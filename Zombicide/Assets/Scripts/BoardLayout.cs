@@ -8,10 +8,23 @@ public class BoardLayout : MonoBehaviour {
 	public List<Vector3> zoneSizes;
 	public List<bool> isStreetZone;
 
-	void Start(){
-	}
+	public GameObject zonePlanePrefab;
 
-	void OnDrawGizmosSelected(){
+	void Start(){
+		for(int i = 0; i < zonePositions.Count; ++i){
+			GameObject newZone = Instantiate(zonePlanePrefab, zonePositions[i] + new Vector3(0, 0.051f, 0), Quaternion.identity) as GameObject;
+			newZone.transform.localScale = zoneSizes[i] + new Vector3(0, .01f, 0);
+
+			newZone.GetComponent<ZoneScript>().zoneNum = i;
+
+			newZone.GetComponent<ZoneScript>().addLinePoints(zoneSizes[i] + new Vector3(0, .01f, 0));
+
+			/*Color c = new Color(1, 0, 0, 0.2f);
+
+			if(isStreetZone[i]) c = new Color(0, 0, 1, 0.2f);
+			newZone.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = c;*/
+
+		}
 	}
 
 }

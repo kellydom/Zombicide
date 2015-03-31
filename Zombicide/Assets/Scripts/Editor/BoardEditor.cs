@@ -12,6 +12,7 @@ public class BoardEditor : Editor {
 	BoardLayout boardLayout;
 	bool showZones;
 
+
 	void Start(){
 		showZones = false;
 	}
@@ -28,6 +29,8 @@ public class BoardEditor : Editor {
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("zonePositions"), true);
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("zoneSizes"), true);
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("isStreetZone"), true);
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("zonePlanePrefab"));
+
 		serializedObject.ApplyModifiedProperties();
 
 		if(showZones){
