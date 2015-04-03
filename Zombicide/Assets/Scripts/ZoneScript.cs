@@ -40,15 +40,21 @@ public class ZoneScript : MonoBehaviour {
 	
 	}
 
-	void OnMouseEnter(){
+	public void Highlight(){
 		transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(1,1,0,0.2f);
 		border = new VectorLine("Border", linePoints, null, 10, LineType.Continuous, Joins.Fill);
 		border.color = Color.yellow;
 		border.Draw3D();
 	}
 
-	void OnMouseExit(){
+	public void Unhighlight(){
 		transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(0,0,0,0);
 		VectorLine.Destroy(ref border);
+	}
+
+	void OnMouseEnter(){
+	}
+
+	void OnMouseExit(){
 	}
 }
