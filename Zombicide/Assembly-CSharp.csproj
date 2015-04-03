@@ -48,6 +48,9 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\BoardLayout.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\PlayerSpawner.cs" />
+     <Compile Include="Assets\Scripts\Survivor.cs" />
      <Compile Include="Assets\Scripts\ZoneScript.cs" />
      <Compile Include="Assets\Scripts\ZoneSelector.cs" />
  <Reference Include="UnityEngine.UI">
