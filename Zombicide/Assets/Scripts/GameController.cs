@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,6 +9,9 @@ public class GameController : MonoBehaviour {
 	public List<Survivor> survivors = new List<Survivor>();
 	Survivor currSurvivor;
 	GameObject currZone;
+
+	bool mouseInWheel = false;
+	bool mouseInWheelButton = false;
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +40,14 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void HighlightZone(Vector3 pos){
+		if(mouseInWheel || mouseInWheelButton){
+			if(currZone != null){
+				currZone.GetComponent<ZoneScript>().Unhighlight();
+				currZone = null;
+			}
+			return;
+		}
+
 		float dist = int.MaxValue;
 
 		GameObject closestZone = null;
@@ -58,6 +70,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SelectSurvivor(Survivor surv){
+
 		if(currSurvivor == surv) return;
 
 		surv.IncreaseSize(2);
@@ -75,6 +88,24 @@ public class GameController : MonoBehaviour {
 		if(currSurvivor == null) return;
 
 		currSurvivor.setZone(currZone);
+	}
+
+	public void MouseEnterWheel(){
+		mouseInWheel = true;
+	}
+
+	public void MouseExitWheel(){
+		mouseInWheel = false;
+
+	}
+	
+	public void MouseEnterButton(){
+		mouseInWheelButton = true;
+	}
+	
+	public void MouseExitButton(){
+		mouseInWheelButton = false;
+		
 	}
 	
 	// Update is called once per frame

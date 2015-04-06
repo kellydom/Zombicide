@@ -11,6 +11,7 @@ public class BoardEditor : Editor {
 
 	BoardLayout boardLayout;
 	bool showZones;
+	bool showNeighbors;
 
 
 	void Start(){
@@ -30,6 +31,7 @@ public class BoardEditor : Editor {
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("zoneSizes"), true);
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("isStreetZone"), true);
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("zonePlanePrefab"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("neighborZones"), true);
 
 		serializedObject.ApplyModifiedProperties();
 
@@ -72,27 +74,86 @@ public class BoardEditor : Editor {
 			EditorGUILayout.EndHorizontal ();
 		}
 
+		if(showNeighbors){
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(Screen.width/3);
+			if (GUILayout.Button("Hide Neighbors")){
+				
+				showNeighbors = false;
+				
+				//This is needed anytime anything might change in the sceneview
+				SceneView.RepaintAll();
+			}			
+			GUILayout.Space(Screen.width/3);
+			EditorGUILayout.EndHorizontal ();
+
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(Screen.width/3);
+			if (GUILayout.Button("Add Neighbors")){
+				
+				boardLayout.neighborZones.Add(Vector2.zero);
+				
+				//This is needed anytime anything might change in the sceneview
+				SceneView.RepaintAll();
+			}			
+			GUILayout.Space(Screen.width/3);
+			EditorGUILayout.EndHorizontal ();
+		}
+		else{
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(Screen.width/3);
+			if (GUILayout.Button("Show Neighbors")){
+				showNeighbors = true;
+				SceneView.RepaintAll();
+			}
+			GUILayout.Space(Screen.width/3);
+			EditorGUILayout.EndHorizontal ();
+		}
+
 	}
 
 	void OnSceneGUI()
 	{
-		if(!showZones) {SceneView.RepaintAll(); return;}
 		if(boardLayout.zonePositions.Count != boardLayout.zoneSizes.Count || boardLayout.zonePositions.Count != boardLayout.isStreetZone.Count){
 			return;
 		}
-		for(int i = 0; i < boardLayout.zonePositions.Count; ++i){
-			Vector3[] vert = new Vector3[4];
-			vert[0] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(boardLayout.zoneSizes[i].x, 0, boardLayout.zoneSizes[i].z);
-			vert[1] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(-boardLayout.zoneSizes[i].x, 0, boardLayout.zoneSizes[i].z);
-			vert[2] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(-boardLayout.zoneSizes[i].x, 0, -boardLayout.zoneSizes[i].z);
-			vert[3] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(boardLayout.zoneSizes[i].x, 0, -boardLayout.zoneSizes[i].z);
+		if(showZones) {
+			for(int i = 0; i < boardLayout.zonePositions.Count; ++i){
+				Vector3[] vert = new Vector3[4];
+				vert[0] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(boardLayout.zoneSizes[i].x, 0, boardLayout.zoneSizes[i].z);
+				vert[1] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(-boardLayout.zoneSizes[i].x, 0, boardLayout.zoneSizes[i].z);
+				vert[2] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(-boardLayout.zoneSizes[i].x, 0, -boardLayout.zoneSizes[i].z);
+				vert[3] = boardLayout.transform.position + boardLayout.zonePositions[i] + new Vector3(boardLayout.zoneSizes[i].x, 0, -boardLayout.zoneSizes[i].z);
 
-			Color c = new Color(1, 0, 0, 0.1f);
-			if(boardLayout.isStreetZone[i]) c = new Color(0, 0, 1, 0.1f);
+				Color c = new Color(1, 0, 0, 0.1f);
+				if(boardLayout.isStreetZone[i]) c = new Color(0, 0, 1, 0.1f);
 
-			Handles.DrawSolidRectangleWithOutline(vert, c, Color.white);
+				Handles.DrawSolidRectangleWithOutline(vert, c, Color.white);
+			}
 		}
-		
+		if(showNeighbors){
+			for(int i = 0; i < boardLayout.neighborZones.Count; ++i){
+				int i1 = (int)boardLayout.neighborZones[i].x;
+				int i2 = (int)boardLayout.neighborZones[i].y;
+				if(i1 >= boardLayout.zonePositions.Count || i2 >= boardLayout.zonePositions.Count){
+					continue;
+				}
+
+				Vector3 pos1 = boardLayout.zonePositions[i1];
+				Vector3 pos2 = boardLayout.zonePositions[i2];
+
+				Vector3 realPos1 = Vector3.MoveTowards(pos1, pos2, 0.5f);
+				Vector3 realPos2 = Vector3.MoveTowards(pos2, pos1, 0.5f);
+
+				Handles.color = Color.yellow;
+				//Handles.DrawLine(pos1, pos2);
+				Vector3[] vert = new Vector3[2];
+				vert[0] = realPos1;
+				vert[1] = realPos2;
+				Handles.DrawAAPolyLine(10, vert);
+
+			}
+		}
 		
 		SceneView.RepaintAll();
 	}

@@ -9,9 +9,11 @@ public class BoardLayout : MonoBehaviour {
 	public List<Vector3> zoneSizes;
 	public List<bool> isStreetZone;
 
+	public List<Vector2> neighborZones;
 
 	public GameObject zonePlanePrefab;
 	public List<GameObject> createdZones;
+
 
 	void Start(){
 		//Singleton initialization
