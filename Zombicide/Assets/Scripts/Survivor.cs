@@ -4,6 +4,9 @@ using System.Collections;
 public class Survivor : MonoBehaviour {
 
 	GameObject currZone;
+	public GameObject CurrZone{
+		get{return currZone;}
+	}
 	Color baseColor;
 
 	bool hasGone;
@@ -22,7 +25,7 @@ public class Survivor : MonoBehaviour {
 		baseColor = gameObject.GetComponent<Renderer>().material.color;
 	}
 
-	public void setZone(GameObject newZone){
+	public void SetZone(GameObject newZone){
 		currZone = newZone;
 		Vector3 basePos = currZone.transform.position;
 		ZoneScript zone = currZone.GetComponent<ZoneScript>();
@@ -35,15 +38,32 @@ public class Survivor : MonoBehaviour {
 
 		transform.position = basePos + new Vector3(randomX, randomHeight, randomZ);
 	}
+
+	public void DoNothing(){
+		numActions = 0;
+	}
+
+	public void MoveTo(GameObject newZone, int actionCost){
+		numActions -= actionCost;
+		SetZone(newZone);
+		GameController.S.MoveSetup();
+	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+		if(GameController.S.currSurvivor != null) {
+			if(GameController.S.currSurvivor != this) Unhighlight();
+
+			return;
+		}
+		if(GameController.S.closestSurvivor == this) Highlight();
+		else Unhighlight();
 	}
 
 	void OnMouseOver(){
 		if(Input.GetMouseButtonDown(0)){
-			GameController.S.SelectSurvivor(this);
+			//GameController.S.SelectSurvivor(this);
 		}
 	}
 
@@ -57,12 +77,13 @@ public class Survivor : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
+		if(hasGone) return;
 		if(currTurn) return;
-		Highlight();
+		//Highlight();
 	}
 	
 	void OnMouseExit(){
 		if(currTurn) return;
-		Unhighlight();
+		//Unhighlight();
 	}
 }

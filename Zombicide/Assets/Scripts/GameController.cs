@@ -7,7 +7,8 @@ public class GameController : MonoBehaviour {
 	public static GameController S;
 
 	public List<Survivor> survivors = new List<Survivor>();
-	Survivor currSurvivor;
+	public Survivor currSurvivor;
+	public Survivor closestSurvivor;
 
 	public bool mouseInWheel = false;
 	public bool mouseInWheelButton = false;
@@ -37,6 +38,57 @@ public class GameController : MonoBehaviour {
 	
 	}
 
+	public void TakeObjSetup(){
+
+	}
+
+	public void ReorganizeInvSetup(){
+
+	}
+
+	public void SearchSetup(){
+
+	}
+
+	public void OpenDoorSetup(){
+
+	}
+
+	public void MakeNoiseSetup(){
+
+	}
+
+	public void ChangeSeatsSetup(){
+
+	}
+
+	public void GetIntoOutOfCarSetup(){
+
+	}
+
+	public void DriveCarSetup(){
+
+	}
+
+	public void RangedSetup(){
+
+	}
+
+	public void MeleeSetup(){
+
+	}
+
+	public void DoNothingSetup(){
+		currSurvivor.DoNothing();
+	}
+
+	public void MoveSetup(){
+		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
+			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
+		}
+		ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
+	}
+
 	IEnumerator PlayerTurn(){
 		playerGoing = true;
 
@@ -48,16 +100,50 @@ public class GameController : MonoBehaviour {
 					if(!survivors[i].HasGone) allSurvivorsDone = false;
 				}
 				if(allSurvivorsDone) break;
+
+				Plane boardPlane = new Plane(Vector3.up, new Vector3(0,0.05f,0));
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				float hit;
+				
+				if(boardPlane.Raycast(ray, out hit)){
+					Vector3 hitPos = ray.GetPoint(hit);
+					closestSurvivor = GetClosestSurvivorTo(hitPos);
+					if(closestSurvivor != null){
+						closestSurvivor.Highlight();
+						if(Input.GetMouseButton(0)){
+							
+							currSurvivor = closestSurvivor;
+							currSurvivor.currTurn = true;
+						}
+
+					}
+
+				}
+
+
 				yield return 0;
 				continue;
 			}
 
 			if(currSurvivor.numActions == 0){
+				ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 				currSurvivor.currTurn = false;
 				currSurvivor.Unhighlight();
 				currSurvivor = null;
 				yield return 0;
 				continue;
+			}
+
+			switch(ActionWheel.S.CurrAction){
+			case "Move":
+				if(Input.GetMouseButton(0) && !ActionWheel.S.mouseInWheel && !ActionWheel.S.mouseInWheelButton){
+					GameObject clickedZone = ZoneSelector.S.CurrZone;
+					GameObject survZone = currSurvivor.CurrZone;
+					if(ZoneSelector.S.IsNeighborOf(clickedZone, survZone)){
+						currSurvivor.MoveTo(clickedZone, 1);
+					}
+				}
+				break;
 			}
 			
 			yield return 0;
@@ -65,6 +151,22 @@ public class GameController : MonoBehaviour {
 
 		playerTurn = false;
 		playerGoing = false;
+	}
+
+	Survivor GetClosestSurvivorTo(Vector3 pos){
+		Survivor surv = null;
+
+		float distance = 0.03f;
+		for(int i = 0; i < survivors.Count; ++i){
+			Survivor temp = survivors[i];
+			if(temp.HasGone) continue;
+
+			if(Vector3.Distance(pos, temp.transform.position) < distance){
+				distance = Vector3.Distance(pos, temp.transform.position);
+				surv = temp;
+			}
+		}
+		return surv;
 	}
 
 
@@ -83,7 +185,7 @@ public class GameController : MonoBehaviour {
 
 	public void SpawnSurvivors(GameObject startingZone){
 		for(int i = 0; i < survivors.Count; ++i){
-			survivors[i].setZone(startingZone);
+			survivors[i].SetZone(startingZone);
 		}
 	}
 

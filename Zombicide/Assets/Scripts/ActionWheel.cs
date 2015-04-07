@@ -167,6 +167,7 @@ public class ActionWheel : MonoBehaviour {
 			actionText.text = "Take Objective";
 			break;
 		}
+		actionText.color = Color.white;
 
 	}
 
@@ -174,10 +175,23 @@ public class ActionWheel : MonoBehaviour {
 		MouseExitButton();
 		if(currAction == "") actionText.text = "";	
 		else actionText.text = currAction;
+		
+		actionText.text = "<b>" + actionText.text + "</b>";
+		actionText.color = Color.green;
 	}
 
 	public void ActionClick(string action){
+		if(GameController.S.currSurvivor == null) return;
 		if(currAction == action){
+			switch(action){
+			case "Move":
+				for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
+					BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
+				}
+				break;
+			}
+
+
 			currAction = "";
 			actionText.text = "";
 			return;
@@ -186,42 +200,56 @@ public class ActionWheel : MonoBehaviour {
 
 		switch (action){
 		case "Melee":
+			GameController.S.MeleeSetup();
 			actionText.text = "Melee";
 			break;
 		case "Ranged":
+			GameController.S.RangedSetup();
 			actionText.text = "Ranged";
 			break;
 		case "Move":
+			GameController.S.MoveSetup();
 			actionText.text = "Move";
 			break;
 		case "OpenDoor":
+			GameController.S.OpenDoorSetup();
 			actionText.text = "Open Door";
 			break;
 		case "Search":
+			GameController.S.SearchSetup();
 			actionText.text = "Search";
 			break;
 		case "MakeNoise":
+			GameController.S.MakeNoiseSetup();
 			actionText.text = "Make Noise";
 			break;
 		case "ReorganizeInventory":
+			GameController.S.ReorganizeInvSetup();
 			actionText.text = "Reorganize Inventory";
 			break;
 		case "DoNothing":
+			GameController.S.DoNothingSetup();
 			actionText.text = "Do Nothing";
 			break;
 		case "GetIntoCar":
+			GameController.S.GetIntoOutOfCarSetup();
 			actionText.text = "Get Into Car";
 			break;
 		case "SwitchSeats":
+			GameController.S.ChangeSeatsSetup();
 			actionText.text = "Switch Seats";
 			break;
 		case "DriveCar":
+			GameController.S.DriveCarSetup();
 			actionText.text = "Drive Car";
 			break;
 		case "TakeObjective":
+			GameController.S.TakeObjSetup();
 			actionText.text = "Take Objective";
 			break;
 		}
+		actionText.text = "<b>" + actionText.text + "</b>";
+		actionText.color = Color.green;
 
 	}
 }
