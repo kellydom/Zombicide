@@ -8,10 +8,12 @@ public class GameController : MonoBehaviour {
 
 	public List<Survivor> survivors = new List<Survivor>();
 	Survivor currSurvivor;
-	GameObject currZone;
 
-	bool mouseInWheel = false;
-	bool mouseInWheelButton = false;
+	public bool mouseInWheel = false;
+	public bool mouseInWheelButton = false;
+
+	bool playerTurn;
+	bool playerGoing;
 
 	// Use this for initialization
 	void Start () {
@@ -25,6 +27,8 @@ public class GameController : MonoBehaviour {
 			if(this != S)
 				Destroy(this.gameObject);
 		}
+		playerTurn = true;
+		playerGoing = false;
 
 		GameObject[] survivorsTEMP = GameObject.FindGameObjectsWithTag("Survivor");
 		for(int i = 0; i < survivorsTEMP.Length; ++i){
@@ -33,83 +37,69 @@ public class GameController : MonoBehaviour {
 	
 	}
 
+	IEnumerator PlayerTurn(){
+		playerGoing = true;
+
+		while(true){
+			if(currSurvivor == null){
+				//check to see if all survivors have finished - otherwise, keep looping
+				bool allSurvivorsDone = true;
+				for(int i = 0; i < survivors.Count; ++i){
+					if(!survivors[i].HasGone) allSurvivorsDone = false;
+				}
+				if(allSurvivorsDone) break;
+				yield return 0;
+				continue;
+			}
+
+			if(currSurvivor.numActions == 0){
+				currSurvivor.currTurn = false;
+				currSurvivor.Unhighlight();
+				currSurvivor = null;
+				yield return 0;
+				continue;
+			}
+			
+			yield return 0;
+		}
+
+		playerTurn = false;
+		playerGoing = false;
+	}
+
+
+	void Update(){
+		if(playerTurn){
+			if(!playerGoing){
+				//I'm using coroutines because I think it looks cleaner here
+				StartCoroutine(PlayerTurn());
+			}
+		}
+		else{
+
+		}
+
+	}
+
 	public void SpawnSurvivors(GameObject startingZone){
 		for(int i = 0; i < survivors.Count; ++i){
 			survivors[i].setZone(startingZone);
 		}
 	}
 
-	public void HighlightZone(Vector3 pos){
-		if(mouseInWheel || mouseInWheelButton){
-			if(currZone != null){
-				currZone.GetComponent<ZoneScript>().Unhighlight();
-				currZone = null;
-			}
-			return;
-		}
-
-		float dist = int.MaxValue;
-
-		GameObject closestZone = null;
-		for(int i = 0; i < BoardLayout.S.zonePositions.Count; ++i){
-			Vector3 zonePos = BoardLayout.S.zonePositions[i];
-			if(Vector3.Distance(zonePos, pos) < dist){
-				dist = Vector3.Distance(zonePos, pos);
-				closestZone = BoardLayout.S.createdZones[i];
-			}
-		}
-		if(currZone == closestZone) return;
-
-		closestZone.GetComponent<ZoneScript>().Highlight();
-		if(currZone != null){
-			currZone.GetComponent<ZoneScript>().Unhighlight();
-		}
-		currZone = closestZone;
-
-
-	}
-
 	public void SelectSurvivor(Survivor surv){
+		if(currSurvivor != null) return;
 
-		if(currSurvivor == surv) return;
-
-		surv.IncreaseSize(2);
-
-		if(currSurvivor != null) currSurvivor.IncreaseSize(0.5f);
+		surv.Highlight();
 
 		currSurvivor = surv;
-	}
-
-	public GameObject GetCurrZone(){
-		return currZone;
+		currSurvivor.currTurn = true;
 	}
 
 	public void ClickedCurrZone(){
 		if(currSurvivor == null) return;
-
-		currSurvivor.setZone(currZone);
 	}
 
-	public void MouseEnterWheel(){
-		mouseInWheel = true;
-	}
 
-	public void MouseExitWheel(){
-		mouseInWheel = false;
 
-	}
-	
-	public void MouseEnterButton(){
-		mouseInWheelButton = true;
-	}
-	
-	public void MouseExitButton(){
-		mouseInWheelButton = false;
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

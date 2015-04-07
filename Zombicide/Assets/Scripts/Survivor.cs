@@ -6,8 +6,19 @@ public class Survivor : MonoBehaviour {
 	GameObject currZone;
 	Color baseColor;
 
+	bool hasGone;
+	public bool HasGone{
+		get{return hasGone;}
+		set{hasGone = value;}
+	}
+
+	public int numActions;
+
+	public bool currTurn = false;
+
 	// Use this for initialization
 	void Start () {
+		numActions = 3;
 		baseColor = gameObject.GetComponent<Renderer>().material.color;
 	}
 
@@ -36,18 +47,22 @@ public class Survivor : MonoBehaviour {
 		}
 	}
 
-	public void IncreaseSize(float sizeInc){
-		Vector3 size = transform.localScale;
-		size *= sizeInc;
-		transform.localScale = size;
+	public void Highlight(){
+		gameObject.GetComponent<Renderer>().material.color = new Color(1,1,0,0.2f);
+
+	}
+	public void Unhighlight(){
+		gameObject.GetComponent<Renderer>().material.color = baseColor;
 
 	}
 
 	void OnMouseEnter(){
-		gameObject.GetComponent<Renderer>().material.color = new Color(1,1,0,0.2f);
+		if(currTurn) return;
+		Highlight();
 	}
 	
 	void OnMouseExit(){
-		gameObject.GetComponent<Renderer>().material.color = baseColor;
+		if(currTurn) return;
+		Unhighlight();
 	}
 }

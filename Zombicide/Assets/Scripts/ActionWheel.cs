@@ -3,21 +3,11 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class ActionWheel : MonoBehaviour {
+	public static ActionWheel S;
 
-	public enum Actions{
-		Melee,
-		Ranged,
-		Move,
-		Search,
-		ReorganizeInventory,
-		OpenDoor,
-		MakeNoise,
-		DoNothing,
-		GetIntoCar,
-		SwitchSeats,
-		DriveCar,
-		TakeObjective
-	}
+
+	public bool mouseInWheel;
+	public bool mouseInWheelButton;
 
 	bool wheelIsMinimized;
 	bool wheelIsChanging;
@@ -32,8 +22,22 @@ public class ActionWheel : MonoBehaviour {
 
 	float scale;
 
+	string currAction = "";
+	public string CurrAction{
+		get{return currAction;}
+	}
+
 	// Use this for initialization
 	void Start () {
+		if(S == null){
+			S = this;
+		}
+		else
+		{
+			if(this != S)
+				Destroy(this.gameObject);
+		}
+
 		wheelIsChanging = false;
 		wheelIsMinimized = true;
 
@@ -49,6 +53,23 @@ public class ActionWheel : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	public void MouseEnterWheel(){
+		mouseInWheel = true;
+	}
+	
+	public void MouseExitWheel(){
+		mouseInWheel = false;
+		
+	}
+	
+	public void MouseEnterButton(){
+		mouseInWheelButton = true;
+	}
+	
+	public void MouseExitButton(){
+		mouseInWheelButton = false;
+		
 	}
 
 	IEnumerator ExpandWheel(){
@@ -107,7 +128,7 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionHover(string action){
-		GameController.S.MouseEnterButton();
+		MouseEnterButton();
 		switch (action){
 		case "Melee":
 			actionText.text = "Melee";
@@ -150,48 +171,55 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionMouseLeave(){
-		GameController.S.MouseExitButton();
-		actionText.text = "";
+		MouseExitButton();
+		if(currAction == "") actionText.text = "";	
+		else actionText.text = currAction;
 	}
 
-	public void ActionClick(string action ){
+	public void ActionClick(string action){
+		if(currAction == action){
+			currAction = "";
+			actionText.text = "";
+			return;
+		}
+		currAction = action;
 
 		switch (action){
 		case "Melee":
-			print ("Melee");
+			actionText.text = "Melee";
 			break;
 		case "Ranged":
-			print ("Ranged");
+			actionText.text = "Ranged";
 			break;
 		case "Move":
-			print ("Move");
+			actionText.text = "Move";
 			break;
 		case "OpenDoor":
-			print ("OpenDoor");
+			actionText.text = "Open Door";
 			break;
 		case "Search":
-			print ("Search");
+			actionText.text = "Search";
 			break;
 		case "MakeNoise":
-			print ("MakeNoise");
+			actionText.text = "Make Noise";
 			break;
 		case "ReorganizeInventory":
-			print ("ReorganizeInventory");
+			actionText.text = "Reorganize Inventory";
 			break;
 		case "DoNothing":
-			print ("DoNothing");
+			actionText.text = "Do Nothing";
 			break;
 		case "GetIntoCar":
-			print ("GetIntoCar");
+			actionText.text = "Get Into Car";
 			break;
 		case "SwitchSeats":
-			print ("SwitchSeats");
+			actionText.text = "Switch Seats";
 			break;
 		case "DriveCar":
-			print ("DriveCar");
+			actionText.text = "Drive Car";
 			break;
 		case "TakeObjective":
-			print ("TakeObjective");
+			actionText.text = "Take Objective";
 			break;
 		}
 

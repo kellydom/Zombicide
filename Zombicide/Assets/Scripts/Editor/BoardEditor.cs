@@ -32,6 +32,9 @@ public class BoardEditor : Editor {
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("isStreetZone"), true);
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("zonePlanePrefab"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("neighborZones"), true);
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("door"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("doors"), true);
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("doorConnections"), true);
 
 		serializedObject.ApplyModifiedProperties();
 
@@ -109,11 +112,28 @@ public class BoardEditor : Editor {
 			GUILayout.Space(Screen.width/3);
 			EditorGUILayout.EndHorizontal ();
 		}
+		EditorGUILayout.BeginHorizontal();
+		GUILayout.Space(Screen.width/3);
+		if (GUILayout.Button("Add Door")){
+			
+			GameObject newDoor = Instantiate(boardLayout.door, Vector3.zero, Quaternion.identity) as GameObject;
+			boardLayout.doors.Add(newDoor);
+			BoardLayout.Door d = new BoardLayout.Door();
+			boardLayout.doorConnections.Add(d);
+
+			
+			//This is needed anytime anything might change in the sceneview
+			SceneView.RepaintAll();
+		}			
+		GUILayout.Space(Screen.width/3);
+		EditorGUILayout.EndHorizontal ();
 
 	}
 
 	void OnSceneGUI()
 	{
+		if(boardLayout == null) return;
+
 		if(boardLayout.zonePositions.Count != boardLayout.zoneSizes.Count || boardLayout.zonePositions.Count != boardLayout.isStreetZone.Count){
 			return;
 		}
@@ -152,6 +172,29 @@ public class BoardEditor : Editor {
 				vert[1] = realPos2;
 				Handles.DrawAAPolyLine(10, vert);
 
+			}
+
+			for(int i = 0; i < boardLayout.doors.Count; ++i){
+				int i1 = (int) boardLayout.doorConnections[i].zoneOne;
+				int i2 = (int) boardLayout.doorConnections[i].zoneTwo;
+				
+				if(i1 >= boardLayout.zonePositions.Count || i2 >= boardLayout.zonePositions.Count){
+					continue;
+				}
+				
+				
+				Vector3 pos1 = boardLayout.zonePositions[i1];
+				Vector3 pos2 = boardLayout.zonePositions[i2];
+				Vector3 doorPos = boardLayout.doors[i].transform.position;
+
+
+				Handles.color = Color.green;
+				//Handles.DrawLine(pos1, pos2);
+				Vector3[] vert = new Vector3[3];
+				vert[0] = pos1;
+				vert[1] = doorPos;
+				vert[2] = pos2;
+				Handles.DrawAAPolyLine(10, vert);
 			}
 		}
 		

@@ -3,6 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BoardLayout : MonoBehaviour {
+	[System.Serializable]
+	public class Door{
+		public int zoneOne;
+		public int zoneTwo;
+
+		public bool isOpened;
+	}
+
+
 	public static BoardLayout S;
 
 	public List<Vector3> zonePositions;
@@ -10,6 +19,9 @@ public class BoardLayout : MonoBehaviour {
 	public List<bool> isStreetZone;
 
 	public List<Vector2> neighborZones;
+	public GameObject door;
+	public List<GameObject> doors;
+	public List<Door> doorConnections;
 
 	public GameObject zonePlanePrefab;
 	public List<GameObject> createdZones;
@@ -32,7 +44,7 @@ public class BoardLayout : MonoBehaviour {
 
 		for(int i = 0; i < zonePositions.Count; ++i){
 			GameObject newZone = Instantiate(zonePlanePrefab, zonePositions[i] + new Vector3(0, 0.051f, 0), Quaternion.identity) as GameObject;
-			newZone.transform.localScale = zoneSizes[i] + new Vector3(0, .01f, 0);
+			newZone.transform.localScale = zoneSizes[i] + new Vector3(0, 0.01f, 0);
 
 			newZone.GetComponent<ZoneScript>().zoneNum = i;
 
@@ -46,6 +58,13 @@ public class BoardLayout : MonoBehaviour {
 			newZone.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = c;*/
 
 		}
+
+		for(int i = 0; i < doors.Count; ++i){
+			if(doorConnections[i].isOpened){
+				doors[i].transform.Rotate(Vector3.right, 180);
+			}
+		}
+
 	}
 
 }

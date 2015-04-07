@@ -27,23 +27,44 @@ public class CameraController : MonoBehaviour {
 			if(child.position.z > topZ) topZ = child.position.z;
 			if(child.position.z < bottomZ) bottomZ = child.position.z;
 		}
-		topZ -= 1;
+		topZ -= 0.1f;
 		bottomZ -= 1;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		// Mouse wheel moving forward
-		if(Input.GetAxis("Mouse ScrollWheel") > 0 && transform.position.y > closeDist)
+		if((Input.GetKeyDown(KeyCode.PageUp) || Input.GetAxis("Mouse ScrollWheel") > 0) && transform.position.y > closeDist)
 		{
 			transform.Translate(Vector3.forward * zoomSpeed);
 		}
 		
 		// Mouse wheel moving backward
-		if(Input.GetAxis("Mouse ScrollWheel") < 0 && transform.position.y < farDist)
+		if((Input.GetKeyDown(KeyCode.PageDown) || Input.GetAxis("Mouse ScrollWheel") < 0) && transform.position.y < farDist)
 		{
 			transform.Translate(Vector3.back * zoomSpeed);
 		}
+
+		if(Input.GetKey(KeyCode.W)){
+			transform.Translate(Vector3.forward / 25 / panSpeed, Space.World);
+		}
+		if(Input.GetKey(KeyCode.S)){
+			transform.Translate(-Vector3.forward / 25 / panSpeed, Space.World);
+		}
+		if(Input.GetKey(KeyCode.A)){
+			transform.Translate(-Vector3.right / 25 / panSpeed, Space.World);
+		}
+		if(Input.GetKey(KeyCode.D)){
+			transform.Translate(Vector3.right / 25 / panSpeed, Space.World);
+		}
+		Vector3 pos = transform.position;
+
+		if(pos.x > rightX) pos.x = rightX;
+		if(pos.x < leftX) pos.x = leftX;
+		if(pos.z > topZ) pos.z = topZ;
+		if(pos.z < bottomZ) pos.z = bottomZ;
+
+		transform.position = pos;
 
 		if(Input.GetMouseButtonDown(2)) {dragging = true; mouseDragStart = Input.mousePosition;}
 		if(Input.GetMouseButtonUp(2)) dragging = false;

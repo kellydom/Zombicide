@@ -6,7 +6,6 @@ using Vectrosity;
 public class ZoneScript : MonoBehaviour {
 
 	public int zoneNum;
-	Color zoneColor;
 
 	VectorLine border;
 	List<Vector3> linePoints = new List<Vector3>();
@@ -29,10 +28,6 @@ public class ZoneScript : MonoBehaviour {
 		linePoints.Add(p4);
 		linePoints.Add(p5);
 
-	}
-
-	public void SetZoneColor(Color c){
-		zoneColor = c;
 	}
 	
 	// Update is called once per frame
