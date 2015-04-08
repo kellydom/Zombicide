@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SurvivorToken : MonoBehaviour {
+	public static SurvivorToken S;
+
 	public Button phil;
 	public Button wanda;
 	public Button front1;
@@ -32,7 +34,15 @@ public class SurvivorToken : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		//Singleton initialization
+		if(S == null){
+			S = this;
+		}
+		else
+		{
+			if(this != S)
+				Destroy(this.gameObject);
+		}
 	}
 	
 	// Update is called once per frame
@@ -49,6 +59,11 @@ public class SurvivorToken : MonoBehaviour {
 		case "Phil":
 			phil.image.transform.localScale = newScale;
 			break;
+		}
+		for (int i = 0; i < GameController.S.survivors.Count; i++) {
+			if(name == GameController.S.survivors[i].name) {
+				GameController.S.survivors[i].Highlight();
+			}
 		}
 		for (int i = 0; i < GameController.S.survivors.Count; i++) {
 			if(name == GameController.S.survivors[i].name) {
@@ -87,6 +102,12 @@ public class SurvivorToken : MonoBehaviour {
 				phil.image.transform.localScale = newScale;
 			}
 			break;
+		}
+		
+		for (int i = 0; i < GameController.S.survivors.Count; i++) {
+			if(name == GameController.S.survivors[i].name) {
+				GameController.S.survivors[i].Unhighlight();
+			}
 		}
 	}
 
@@ -144,6 +165,7 @@ public class SurvivorToken : MonoBehaviour {
 				removeCards();
 				wandaClicked = false;
 				wanda.image.transform.localScale = new Vector3(1, 1, 0);
+				GameController.S.currSurvivor = null;
 				break;
 			}
 			if(!cardsOut)
@@ -157,6 +179,12 @@ public class SurvivorToken : MonoBehaviour {
 				philClicked = false;
 			}
 			wandaClicked = true;
+			for (int i = 0; i < GameController.S.survivors.Count; i++) {
+				if("Wanda" == GameController.S.survivors[i].name) {
+					GameController.S.currSurvivor = GameController.S.survivors[i];
+				}
+			}
+
 			break;
 		case "Phil":
 			if(philClicked) {
@@ -164,6 +192,7 @@ public class SurvivorToken : MonoBehaviour {
 				removeCards();
 				clicked = false;
 				phil.image.transform.localScale = new Vector3(1, 1, 0);
+				GameController.S.currSurvivor = null;
 				break;
 			}
 			phil.image.transform.localScale = newScale;
@@ -177,6 +206,11 @@ public class SurvivorToken : MonoBehaviour {
 				expandCards();
 			}
 			philClicked = true;
+			for (int i = 0; i < GameController.S.survivors.Count; i++) {
+				if("Phil" == GameController.S.survivors[i].name) {
+					GameController.S.currSurvivor = GameController.S.survivors[i];
+				}
+			}
 			break;
 		}
 	}

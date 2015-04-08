@@ -149,7 +149,7 @@ public class GameController : MonoBehaviour {
 					if(!survivors[i].HasGone) allSurvivorsDone = false;
 				}
 				if(allSurvivorsDone) break;
-
+/*
 				Plane boardPlane = new Plane(Vector3.up, new Vector3(0,0.05f,0));
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				float hit;
@@ -170,18 +170,20 @@ public class GameController : MonoBehaviour {
 
 					}
 
-				}
+				}*/
 
 
 				yield return 0;
 				continue;
 			}
+			currSurvivor.Highlight();
 
 			if(currSurvivor.numActions == 0){
 				ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 				currSurvivor.currTurn = false;
 				currSurvivor.Unhighlight();
 				currSurvivor.HasGone = true;
+				SurvivorToken.S.tokenOnClicked(currSurvivor.name);
 				currSurvivor = null;
 				yield return 0;
 				continue;
