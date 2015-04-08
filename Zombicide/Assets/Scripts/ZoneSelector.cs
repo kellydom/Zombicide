@@ -219,7 +219,6 @@ public class ZoneSelector : MonoBehaviour {
 						List<GameObject> nextNeighbors = GetNeighborsOf(newZone);
 						for(int j = 0; j < nextNeighbors.Count; ++j){
 							KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(newZone, nextNeighbors[j]);
-							print (newPair);
 							neighbors.Add(newPair);
 						}
 					}
@@ -237,6 +236,159 @@ public class ZoneSelector : MonoBehaviour {
 		foreach(GameObject zoneGO in zonesCanSee){
 			zoneGO.GetComponent<ZoneScript>().Highlight();
 		}
+	}
 
+	public List<GameObject> SeeableZonesWithSurvivors(GameObject startingZone){
+		List<GameObject> zonesCanSee = GetZonesCanSeeFrom(startingZone);
+		List<GameObject> zonesWithSurvivors = new List<GameObject>();
+		
+		foreach(GameObject zone in zonesCanSee){
+			foreach(Survivor surv in GameController.S.survivors){
+				if(surv.CurrZone == zone){
+					zonesWithSurvivors.Add (zone);
+				}
+			}
+		}
+
+		return zonesWithSurvivors;
+	}
+
+	public List<GameObject> ClosestSeeableZonesWithSurvivor(GameObject startingZone){
+		List<GameObject> zonesWithSurvivors = new List<GameObject>();
+		zonesWithSurvivors = SeeableZonesWithSurvivors(startingZone);
+
+		return ClosestZonesFromList(zonesWithSurvivors, startingZone);
+	}
+
+	public List<GameObject> NoisiestSeeableZonesWithSurvivor(GameObject startingZone){
+		List<GameObject> zonesWithSurvivors = new List<GameObject>();
+		zonesWithSurvivors = SeeableZonesWithSurvivors(startingZone);
+		
+		return NoisiestZonesFromList(zonesWithSurvivors);
+	}
+
+	public List<GameObject> ClosestZonesFromList(List<GameObject> zoneList, GameObject startingZone){
+		List<GameObject> closestZones = new List<GameObject>();
+
+		int closestDist = int.MaxValue;
+		foreach(GameObject zone in zoneList){
+			if(ZoneDistance(startingZone, zone) < closestDist) closestDist = ZoneDistance(startingZone, zone);
+		}
+		foreach(GameObject zone in zoneList){
+			if(ZoneDistance(startingZone, zone) == closestDist) closestZones.Add (zone);
+		}
+
+		return closestZones;
+	}
+
+	public List<GameObject> NoisiestZonesFromList(List<GameObject> zoneList){
+		List<GameObject> noisyZones = new List<GameObject>();
+		
+		int mostNoise = 0;
+		foreach(GameObject zone in zoneList){
+			if(zone.GetComponent<ZoneScript>().ZoneNoise() > mostNoise){
+				mostNoise = zone.GetComponent<ZoneScript>().ZoneNoise();
+			}
+		}
+		
+		foreach(GameObject zone in zoneList){
+			if(zone.GetComponent<ZoneScript>().ZoneNoise() == mostNoise){
+				noisyZones.Add (zone);
+			}
+		}
+		
+		return noisyZones;
+	}
+
+	public List<GameObject> GetNoisiestZones(){
+		List<GameObject> noisyZones = NoisiestZonesFromList(BoardLayout.S.createdZones);
+
+		return noisyZones;
+	}
+
+	public int ZoneDistance(GameObject zoneOne, GameObject zoneTwo){
+		if(zoneOne == zoneTwo) return 0;
+
+		List<GameObject> zonesChecked = new List<GameObject>();
+		zonesChecked.Add(zoneOne);
+
+		List<GameObject> neighborZones = GetNeighborsOf(zoneOne);
+		List<KeyValuePair<GameObject, int>> neighbors = new List<KeyValuePair<GameObject, int>>();
+		foreach(GameObject go in neighborZones){
+			KeyValuePair<GameObject, int> newPair = new KeyValuePair<GameObject, int>(go, 1);
+			neighbors.Add (newPair);
+		}
+		zonesChecked.AddRange(neighborZones);
+
+		while(neighbors.Count > 0){
+			GameObject currZone = neighbors[0].Key;
+			int dist = neighbors[0].Value;
+
+			if(currZone == zoneTwo) return dist;
+
+			neighborZones = GetNeighborsOf(currZone);
+			foreach(GameObject go in neighborZones){
+				if(zonesChecked.Contains(go)) continue;
+				KeyValuePair<GameObject, int> newPair = new KeyValuePair<GameObject, int>(go, 1 + dist);
+				zonesChecked.Add (go);
+				neighbors.Add (newPair);
+			}
+			neighbors.RemoveAt(0);
+		}
+
+		return -1;
+	}
+
+	public List<GameObject> StepTowardsZone(GameObject startZone, GameObject goalZone, int distToZone){
+		List<GameObject> possiblePaths = new List<GameObject>();
+
+		//Yeah, I know this is a stupid way to do it, but whatever
+		List<List<GameObject>> currentPaths = new List<List<GameObject>>();
+		List<GameObject> neighbors = GetNeighborsOf(startZone);
+		foreach(GameObject go in neighbors){
+			List<GameObject> temp = new List<GameObject>();
+			temp.Add (go);
+			currentPaths.Add (temp);
+		}
+
+		while(currentPaths.Count > 0 && currentPaths[0].Count <= distToZone){
+			List<GameObject> thisPath = currentPaths[0];
+			GameObject currZone = thisPath[thisPath.Count - 1];
+
+
+			if(currZone == goalZone){
+				possiblePaths.Add (thisPath[0]);
+				currentPaths.RemoveAt(0);
+				continue;
+			}
+
+			neighbors = GetNeighborsOf(currZone);
+			foreach(GameObject go in neighbors){
+				List<GameObject> newPath = new List<GameObject>();
+				newPath.AddRange(thisPath);
+				newPath.Add (go);
+				currentPaths.Add (newPath);
+			}
+			currentPaths.RemoveAt(0);
+
+			//Fun sorting algorithm!
+			List<List<GameObject>> newCurrentPaths = new List<List<GameObject>>();
+			while(currentPaths.Count > 0){
+				int lowCount = int.MaxValue;
+				int lowNum = -1;
+				for(int i = 0; i < currentPaths.Count; ++i){
+					if(currentPaths[i].Count < lowCount){
+						lowCount = currentPaths[i].Count;
+						lowNum = i;
+					}
+				}
+				newCurrentPaths.Add (currentPaths[lowNum]);
+				currentPaths.RemoveAt(lowNum);
+			}
+			currentPaths.AddRange(newCurrentPaths);
+
+		}
+
+		return possiblePaths;
 	}
 }

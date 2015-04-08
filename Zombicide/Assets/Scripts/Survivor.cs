@@ -4,6 +4,8 @@ using System.Collections;
 
 public class Survivor : MonoBehaviour {
 
+	public int survNum;
+
 	GameObject currZone;
 	public GameObject CurrZone{
 		get{return currZone;}
@@ -38,11 +40,21 @@ public class Survivor : MonoBehaviour {
 		int index = zone.zoneNum;
 		Vector3 size = BoardLayout.S.zoneSizes[index];
 
-		float randomX = Random.Range(-size.x, size.x);
-		float randomZ = Random.Range(-size.z, size.z);
-		float randomHeight = Random.Range(0.1f, 0.6f);
+		Vector3 bottomLeft = newZone.GetComponent<BoxCollider>().bounds.min;
+		Vector3 bottomRight = bottomLeft;
+		bottomRight.x = newZone.GetComponent<BoxCollider>().bounds.max.x;
+		bottomLeft.z += .03f;
+		bottomRight.z += .03f;
 
-		transform.position = basePos + new Vector3(randomX, randomHeight, randomZ);
+		if(survNum >= 3) {
+			bottomLeft.z = (bottomLeft.z + newZone.GetComponent<BoxCollider>().bounds.max.z) / 2;
+			bottomRight.z = bottomLeft.z;
+		}
+
+		int xValue = survNum;
+		if(xValue >= 3) xValue -= 3;
+
+		transform.position = Vector3.Lerp (bottomLeft, bottomRight, (xValue + 1) / 4.0f ) + Vector3.up / 5;
 	}
 
 	public void DoNothing(){

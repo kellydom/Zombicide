@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour {
 	//spawn from that randomly (until cards are done)
 	public List<GameObject> enemyTypes;
 
+	List<Enemy> allZombies = new List<Enemy>();
+
 	// Use this for initialization
 	void Start () {
 
@@ -121,6 +123,9 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator PlayerTurn(){
 		playerGoing = true;
+		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
+			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
+		}
 
 		while(true){
 			if(currSurvivor == null){
@@ -226,12 +231,18 @@ public class GameController : MonoBehaviour {
 		}
 
 		//Move Zombies on board
+		CameraController.S.ZoomOut(0.5f);
+		yield return new WaitForSeconds(0.5f);
+
+		foreach(GameObject zone in BoardLayout.S.createdZones){
+			zone.GetComponent<ZoneScript>().DoZombieActions();
+		}
+		yield return new WaitForSeconds(1);
 
 		//Spawn Zombies
-		print ("going to do this " + zombieSpawnZones.Count);
 		foreach(GameObject zone in zombieSpawnZones){
-			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, CameraController.S.transform.position.y, 0) + Vector3.back / 3, 2);
-			yield return new WaitForSeconds(2);
+			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, 1, 0) + Vector3.back / 3, 1);
+			yield return new WaitForSeconds(1);
 
 			SpawnZombiesAt(zone);
 			yield return new WaitForSeconds(1);
@@ -244,6 +255,9 @@ public class GameController : MonoBehaviour {
 		foreach(Survivor surv in survivors){
 			surv.HasGone = false;
 			surv.numActions = 3;
+		}
+		foreach(Enemy zomb in allZombies){
+			zomb.hasDoneAction = false;
 		}
 
 		zombieGoing = false;
@@ -283,12 +297,18 @@ public class GameController : MonoBehaviour {
 			
 			while(walkersToSpawn > 0){
 				GameObject zombie = Instantiate(enemyTypes[0], walkerSpawnPos + Vector3.up / 5 * walkersToSpawn, Quaternion.identity) as GameObject;
+				zone.GetComponent<ZoneScript>().AddZombieToZone(zombie);
+				zombie.GetComponent<Enemy>().currZone = zone;
+				allZombies.Add (zombie.GetComponent<Enemy>());
 				walkersToSpawn--;
 			}
 		}
 
 		while(numToSpawn > 0){
 			GameObject zombie = Instantiate(enemyTypes[zombieType], spawnPos + Vector3.up / 5 * numToSpawn, Quaternion.identity) as GameObject;
+			zone.GetComponent<ZoneScript>().AddZombieToZone(zombie);
+			zombie.GetComponent<Enemy>().currZone = zone;
+			allZombies.Add (zombie.GetComponent<Enemy>());
 			numToSpawn--;
 		}
 		
@@ -313,6 +333,7 @@ public class GameController : MonoBehaviour {
 
 	public void SpawnSurvivors(GameObject startingZone){
 		for(int i = 0; i < survivors.Count; ++i){
+			survivors[i].survNum = i;
 			survivors[i].SetZone(startingZone);
 		}
 	}

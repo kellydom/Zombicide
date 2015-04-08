@@ -117,4 +117,11 @@ public class CameraController : MonoBehaviour {
 		object[] parms = new object[2]{pos, time};
 		StartCoroutine("MoveOverTime", parms);
 	}
+
+	public void ZoomOut(float time){
+		StopCoroutine("MoveOverTime");
+		
+		object[] parms = new object[2]{new Vector3(0, 2.3f, -1.41f), time};
+		StartCoroutine("MoveOverTime", parms);
+	}
 }
