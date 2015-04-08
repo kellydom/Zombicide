@@ -37,9 +37,13 @@ public class ZoneScript : MonoBehaviour {
 
 	public void Highlight(){
 		transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(1,1,0,0.2f);
-		border = new VectorLine("Border", linePoints, null, 10, LineType.Continuous, Joins.Fill);
-		border.color = Color.yellow;
-		border.Draw3D();
+		if(border == null){
+			
+			border = new VectorLine("Border", linePoints, null, 10, LineType.Continuous, Joins.Fill);
+			border.color = Color.yellow;
+			border.Draw3D();
+
+		}
 	}
 
 	public void Unhighlight(){

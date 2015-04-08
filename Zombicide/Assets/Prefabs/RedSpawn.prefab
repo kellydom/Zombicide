@@ -80,7 +80,7 @@ GameObject:
   - 54: {fileID: 5415212}
   m_Layer: 0
   m_Name: RedSpawn
-  m_TagString: Untagged
+  m_TagString: ZombieSpawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,9 +149,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 113082}
-  m_LocalRotation: {x: 0, y: 4.61935997e-07, z: 0, w: -1}
-  m_LocalPosition: {x: 1.52999997, y: 1.11000001, z: .379999995}
-  m_LocalScale: {x: .320043355, y: .0160000008, z: .160000011}
+  m_LocalRotation: {x: 0, y: -.707106352, z: 0, w: -.707107306}
+  m_LocalPosition: {x: .957000017, y: .105999999, z: 0}
+  m_LocalScale: {x: .19574751, y: .00978605077, z: .0978605077}
   m_Children:
   - {fileID: 468662}
   - {fileID: 449510}

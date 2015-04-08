@@ -1202,7 +1202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zonePositions:
-  - {x: -.0199999996, y: 0, z: .0299999993}
+  - {x: -.00999999978, y: 0, z: .0299999993}
   - {x: .529999971, y: 0, z: .0299999993}
   - {x: .910000026, y: 0, z: .0299999993}
   - {x: .899999976, y: 0, z: -.50999999}
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   doorConnections:
   - zoneOne: 0
     zoneTwo: 20
-    isOpened: 0
+    isOpened: 1
   - zoneOne: 16
     zoneTwo: 9
     isOpened: 1
@@ -3564,18 +3564,6 @@ Prefab:
     - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
       propertyPath: m_RootOrder
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
-      propertyPath: m_LocalScale.x
-      value: .19574751
-      objectReference: {fileID: 0}
-    - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
-      propertyPath: m_LocalScale.y
-      value: .00978605077
-      objectReference: {fileID: 0}
-    - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
-      propertyPath: m_LocalScale.z
-      value: .0978605077
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 50090fe9235dff6488a674c736941be8, type: 2}

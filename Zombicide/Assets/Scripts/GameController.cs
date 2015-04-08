@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour {
 	bool playerTurn;
 	bool playerGoing;
 	bool zombieGoing;
+	List<ZoneScript> zombieSpawnZones = new List<ZoneScript>();
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +41,12 @@ public class GameController : MonoBehaviour {
 			survivors.Add(survivorsTEMP[i].GetComponent<Survivor>());
 		}
 		deck = GameObject.Find("Main Camera").GetComponent<Deck>();
+
+		GameObject[] zombieSpawn = GameObject.FindGameObjectsWithTag("ZombieSpawn");
+		foreach(GameObject zSpawn in zombieSpawn){
+
+		}
+
 	}
 
 	public void TakeObjSetup(){
@@ -91,7 +98,6 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}
-		ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
 	}
 
 	IEnumerator PlayerTurn(){
@@ -181,6 +187,9 @@ public class GameController : MonoBehaviour {
 
 		//Spawn Zombies
 
+
+
+		yield return 0;
 		zombieGoing = false;
 		playerTurn = true;
 	}

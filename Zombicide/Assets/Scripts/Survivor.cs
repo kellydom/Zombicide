@@ -25,7 +25,7 @@ public class Survivor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		numActions = 3;
+		numActions = 100;
 		baseColor = gameObject.GetComponent<Renderer>().material.color;
 	}
 

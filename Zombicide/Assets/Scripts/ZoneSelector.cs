@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ZoneSelector : MonoBehaviour {
 	public static ZoneSelector S;
@@ -81,16 +82,30 @@ public class ZoneSelector : MonoBehaviour {
 		currZone = zone;
 	}
 
-	public void HighlightNeighborsOf(GameObject zone){
+	public List<GameObject> GetNeighborsOf(GameObject zone){
+		List<GameObject> neighbors = new List<GameObject>();
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			GameObject testZone = BoardLayout.S.createdZones[i];
 			if(IsNeighborOf(zone, testZone)){
-				testZone.GetComponent<ZoneScript>().Highlight();
+				neighbors.Add (testZone);
 			}
 		}
+
+		return neighbors;
+	}
+
+	public void HighlightNeighborsOf(GameObject zone){
+		List<GameObject> neighbors = GetNeighborsOf(zone);
+		for(int i = 0; i < neighbors.Count; ++i){
+			neighbors[i].GetComponent<ZoneScript>().Highlight();
+		}
+
 	}
 
 	public bool IsNeighborOf(GameObject zone, GameObject possibleNeighbor){
+		if(zone.GetComponent<ZoneScript>() == null) return false;
+		if(possibleNeighbor.GetComponent<ZoneScript>() == null) return false;
+
 		int zoneOne = zone.GetComponent<ZoneScript>().zoneNum;
 		int zoneTwo = possibleNeighbor.GetComponent<ZoneScript>().zoneNum;
 
@@ -117,5 +132,111 @@ public class ZoneSelector : MonoBehaviour {
 
 
 		return false;
+	}
+
+	public List<GameObject> GetZonesCanSeeFrom(GameObject zone){
+		if(zone.GetComponent<ZoneScript>() == null) return new List<GameObject>();
+		List<GameObject> zonesCanSee = new List<GameObject>();
+		zonesCanSee.Add (zone);
+
+		List<GameObject> originalNeighbors = new List<GameObject>();
+		List<string> sightDirections = new List<string>();
+		
+		float x = zone.transform.position.x;
+		float z = zone.transform.position.z;
+		
+		originalNeighbors = GetNeighborsOf(zone);
+		for(int i = 0; i < originalNeighbors.Count; ++i){
+			ZoneScript newZone = originalNeighbors[i].GetComponent<ZoneScript>();
+			//newZone.Highlight();
+			zonesCanSee.Add (originalNeighbors[i]);
+
+			if(BoardLayout.S.isStreetZone[newZone.zoneNum]){
+				float newX = newZone.transform.position.x;
+				float newZ = newZone.transform.position.z;
+				
+				float xDiff = Mathf.Abs (newX - x);
+				float zDiff = Mathf.Abs (newZ - z);
+				
+				if(xDiff > zDiff) sightDirections.Add ("x");
+				else sightDirections.Add( "z");
+			}
+			else{
+				originalNeighbors.RemoveAt(i);
+				i--;
+			}
+		}
+		
+		List<GameObject> zonesChecked = new List<GameObject>();
+		zonesChecked.AddRange(originalNeighbors);
+		zonesChecked.Add (zone);
+		
+		//for each neighbor, look along sight directions
+		for(int i = 0; i < originalNeighbors.Count; ++i){
+			//the keyvaluepair is so we know where the next neighbor came from
+			List<KeyValuePair<GameObject, GameObject>> neighbors = new List<KeyValuePair<GameObject,GameObject>>();
+			List<GameObject> firstNeighbors = GetNeighborsOf(originalNeighbors[i]);
+			
+			for(int j = 0; j < firstNeighbors.Count; ++j){
+				KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(originalNeighbors[i], firstNeighbors[j]);
+				neighbors.Add(newPair);
+			}
+			while(neighbors.Count > 0){
+				if(zonesChecked.Contains(neighbors[0].Value)){
+					neighbors.RemoveAt(0);
+					continue;
+				}
+				
+				GameObject newZone = neighbors[0].Value;
+				
+				float ogX = neighbors[0].Key.transform.position.x;
+				float ogZ = neighbors[0].Key.transform.position.z;
+				
+				float newX = newZone.transform.position.x;
+				float newZ = newZone.transform.position.z;
+				
+				float xDiff = Mathf.Abs(newX - ogX);
+				float zDiff = Mathf.Abs(newZ - ogZ);
+				
+				if(sightDirections[i] == "x" && xDiff > zDiff){
+					
+					//newZone.GetComponent<ZoneScript>().Highlight();
+					zonesCanSee.Add (newZone);
+					if(BoardLayout.S.isStreetZone[newZone.GetComponent<ZoneScript>().zoneNum]){
+						
+						List<GameObject> nextNeighbors = GetNeighborsOf(newZone);
+						for(int j = 0; j < nextNeighbors.Count; ++j){
+							KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(newZone, nextNeighbors[j]);
+							neighbors.Add(newPair);
+						}
+					}
+				}
+				else if(sightDirections[i] == "z" && zDiff >= xDiff){
+					//newZone.GetComponent<ZoneScript>().Highlight();
+					zonesCanSee.Add (newZone);
+					if(BoardLayout.S.isStreetZone[newZone.GetComponent<ZoneScript>().zoneNum]){
+						
+						List<GameObject> nextNeighbors = GetNeighborsOf(newZone);
+						for(int j = 0; j < nextNeighbors.Count; ++j){
+							KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(newZone, nextNeighbors[j]);
+							print (newPair);
+							neighbors.Add(newPair);
+						}
+					}
+				}
+				zonesChecked.Add (newZone);
+				neighbors.RemoveAt(0);
+			}
+		}
+
+		return zonesCanSee;
+	}
+
+	public void HighlightZonesCanSeeFrom(GameObject zone){
+		List<GameObject> zonesCanSee = GetZonesCanSeeFrom(zone);
+		foreach(GameObject zoneGO in zonesCanSee){
+			zoneGO.GetComponent<ZoneScript>().Highlight();
+		}
+
 	}
 }
