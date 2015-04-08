@@ -76,13 +76,13 @@ public class Survivor : MonoBehaviour {
 	void Update () {
 		if(!GameController.S.playerTurn) {Unhighlight(); return;}
 
-		if(GameController.S.currSurvivor != null) {
+		/*if(GameController.S.currSurvivor != null) {
 			if(GameController.S.currSurvivor != this) Unhighlight();
 
 			return;
 		}
 		if(GameController.S.closestSurvivor == this) Highlight();
-		else Unhighlight();
+		else Unhighlight();*/
 	}
 
 	void OnMouseOver(){
