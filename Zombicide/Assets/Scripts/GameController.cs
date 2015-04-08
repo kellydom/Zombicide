@@ -15,10 +15,18 @@ public class GameController : MonoBehaviour {
 	public bool mouseInWheel = false;
 	public bool mouseInWheelButton = false;
 
-	bool playerTurn;
+	public bool playerTurn;
 	bool playerGoing;
 	bool zombieGoing;
-	List<ZoneScript> zombieSpawnZones = new List<ZoneScript>();
+	List<GameObject> zombieSpawnZones = new List<GameObject>();
+	public Text turnText;
+	public Sprite gemEmpty;
+	public Sprite gemFull;
+	public List<Image> gems;
+
+	//for now, I'm just going to have a list of each zombie type, and 
+	//spawn from that randomly (until cards are done)
+	public List<GameObject> enemyTypes;
 
 	// Use this for initialization
 	void Start () {
@@ -42,11 +50,21 @@ public class GameController : MonoBehaviour {
 		}
 		deck = GameObject.Find("Main Camera").GetComponent<Deck>();
 
-		GameObject[] zombieSpawn = GameObject.FindGameObjectsWithTag("ZombieSpawn");
-		foreach(GameObject zSpawn in zombieSpawn){
-
+		foreach(Image img in gems){
+			img.sprite = null;
 		}
 
+		StartCoroutine(GetZombieSpawnZones());
+	}
+
+	IEnumerator GetZombieSpawnZones(){
+		yield return new WaitForEndOfFrame();
+
+		GameObject[] zombieSpawn = GameObject.FindGameObjectsWithTag("ZombieSpawn");
+		foreach(GameObject zSpawn in zombieSpawn){
+			GameObject zone = ZoneSelector.S.GetZoneAt(zSpawn.transform.position);
+			zombieSpawnZones.Add (zone);
+		}
 	}
 
 	public void TakeObjSetup(){
@@ -98,6 +116,7 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}
+		ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
 	}
 
 	IEnumerator PlayerTurn(){
@@ -105,6 +124,10 @@ public class GameController : MonoBehaviour {
 
 		while(true){
 			if(currSurvivor == null){
+				turnText.text = "Choose a Survivor";
+				foreach(Image img in gems){
+					img.sprite = null;
+				}
 				//check to see if all survivors have finished - otherwise, keep looping
 				bool allSurvivorsDone = true;
 				for(int i = 0; i < survivors.Count; ++i){
@@ -120,11 +143,14 @@ public class GameController : MonoBehaviour {
 					Vector3 hitPos = ray.GetPoint(hit);
 					closestSurvivor = GetClosestSurvivorTo(hitPos);
 					if(closestSurvivor != null){
-						closestSurvivor.Highlight();
-						if(Input.GetMouseButton(0)){
-							
-							currSurvivor = closestSurvivor;
-							currSurvivor.currTurn = true;
+						if(!closestSurvivor.HasGone){
+							closestSurvivor.Highlight();
+							if(Input.GetMouseButton(0)){
+								
+								currSurvivor = closestSurvivor;
+								currSurvivor.currTurn = true;
+							}
+
 						}
 
 					}
@@ -140,9 +166,21 @@ public class GameController : MonoBehaviour {
 				ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 				currSurvivor.currTurn = false;
 				currSurvivor.Unhighlight();
+				currSurvivor.HasGone = true;
 				currSurvivor = null;
 				yield return 0;
 				continue;
+			}
+			turnText.text = "Actions Remaining: ";
+			int ctr = 0;
+			foreach(Image gem in gems){
+				if(ctr < currSurvivor.numActions){
+					gem.sprite = gemFull;
+				}
+				else{
+					gem.sprite = gemEmpty;
+				}
+				ctr++;
 			}
 
 			switch(ActionWheel.S.CurrAction){
@@ -182,16 +220,78 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator ZombieTurn(){
 		zombieGoing = true;
+		turnText.text = "Zombies' Turn!";
+		foreach(Image img in gems){
+			img.sprite = null;
+		}
 
 		//Move Zombies on board
 
 		//Spawn Zombies
+		print ("going to do this " + zombieSpawnZones.Count);
+		foreach(GameObject zone in zombieSpawnZones){
+			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, CameraController.S.transform.position.y, 0) + Vector3.back / 3, 2);
+			yield return new WaitForSeconds(2);
 
+			SpawnZombiesAt(zone);
+			yield return new WaitForSeconds(1);
+
+		}
 
 
 		yield return 0;
+
+		foreach(Survivor surv in survivors){
+			surv.HasGone = false;
+			surv.numActions = 3;
+		}
+
 		zombieGoing = false;
 		playerTurn = true;
+	}
+
+	void SpawnZombiesAt(GameObject zone){
+
+		//Random zombie spawn while we don't have cards fully implemented yet
+		int zombieType = 0;
+		float ran = Random.Range(0.0f, 100.0f);
+		if(ran < 50) zombieType = 0;
+		else if(ran < 85) zombieType = 1;
+		else zombieType = 2;
+
+		int numToSpawn = 0;
+		if(zombieType == 0) numToSpawn = Random.Range(1, 5);
+		else if(zombieType == 1) numToSpawn = Random.Range(1, 3);
+		else numToSpawn = 1;
+
+		Vector3 topRightCorner = zone.GetComponent<BoxCollider>().bounds.max;
+		Vector3 topLeftCorner = topRightCorner;
+		topLeftCorner.x = zone.GetComponent<BoxCollider>().bounds.min.x;
+		topRightCorner.z += -0.03f;
+		topLeftCorner.z += -0.03f;
+
+
+		Vector3 spawnPos = Vector3.Lerp (topLeftCorner, topRightCorner, (zombieType + 1) / 5.0f);
+
+
+		if(zombieType == 2){
+			//Have to spawn 2 walkers per fatty as well)
+			Vector3 walkerSpawnPos = Vector3.Lerp (topLeftCorner, topRightCorner, 1/5.0f);
+
+			int walkersToSpawn = numToSpawn * 2;
+			
+			
+			while(walkersToSpawn > 0){
+				GameObject zombie = Instantiate(enemyTypes[0], walkerSpawnPos + Vector3.up / 5 * walkersToSpawn, Quaternion.identity) as GameObject;
+				walkersToSpawn--;
+			}
+		}
+
+		while(numToSpawn > 0){
+			GameObject zombie = Instantiate(enemyTypes[zombieType], spawnPos + Vector3.up / 5 * numToSpawn, Quaternion.identity) as GameObject;
+			numToSpawn--;
+		}
+		
 	}
 
 	void Update(){

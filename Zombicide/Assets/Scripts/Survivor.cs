@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Survivor : MonoBehaviour {
@@ -23,9 +24,10 @@ public class Survivor : MonoBehaviour {
 
 	public bool currTurn = false;
 
+
 	// Use this for initialization
 	void Start () {
-		numActions = 100;
+		numActions = 3;
 		baseColor = gameObject.GetComponent<Renderer>().material.color;
 	}
 
@@ -55,6 +57,7 @@ public class Survivor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(!GameController.S.playerTurn) {Unhighlight(); return;}
 
 		if(GameController.S.currSurvivor != null) {
 			if(GameController.S.currSurvivor != this) Unhighlight();

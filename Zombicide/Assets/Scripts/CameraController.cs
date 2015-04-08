@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
+	public static CameraController S;	
 
 	public float closeDist;
 	public float farDist;
@@ -17,15 +18,25 @@ public class CameraController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Singleton initialization
+		if(S == null){
+			S = this;
+		}
+		else
+		{
+			if(this != S)
+				Destroy(this.gameObject);
+		}
+
 		transform.position = board.transform.position + Vector3.up * (farDist - closeDist) / 2;
 		rightX = topZ = Mathf.NegativeInfinity;
 		leftX = bottomZ = Mathf.Infinity;
 
 		foreach(Transform child in board.transform){
-			if(child.position.x > rightX) rightX = child.position.x;
-			if(child.position.x < leftX) leftX = child.position.x;
+			if(child.position.x > rightX) rightX = child.position.x + 0.5f;
+			if(child.position.x < leftX) leftX = child.position.x - 0.5f;
 			if(child.position.z > topZ) topZ = child.position.z;
-			if(child.position.z < bottomZ) bottomZ = child.position.z;
+			if(child.position.z < bottomZ) bottomZ = child.position.z - 0.01f;
 		}
 		topZ -= 0.1f;
 		bottomZ -= 1;
@@ -83,5 +94,27 @@ public class CameraController : MonoBehaviour {
 
 			mouseDragStart = Input.mousePosition;
 		}
+	}
+
+	IEnumerator MoveOverTime(object[] parms){
+		Vector3 pos = (Vector3)parms[0];
+		float time = (float)parms[1];
+
+		Vector3 startPos = transform.position;
+
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / time;
+			transform.position = Vector3.Lerp (startPos, pos, t);
+			yield return 0;
+		}
+
+	}
+
+	public void MoveTo(Vector3 pos, float time){
+		StopCoroutine("MoveOverTime");
+
+		object[] parms = new object[2]{pos, time};
+		StartCoroutine("MoveOverTime", parms);
 	}
 }
