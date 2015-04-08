@@ -2246,7 +2246,7 @@ Transform:
   - {fileID: 588188651}
   - {fileID: 1818681633}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
 --- !u!54 &848796783
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3100,6 +3100,7 @@ MonoBehaviour:
   survivors: []
   currSurvivor: {fileID: 0}
   closestSurvivor: {fileID: 0}
+  deck: {fileID: 0}
   mouseInWheel: 0
   mouseInWheelButton: 0
 --- !u!114 &1166976250
@@ -4979,7 +4980,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -.981000006
+      value: -.957000017
       objectReference: {fileID: 0}
     - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
       propertyPath: m_LocalRotation.x
@@ -4999,7 +5000,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
       propertyPath: m_LocalScale.x

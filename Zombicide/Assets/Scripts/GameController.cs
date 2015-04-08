@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour {
 	public List<Survivor> survivors = new List<Survivor>();
 	public Survivor currSurvivor;
 	public Survivor closestSurvivor;
-	//public Deck deck;
+	public Deck deck;
 	//public Card picked;
 
 	public bool mouseInWheel = false;
@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
 
 	bool playerTurn;
 	bool playerGoing;
+	bool zombieGoing;
 
 	// Use this for initialization
 	void Start () {
@@ -32,12 +33,13 @@ public class GameController : MonoBehaviour {
 		}
 		playerTurn = true;
 		playerGoing = false;
+		zombieGoing = false;
 
 		GameObject[] survivorsTEMP = GameObject.FindGameObjectsWithTag("Survivor");
 		for(int i = 0; i < survivorsTEMP.Length; ++i){
 			survivors.Add(survivorsTEMP[i].GetComponent<Survivor>());
 		}
-		//deck = GameObject.Find("Main Camera").GetComponent<Deck>();
+		deck = GameObject.Find("Main Camera").GetComponent<Deck>();
 	}
 
 	public void TakeObjSetup(){
@@ -172,6 +174,16 @@ public class GameController : MonoBehaviour {
 		return surv;
 	}
 
+	IEnumerator ZombieTurn(){
+		zombieGoing = true;
+
+		//Move Zombies on board
+
+		//Spawn Zombies
+
+		zombieGoing = false;
+		playerTurn = true;
+	}
 
 	void Update(){
 		//picked = deck.draw ();
@@ -183,7 +195,9 @@ public class GameController : MonoBehaviour {
 			}
 		}
 		else{
-
+			if(!zombieGoing){
+				StartCoroutine(ZombieTurn());
+			}
 		}
 
 	}
