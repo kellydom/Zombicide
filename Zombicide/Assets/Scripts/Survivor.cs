@@ -15,12 +15,17 @@ public class Survivor : MonoBehaviour {
 		get{return hasGone;}
 		set{hasGone = value;}
 	}
-
+	public string name;
 	public int numActions;
 	public bool slippery = false;
 	public bool extraAction = false;
 	public bool freeSearch = false;
 	public bool doubleMove = false;
+	public Card front1;
+	public Card front2;
+	public Card back1;
+	public Card back2;
+	public Card back3;
 
 	public bool currTurn = false;
 
