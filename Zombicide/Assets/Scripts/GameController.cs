@@ -52,6 +52,16 @@ public class GameController : MonoBehaviour {
 		}
 		deck = GameObject.Find("Main Camera").GetComponent<Deck>();
 
+		foreach (Survivor guy in survivors) {
+			guy.front1 = deck.empty;
+			guy.front2 = deck.empty;
+			guy.back1 = deck.empty;
+			guy.back2 = deck.empty;
+			guy.back3 = deck.empty;
+		}
+
+		survivors [1].front1 = deck.pan;
+
 		foreach(Image img in gems){
 			img.sprite = null;
 		}

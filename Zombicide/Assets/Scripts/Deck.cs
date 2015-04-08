@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
+	public Card empty = new Card ();
 	public Card pan = new Card();
 	public Card molotov = new Card();
 	public Card crowbar = new Card();
@@ -30,11 +31,16 @@ public class Deck : MonoBehaviour {
 	public Card zombie = new Card();
 	public Card ammoH = new Card();
 	public Card ammoL = new Card();
+	public Button shotgunButton;
+	public Button rifleButton;
+	public Button emptyButton;
 
 	public List<string> equipment = new List<string>();
 
 	// Use this for initialization
 	void Start () {
+		empty.but = emptyButton;
+		empty.cardName = "Empty";
 		pan.cardName = "Pan";
 		pan.weapon = true;
 		pan.combinable = false;
@@ -43,6 +49,7 @@ public class Deck : MonoBehaviour {
 		pan.dice = 1;
 		pan.openDoor = false;
 		pan.noise = false;
+		pan.but = shotgunButton;
 		for (int i = 0; i < 3; i++) {
 			equipment.Add(pan.cardName);
 		}
@@ -297,7 +304,7 @@ public class Card {
 	public string combineWith;
 	public int range;
 	public int dice;
-	public Sprite image;
+	public Button but;
 	public bool noise;
 	public bool openDoor;
 	public bool doorNoise;
