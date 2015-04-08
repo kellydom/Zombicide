@@ -16,6 +16,10 @@ public class Survivor : MonoBehaviour {
 	}
 
 	public int numActions;
+	public bool slippery = false;
+	public bool extraAction = false;
+	public bool freeSearch = false;
+	public bool doubleMove = false;
 
 	public bool currTurn = false;
 

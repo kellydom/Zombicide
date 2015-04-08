@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour {
 	public List<Survivor> survivors = new List<Survivor>();
 	public Survivor currSurvivor;
 	public Survivor closestSurvivor;
+	public Deck deck;
+	//public Card picked;
 
 	public bool mouseInWheel = false;
 	public bool mouseInWheelButton = false;
@@ -35,7 +37,7 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < survivorsTEMP.Length; ++i){
 			survivors.Add(survivorsTEMP[i].GetComponent<Survivor>());
 		}
-	
+		deck = GameObject.Find("Main Camera").GetComponent<Deck>();
 	}
 
 	public void TakeObjSetup(){
@@ -47,6 +49,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SearchSetup(){
+
 
 	}
 
@@ -171,6 +174,8 @@ public class GameController : MonoBehaviour {
 
 
 	void Update(){
+		//picked = deck.draw ();
+		//print (picked.cardName);
 		if(playerTurn){
 			if(!playerGoing){
 				//I'm using coroutines because I think it looks cleaner here
