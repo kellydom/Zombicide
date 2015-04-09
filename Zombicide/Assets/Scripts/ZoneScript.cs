@@ -47,10 +47,6 @@ public class ZoneScript : MonoBehaviour {
 	}
 
 	public void DoZombieActions(){
-		StartCoroutine(ActionCoroutine());
-	}
-
-	IEnumerator ActionCoroutine(){
 		//These are the zombies that actually have to do actions
 		//It may be exactly the lists above, but it is possible
 		//There are zombies in this zone who have already gone, so
@@ -62,32 +58,46 @@ public class ZoneScript : MonoBehaviour {
 		
 		foreach(GameObject zombie in walkersInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
+			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			walkersToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in runnersInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
+			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			runnersToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in fattiesInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
+			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			fattiesToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in abombInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
 			abombToGo.Add (zombie);
 		}
-		
-		
-		//Now actually do actions
+
+		object[] parms = new object[4]{walkersToGo, runnersToGo, fattiesToGo, abombToGo};
 		
 		List<GameObject> allZombies = new List<GameObject>();
 		allZombies.AddRange(walkersToGo);
 		allZombies.AddRange(runnersToGo);
 		allZombies.AddRange(fattiesToGo);
 		allZombies.AddRange(abombToGo);
+		print (zoneNum + " " + allZombies.Count);
 		foreach(GameObject zombie in allZombies){
 			zombie.GetComponent<Enemy>().hasDoneAction = true;
 		}
+		StartCoroutine("ActionCoroutine", parms);
+	}
+
+	IEnumerator ActionCoroutine(object[] parms){
+		
+		List<GameObject> walkersToGo = (List<GameObject>)parms[0];
+		List<GameObject> runnersToGo = (List<GameObject>)parms[1];
+		List<GameObject> fattiesToGo = (List<GameObject>)parms[2];
+		List<GameObject> abombToGo = (List<GameObject>)parms[3];
+		
+		//Now actually do actions
 
 		//The reason I split it up like this is because
 		//if zombies split to go down multiple paths,
@@ -106,6 +116,7 @@ public class ZoneScript : MonoBehaviour {
 
 	public void DoAnAction(List<GameObject> zombies){
 		if(zombies.Count == 0) return;
+		print (zoneNum + " " + zombies.Count);
 		
 		GameObject enemyZone = zombies[0].GetComponent<Enemy>().currZone;
 		List<GameObject> closestZones = ZoneSelector.S.NoisiestSeeableZonesWithSurvivor(enemyZone);
@@ -135,10 +146,17 @@ public class ZoneScript : MonoBehaviour {
 
 			float offsetCtr = 1;
 			foreach(GameObject zombie in zombies){
-				zombie.GetComponent<Enemy>().MoveTo(nextZone, offsetCtr);
+				zombie.GetComponent<Enemy>().MoveTo(nextZone, enemyZone, offsetCtr);
 				offsetCtr+= 0.1f;
 			}
 		}
+	}
+	public void RemoveEnemy(GameObject zombie){
+		Enemy.EnemyType type = zombie.GetComponent<Enemy>().type;
+		if(type == Enemy.EnemyType.Walker) walkersInZone.Remove(zombie);
+		if(type == Enemy.EnemyType.Runner) runnersInZone.Remove(zombie);
+		if(type == Enemy.EnemyType.Fatty) fattiesInZone.Remove(zombie);
+		if(type == Enemy.EnemyType.Abomination) abombInZone.Remove(zombie);
 	}
 
 	public void AddNoiseToken(){

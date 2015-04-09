@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour {
 	
 	}
 
-	public void MoveTo(GameObject zone, float vertOffset){
+	public void MoveTo(GameObject zone, GameObject oldZone, float vertOffset){
 		currZone = zone;
 		Vector3 topRightCorner = zone.GetComponent<BoxCollider>().bounds.max;
 		Vector3 topLeftCorner = topRightCorner;
@@ -47,6 +47,8 @@ public class Enemy : MonoBehaviour {
 		if(type == EnemyType.Abomination){
 			zone.GetComponent<ZoneScript>().abombInZone.Add (this.gameObject);
 		}
+
+		oldZone.GetComponent<ZoneScript>().RemoveEnemy(this.gameObject);
 	}
 	
 	// Update is called once per frame

@@ -247,7 +247,10 @@ public class GameController : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		foreach(GameObject zone in BoardLayout.S.createdZones){
+			if(allZombies.Count == 0) continue;
+
 			zone.GetComponent<ZoneScript>().DoZombieActions();
+			yield return new WaitForSeconds(0.5f);
 		}
 		yield return new WaitForSeconds(1);
 
