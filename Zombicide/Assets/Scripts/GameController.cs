@@ -10,7 +10,8 @@ public class GameController : MonoBehaviour {
 	public Survivor currSurvivor;
 	public Survivor closestSurvivor;
 	public Deck deck;
-	//public Card picked;
+	public Card picked;
+	public Button pickedImage;
 
 	public bool mouseInWheel = false;
 	public bool mouseInWheelButton = false;
@@ -60,7 +61,7 @@ public class GameController : MonoBehaviour {
 			guy.back3 = deck.empty;
 		}
 
-		survivors [1].front1 = deck.pan;
+		//survivors [1].front1 = deck.pan;
 
 		foreach(Image img in gems){
 			img.sprite = null;
@@ -88,7 +89,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SearchSetup(){
-
+		picked = deck.draw ();
+		print (picked.cardName);
+		//pickedImage.image.sprite = picked.but.image.sprite;
+		//pickedImage.transform.position = new Vector3 (0, 0, 0);
 
 	}
 
