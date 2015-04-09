@@ -25,6 +25,9 @@ public class GameController : MonoBehaviour {
 	public Sprite gemFull;
 	public List<Image> gems;
 
+	public Image zombieNumImg;
+	public Text zombieNum;
+
 	//for now, I'm just going to have a list of each zombie type, and 
 	//spawn from that randomly (until cards are done)
 	public List<GameObject> enemyTypes;
@@ -370,6 +373,15 @@ public class GameController : MonoBehaviour {
 		if(currSurvivor == null) return;
 	}
 
+	public void SetZombieNumText(Vector3 pos, int num){
+		zombieNum.text = "x"+num;
+		Vector2 viewportPoint = Camera.main.WorldToScreenPoint(pos - new Vector3(0, 0, 0.05f)); //convert game object position to VievportPoint
+		// set MIN and MAX Anchor values(positions) to the same position (ViewportPoint)
+		zombieNumImg.transform.position = viewportPoint;
+	}
 
-
+	public void MoveZombieNumOff(){
+		zombieNum.text = "";
+		zombieNumImg.transform.position = new Vector2(-1, -1);
+	}
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
@@ -54,6 +55,35 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	void OnMouseEnter(){
+		List<GameObject> zoneZombies = new List<GameObject>();
+		if(type == EnemyType.Walker){
+			zoneZombies = currZone.GetComponent<ZoneScript>().walkersInZone;
+		}
+		if(type == EnemyType.Runner){
+			zoneZombies = currZone.GetComponent<ZoneScript>().runnersInZone;
+		}
+		if(type == EnemyType.Fatty){
+			zoneZombies = currZone.GetComponent<ZoneScript>().fattiesInZone;
+		}
+		if(type == EnemyType.Abomination){
+			zoneZombies = currZone.GetComponent<ZoneScript>().abombInZone;
+		}
+
+		Vector3 avgPos = Vector3.zero;
+
+		foreach(GameObject zombie in zoneZombies){
+			avgPos += zombie.transform.position;
+		}
+
+		avgPos /= zoneZombies.Count;
+		GameController.S.SetZombieNumText(transform.position, zoneZombies.Count);
+	}
+
+	void OnMouseExit(){
+		GameController.S.MoveZombieNumOff();
 	}
 
 }
