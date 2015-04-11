@@ -16,6 +16,7 @@ public class ZoneScript : MonoBehaviour {
 	public List<GameObject> abombInZone = new List<GameObject>();
 
 	public List<GameObject> noiseTokensInZone = new List<GameObject>();
+	public GameObject noiseTokenPrefab;
 
 
 	// Use this for initialization
@@ -160,7 +161,10 @@ public class ZoneScript : MonoBehaviour {
 	}
 
 	public void AddNoiseToken(){
-		GameObject temp = new GameObject();
+		Vector3 pos = transform.position;
+		pos += new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(0.2f, 0.5f), Random.Range(-0.05f, 0.05f));
+
+		GameObject temp = Instantiate(noiseTokenPrefab, pos, Quaternion.identity) as GameObject;
 		noiseTokensInZone.Add (temp);
 	}
 
@@ -174,6 +178,10 @@ public class ZoneScript : MonoBehaviour {
 	}
 
 	public void RemoveNoiseTokens(){
+		foreach(GameObject noiseToken in noiseTokensInZone){
+			Destroy(noiseToken);
+		}
+
 		noiseTokensInZone.Clear();
 	}
 	

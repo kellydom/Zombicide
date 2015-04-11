@@ -104,6 +104,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void MakeNoiseSetup(){
+		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+		if(currSurvivor == null) return;
+		currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
+		currSurvivor.numActions--;
 
 	}
 

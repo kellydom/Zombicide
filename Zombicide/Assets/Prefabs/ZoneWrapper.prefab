@@ -127,6 +127,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoneNum: 0
+  walkersInZone: []
+  runnersInZone: []
+  fattiesInZone: []
+  abombInZone: []
+  noiseTokensInZone: []
+  noiseTokenPrefab: {fileID: 114478, guid: 5b16e734eb2d22f49bb254b56c0a6db3, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
