@@ -80,6 +80,12 @@ public class ActionWheel : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(!wheelIsMinimized && !wheelIsChanging){
+			if(!mouseInWheel && !mouseInWheelButton){
+				StartCoroutine(RetractWheel());
+			}
+		}
+
 		if(GameController.S.currSurvivor == null){
 			objBtn.interactable = false;
 			nothingBtn.interactable = false;
@@ -132,6 +138,10 @@ public class ActionWheel : MonoBehaviour {
 	
 	public void MouseEnterButton(){
 		mouseInWheelButton = true;
+
+		if(wheelIsMinimized && !wheelIsChanging){
+			StartCoroutine(ExpandWheel());
+		}
 	}
 	
 	public void MouseExitButton(){
@@ -190,8 +200,8 @@ public class ActionWheel : MonoBehaviour {
 	public void ActionWheelButtonClick(){
 		if(wheelIsChanging) return;
 
-		if(wheelIsMinimized) StartCoroutine(ExpandWheel());
-		else StartCoroutine(RetractWheel());
+		//if(wheelIsMinimized) StartCoroutine(ExpandWheel());
+		//else StartCoroutine(RetractWheel());
 	}
 
 	public void ActionHover(string action){

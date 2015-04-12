@@ -102,6 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
+  hasDoneAction: 0
+  currZone: {fileID: 0}
+  damageToKill: 3
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

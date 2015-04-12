@@ -224,8 +224,8 @@ public class GameController : MonoBehaviour {
 				yield return 0;
 				continue;
 			}
-			turnText.text = "Actions Remaining: ";
-			int ctr = 0;
+			turnText.text = "Actions Remaining: " + currSurvivor.numActions;
+			/*int ctr = 0;
 			foreach(Image gem in gems){
 				if(ctr < currSurvivor.numActions){
 					gem.sprite = gemFull;
@@ -234,7 +234,7 @@ public class GameController : MonoBehaviour {
 					gem.sprite = gemEmpty;
 				}
 				ctr++;
-			}
+			}*/
 
 			switch(ActionWheel.S.CurrAction){
 			case "Move":

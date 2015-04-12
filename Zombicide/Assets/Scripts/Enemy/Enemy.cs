@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour {
 	public EnemyType type;
 	public bool hasDoneAction;
 	public GameObject currZone;
+	public int damageToKill;
 
 	// Use this for initialization
 	void Start () {
