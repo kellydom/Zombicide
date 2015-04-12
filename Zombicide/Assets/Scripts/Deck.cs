@@ -45,10 +45,11 @@ public class Deck : MonoBehaviour {
 		pan.weapon = true;
 		pan.combinable = false;
 		pan.dualWield = false;
-		pan.range = 0;
+		pan.closeRange = 0;
 		pan.dice = 1;
 		pan.openDoor = false;
 		pan.noise = false;
+		pan.melee = true;
 		pan.but = shotgunButton;
 		for (int i = 0; i < 3; i++) {
 			equipment.Add(pan.cardName);
@@ -56,7 +57,10 @@ public class Deck : MonoBehaviour {
 
 		molotov.cardName = "Molotov";
 		molotov.weapon = true;
+		molotov.closeRange = 0;
+		molotov.farRange = 2;
 		molotov.dualWield = false;
+		molotov.melee = false;
 
 		crowbar.cardName = "Crowbar";
 		crowbar.weapon = true;
@@ -64,6 +68,7 @@ public class Deck : MonoBehaviour {
 		crowbar.noise = false;
 		crowbar.doorNoise = false;
 		crowbar.combinable = false;
+		crowbar.melee = true;
 		crowbar.dice = 1;
 		for (int i = 0; i < 2; i++) {
 			equipment.Add(crowbar.cardName);
@@ -73,10 +78,11 @@ public class Deck : MonoBehaviour {
 		bat.weapon = true;
 		bat.combinable = false;
 		bat.noise = false;
-		bat.range = 0;
+		bat.closeRange = 0;
 		bat.dice = 1;
 		bat.dualWield = false;
 		bat.openDoor = false;
+		bat.melee = true;
 		for (int i = 0; i < 2; i++) {
 			equipment.Add(bat.cardName);
 		}
@@ -87,8 +93,9 @@ public class Deck : MonoBehaviour {
 		axe.noise = false;
 		axe.doorNoise = true;
 		axe.combinable = false;
+		axe.melee = true;
 		axe.dice = 1;
-		axe.range = 0;
+		axe.closeRange = 0;
 		for (int i = 0; i < 2; i++) {
 			equipment.Add(axe.cardName);
 		}
@@ -98,8 +105,9 @@ public class Deck : MonoBehaviour {
 		machete.dualWield = true;
 		machete.openDoor = false;
 		machete.dice = 1;
-		machete.range = 0;
+		machete.closeRange = 0;
 		machete.noise = false;
+		machete.melee = true;
 		for (int i = 0; i < 4; i++) {
 			equipment.Add(machete.cardName);
 		}
@@ -302,10 +310,13 @@ public class Card {
 	public bool dualWield;
 	public bool combinable;
 	public string combineWith;
-	public int range;
+	public int closeRange;
+	public int farRange;
 	public int dice;
 	public Button but;
 	public bool noise;
 	public bool openDoor;
 	public bool doorNoise;
+
+	public bool melee;
 }

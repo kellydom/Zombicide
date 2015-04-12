@@ -391,4 +391,15 @@ public class ZoneSelector : MonoBehaviour {
 
 		return possiblePaths;
 	}
+
+	public List<GameObject> GetZonesInRange(GameObject startZone, int close, int far){
+		List<GameObject> rangeZones = new List<GameObject>();
+
+		foreach(GameObject zone in BoardLayout.S.createdZones){
+			int zoneDist = ZoneDistance(startZone, zone);
+			if(zoneDist >= close && zoneDist <= far) rangeZones.Add(zone);
+		}
+
+		return rangeZones;
+	}
 }

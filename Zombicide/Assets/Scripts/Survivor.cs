@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Survivor : MonoBehaviour {
 
@@ -30,6 +31,8 @@ public class Survivor : MonoBehaviour {
 	public Card back3;
 
 	public bool currTurn = false;
+
+	public bool hasSearched = false;
 
 
 	// Use this for initialization
@@ -71,6 +74,79 @@ public class Survivor : MonoBehaviour {
 		SetZone(newZone);
 		GameController.S.MoveSetup();
 	}
+	public bool CanMove(){
+		ZoneScript zs = currZone.GetComponent<ZoneScript>();
+		
+		if(numActions > 1) return true;
+		
+		if(zs.walkersInZone.Count > 0) return false;
+		if(zs.runnersInZone.Count > 0) return false;
+		if(zs.fattiesInZone.Count > 0) return false;
+		if(zs.abombInZone.Count > 0) return false;
+		
+		return true;
+	}
+
+	public bool CanDoMelee(){
+		if(front1 != null){
+			if(front1.weapon && front1.melee){
+				ZoneScript zs = currZone.GetComponent<ZoneScript>();
+				
+				if(zs.walkersInZone.Count > 0) return true;
+				if(zs.runnersInZone.Count > 0) return true;
+				if(zs.fattiesInZone.Count > 0) return true;
+				if(zs.abombInZone.Count > 0) return true;
+
+			}
+		}
+		if(front2 != null){
+			if(front2.weapon && front2.melee){
+				ZoneScript zs = currZone.GetComponent<ZoneScript>();
+				
+				if(zs.walkersInZone.Count > 0) return true;
+				if(zs.runnersInZone.Count > 0) return true;
+				if(zs.fattiesInZone.Count > 0) return true;
+				if(zs.abombInZone.Count > 0) return true;
+				
+			}
+		}
+
+		return false;
+	}
+	public bool CanDoRanged(){
+		if(front1 != null){
+			if(front1.weapon && !front1.melee){
+				ZoneScript zs = currZone.GetComponent<ZoneScript>();
+				List<GameObject> frontRange1 = new List<GameObject>();
+				frontRange1 = ZoneSelector.S.GetZonesInRange(currZone, front1.closeRange, front1.farRange);
+				
+				foreach(GameObject zone in frontRange1){
+					
+					if(zone.GetComponent<ZoneScript>().walkersInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().runnersInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().fattiesInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().abombInZone.Count > 0) return true;
+				}
+			}
+		}
+		if(front2 != null){
+			if(front2.weapon && !front2.melee){
+				ZoneScript zs = currZone.GetComponent<ZoneScript>();
+				List<GameObject> frontRange2 = new List<GameObject>();
+				frontRange2 = ZoneSelector.S.GetZonesInRange(currZone, front2.closeRange, front2.farRange);
+				
+				foreach(GameObject zone in frontRange2){
+					
+					if(zone.GetComponent<ZoneScript>().walkersInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().runnersInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().fattiesInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().abombInZone.Count > 0) return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -110,4 +186,5 @@ public class Survivor : MonoBehaviour {
 		if(currTurn) return;
 		//Unhighlight();
 	}
+
 }

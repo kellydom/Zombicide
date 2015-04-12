@@ -18,6 +18,8 @@ public class ZoneScript : MonoBehaviour {
 	public List<GameObject> noiseTokensInZone = new List<GameObject>();
 	public GameObject noiseTokenPrefab;
 
+	public GameObject objectiveInRoom;
+
 
 	// Use this for initialization
 	void Start () {
@@ -84,7 +86,6 @@ public class ZoneScript : MonoBehaviour {
 		allZombies.AddRange(runnersToGo);
 		allZombies.AddRange(fattiesToGo);
 		allZombies.AddRange(abombToGo);
-		print (zoneNum + " " + allZombies.Count);
 		foreach(GameObject zombie in allZombies){
 			zombie.GetComponent<Enemy>().hasDoneAction = true;
 		}

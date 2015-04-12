@@ -27,6 +27,19 @@ public class ActionWheel : MonoBehaviour {
 		get{return currAction;}
 	}
 
+	public Button objBtn;
+	public Button nothingBtn;
+	public Button moveBtn;
+	public Button rangedBtn;
+	public Button meleeBtn;
+	public Button openDoorBtn;
+	public Button driveBtn;
+	public Button getInCarBtn;
+	public Button switchSeatsBtn;
+	public Button makeNoiseBtn;
+	public Button searchBtn;
+	public Button invBtn;
+
 	// Use this for initialization
 	void Start () {
 		if(S == null){
@@ -49,9 +62,63 @@ public class ActionWheel : MonoBehaviour {
 
 		actionText.text = "";
 	}
+
+	void CheckDoor(){
+		int pZone = GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().zoneNum;
+
+		bool interactable = false;
+		foreach(BoardLayout.Door door in BoardLayout.S.doorConnections){
+			if(door.zoneOne == pZone || door.zoneTwo == pZone){
+				if(!door.isOpened){
+					interactable = true;
+				}
+			}
+		}
+
+		openDoorBtn.interactable = interactable;
+	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameController.S.currSurvivor == null){
+			objBtn.interactable = false;
+			nothingBtn.interactable = false;
+			moveBtn.interactable = false;
+			rangedBtn.interactable = false;
+			meleeBtn.interactable = false;
+			openDoorBtn.interactable = false;
+			driveBtn.interactable = false;
+			getInCarBtn.interactable = false;
+			switchSeatsBtn.interactable = false;
+			makeNoiseBtn.interactable = false;
+			searchBtn.interactable = false;
+			invBtn.interactable = false;
+
+			return;
+		}
+		else{
+			nothingBtn.interactable = true;
+			makeNoiseBtn.interactable = true;
+			invBtn.interactable = true;
+		}
+		CheckDoor();
+		
+		int zoneNum = GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().zoneNum;
+		if(GameController.S.currSurvivor.hasSearched || BoardLayout.S.isStreetZone[zoneNum]) searchBtn.interactable = false;
+		else searchBtn.interactable = true;
+
+
+		if(!GameController.S.currSurvivor.CanMove()) moveBtn.interactable = false;
+		else moveBtn.interactable = true;
+
+		if(GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom == null) objBtn.interactable = false;
+		else objBtn.interactable = true;
+
+		if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;
+		else  meleeBtn.interactable = false;
+		
+		if(GameController.S.currSurvivor.CanDoRanged()) rangedBtn.interactable = true;
+		else  rangedBtn.interactable = false;
 	
 	}
 	public void MouseEnterWheel(){
@@ -181,13 +248,14 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionClick(string action){
+		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
+			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
+		}
+
 		if(GameController.S.currSurvivor == null) return;
 		if(currAction == action){
 			switch(action){
 			case "Move":
-				for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
-					BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
-				}
 				break;
 			}
 

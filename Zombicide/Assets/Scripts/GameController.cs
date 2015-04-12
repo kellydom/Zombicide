@@ -84,7 +84,14 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void TakeObjSetup(){
+		if(currSurvivor == null) return;
+		if(currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom == null) return;
 
+		Destroy(currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom);
+		currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom = null;
+		
+		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+		currSurvivor.numActions--;
 	}
 
 	public void ReorganizeInvSetup(){
@@ -94,13 +101,31 @@ public class GameController : MonoBehaviour {
 	public void SearchSetup(){
 		picked = deck.draw ();
 		print (picked.cardName);
+		currSurvivor.hasSearched = true;
+		currSurvivor.numActions--;
 		//pickedImage.image.sprite = picked.but.image.sprite;
 		//pickedImage.transform.position = new Vector3 (0, 0, 0);
-
+		
+		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 	}
 
 	public void OpenDoorSetup(){
+		if(currSurvivor == null) return;
 
+		int pZone = currSurvivor.CurrZone.GetComponent<ZoneScript>().zoneNum;
+		for(int i = 0; i < BoardLayout.S.doorConnections.Count; ++i){
+			BoardLayout.Door door = BoardLayout.S.doorConnections[i];
+			if(door.zoneOne == pZone || door.zoneTwo == pZone){
+				if(!door.isOpened){
+					BoardLayout.S.doors[i].transform.Rotate(Vector3.right, 180);
+					Vector3 newPos = BoardLayout.S.doors[i].transform.position + Vector3.up / 3.0f;
+					BoardLayout.S.doors[i].transform.position = newPos;
+					door.isOpened = true;
+				}
+			}
+		}
+
+		currSurvivor.numActions--;
 	}
 
 	public void MakeNoiseSetup(){
@@ -217,7 +242,16 @@ public class GameController : MonoBehaviour {
 					GameObject clickedZone = ZoneSelector.S.CurrZone;
 					GameObject survZone = currSurvivor.CurrZone;
 					if(ZoneSelector.S.IsNeighborOf(clickedZone, survZone)){
-						currSurvivor.MoveTo(clickedZone, 1);
+						ZoneScript zs = currSurvivor.CurrZone.GetComponent<ZoneScript>();
+
+						int actionCount = 1;
+						
+						if(zs.walkersInZone.Count > 0) actionCount = 2;
+						if(zs.runnersInZone.Count > 0) actionCount = 2;
+						if(zs.fattiesInZone.Count > 0) actionCount = 2;
+						if(zs.abombInZone.Count > 0) actionCount = 2;
+
+						currSurvivor.MoveTo(clickedZone, actionCount);
 					}
 				}
 				break;
@@ -261,7 +295,7 @@ public class GameController : MonoBehaviour {
 			if(allZombies.Count == 0) continue;
 
 			zone.GetComponent<ZoneScript>().DoZombieActions();
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 		}
 		yield return new WaitForSeconds(1);
 

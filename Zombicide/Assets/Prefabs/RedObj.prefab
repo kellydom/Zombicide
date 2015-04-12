@@ -61,6 +61,7 @@ GameObject:
   - 4: {fileID: 421214}
   - 65: {fileID: 6582264}
   - 54: {fileID: 5487346}
+  - 114: {fileID: 11466186}
   m_Layer: 0
   m_Name: RedObj
   m_TagString: Untagged
@@ -138,8 +139,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145246}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 5.51342964e-07}
-  m_LocalPosition: {x: 2.3269999, y: .0670000017, z: -1.69599998}
-  m_LocalScale: {x: .159999996, y: .0160000008, z: .160000011}
+  m_LocalPosition: {x: -.531000018, y: .0839999989, z: -.159999996}
+  m_LocalScale: {x: .0928668752, y: .00928668864, z: .0928668827}
   m_Children:
   - {fileID: 419812}
   - {fileID: 452932}
@@ -422,6 +423,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11466186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 145246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f762066c9a5e1b741b77a83cc70892c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
