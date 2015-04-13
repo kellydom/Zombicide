@@ -64,6 +64,7 @@ public class Deck : MonoBehaviour {
 	bool maShotTaken = false;
 
 	public List<string> equipment = new List<string>();
+	public List<string> initial = new List<string>();
 
 	// Use this for initialization
 	void Start () {
@@ -83,7 +84,8 @@ public class Deck : MonoBehaviour {
 		pan.noise = false;
 		pan.melee = true;
 		pan.but = panButton;
-		for (int i = 0; i < 3; i++) {
+		initial.Add(pan.cardName);
+		for (int i = 0; i < 2; i++) {
 			equipment.Add(pan.cardName);
 		}
 
@@ -114,7 +116,8 @@ public class Deck : MonoBehaviour {
 		crowbar.closeRange = 0;
 		crowbar.farRange = 0;
 		crowbar.ranged = false;
-		for (int i = 0; i < 2; i++) {
+		initial.Add(crowbar.cardName);
+		for (int i = 0; i < 1; i++) {
 			equipment.Add(crowbar.cardName);
 		}
 
@@ -148,7 +151,8 @@ public class Deck : MonoBehaviour {
 		axe.farRange = 0;
 		axe.closeRange = 0;
 		axe.ranged = false;
-		for (int i = 0; i < 2; i++) {
+		initial.Add(axe.cardName);
+		for (int i = 0; i < 1; i++) {
 			equipment.Add(axe.cardName);
 		}
 
@@ -250,7 +254,8 @@ public class Deck : MonoBehaviour {
 		pistol.dice = 1;
 		pistol.minDiceNumber = 4;
 		pistol.damage = 1;
-		for (int i = 0; i < 3; i++) {
+		initial.Add(pistol.cardName);
+		for (int i = 0; i < 2; i++) {
 			equipment.Add(pistol.cardName);
 		}
 	
@@ -457,6 +462,38 @@ public class Deck : MonoBehaviour {
 		ammoL.openDoor = false;
 		for (int i = 0; i < 3; i++) {
 			equipment.Add(ammoL.cardName);
+		}
+
+		initialize ();
+	}
+
+	//set up the survivors
+	public void initialize() {
+		int what = -1;
+		Card drawn = empty;
+		string cardName;
+		for(int i = 0; i < GameController.S.survivors.Count; i++) {
+			what = Random.Range(0, initial.Count);
+			if(GameController.S.survivors[i].name == "Phil") {
+				GameController.S.survivors[i].front2 = pistol;
+			}
+			cardName = initial[what];
+			switch(cardName){
+			case "Fire Axe":
+				drawn = axe;
+				break;
+			case "Pan":
+				drawn = pan;
+				break;
+			case "Crowbar":
+				drawn = crowbar;
+				break;
+			case "Pistol":
+				drawn = pistol;
+				break;
+			}
+			GameController.S.survivors[i].front1 = drawn;
+			initial.Remove(cardName);
 		}
 	}
 
