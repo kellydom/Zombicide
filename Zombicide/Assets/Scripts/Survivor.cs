@@ -89,7 +89,7 @@ public class Survivor : MonoBehaviour {
 
 	public bool CanDoMelee(){
 		if(front1 != null){
-			if(front1.weapon && front1.melee){
+			if(front1.melee){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				
 				if(zs.walkersInZone.Count > 0) return true;
@@ -100,7 +100,7 @@ public class Survivor : MonoBehaviour {
 			}
 		}
 		if(front2 != null){
-			if(front2.weapon && front2.melee){
+			if(front2.melee){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				
 				if(zs.walkersInZone.Count > 0) return true;
@@ -115,7 +115,7 @@ public class Survivor : MonoBehaviour {
 	}
 	public bool CanDoRanged(){
 		if(front1 != null){
-			if(front1.weapon && !front1.melee){
+			if(front1.ranged){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				List<GameObject> frontRange1 = new List<GameObject>();
 				frontRange1 = ZoneSelector.S.GetZonesInRange(currZone, front1.closeRange, front1.farRange);
@@ -130,7 +130,7 @@ public class Survivor : MonoBehaviour {
 			}
 		}
 		if(front2 != null){
-			if(front2.weapon && !front2.melee){
+			if(front2.ranged){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				List<GameObject> frontRange2 = new List<GameObject>();
 				frontRange2 = ZoneSelector.S.GetZonesInRange(currZone, front2.closeRange, front2.farRange);
