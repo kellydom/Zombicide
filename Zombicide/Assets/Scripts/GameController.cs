@@ -153,7 +153,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void MeleeSetup(){
-
+		AttackScript.S.CreateAttackWheels();
 	}
 
 	public void DoNothingSetup(){

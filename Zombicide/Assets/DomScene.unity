@@ -4376,6 +4376,7 @@ GameObject:
   - 114: {fileID: 1166976251}
   - 114: {fileID: 1166976252}
   - 114: {fileID: 1166976253}
+  - 114: {fileID: 1166976254}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4576,6 +4577,18 @@ MonoBehaviour:
   rifleButton: {fileID: 1932709388}
   emptyButton: {fileID: 1790149605}
   equipment: []
+--- !u!114 &1166976254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1166976242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76cef81e2e3fe0c49ada1d1df105bc3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackWheelPrefab: {fileID: 171472, guid: 47c7dc694aaaac04c99821f681aa1003, type: 2}
 --- !u!1001 &1185809376
 Prefab:
   m_ObjectHideFlags: 0

@@ -120,8 +120,10 @@ public class ActionWheel : MonoBehaviour {
 		if(GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom == null) objBtn.interactable = false;
 		else objBtn.interactable = true;
 
-		if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;
-		else  meleeBtn.interactable = false;
+
+		meleeBtn.interactable = true;
+		//if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;
+		//else  meleeBtn.interactable = false;
 		
 		if(GameController.S.currSurvivor.CanDoRanged()) rangedBtn.interactable = true;
 		else  rangedBtn.interactable = false;

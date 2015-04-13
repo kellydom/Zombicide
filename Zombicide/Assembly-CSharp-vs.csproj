@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ActionWheel.cs" />
+     <Compile Include="Assets\Scripts\AttackScript.cs" />
      <Compile Include="Assets\Scripts\BoardLayout.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\Deck.cs" />
@@ -62,7 +63,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Vectrosity">
- <HintPath>C:/Users/Domenic/Documents/GitHub/Zombicide/Zombicide/Assets/Plugins/Vectrosity.dll</HintPath>
+ <HintPath>C:/Users/DomenicKelly/Documents/GitHub/Zombicide/Zombicide/Assets/Plugins/Vectrosity.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
