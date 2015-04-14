@@ -100,11 +100,12 @@ public class GameController : MonoBehaviour {
 
 	public void SearchSetup(){
 		picked = deck.draw ();
-		print (picked.cardName);
 		currSurvivor.hasSearched = true;
 		currSurvivor.numActions--;
-		//pickedImage.image.sprite = picked.but.image.sprite;
-		//pickedImage.transform.position = new Vector3 (0, 0, 0);
+
+		//need to figure out where to divert the program to for the search function
+		pickedImage.image.sprite = picked.but.image.sprite;
+		pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
 		
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 	}

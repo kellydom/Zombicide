@@ -214,4 +214,12 @@ public class SurvivorToken : MonoBehaviour {
 			break;
 		}
 	}
+
+	void selectSearch() {
+
+	}
+
+	void trade(Card surv1, Card surv2) {
+
+	}
 }
