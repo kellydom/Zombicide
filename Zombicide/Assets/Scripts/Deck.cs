@@ -498,7 +498,10 @@ public class Deck : MonoBehaviour {
 	}
 
 	public void returnToDeck(string cardName) {
-		equipment.Add (cardName);
+		if (cardName != "Empty") {
+			print ("returned " + cardName);
+			equipment.Add (cardName);
+		}
 	}
 
 	public Card searchCar() {

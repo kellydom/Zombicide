@@ -13,7 +13,6 @@ public class SurvivorToken : MonoBehaviour {
 	public Button back1;
 	public Button back2;
 	public Button back3;
-	public Button currButton;
 	public Button tempf1;
 	public Button tempf2;
 	public Button tempb1;
@@ -31,6 +30,9 @@ public class SurvivorToken : MonoBehaviour {
 	int tempBackCards = 1300;
 	bool tempOut = false;
 	bool cardsOut = false;
+
+	string whichCard;
+	bool cardSwitch = false;
 
 	// Use this for initialization
 	void Start () {
@@ -171,7 +173,6 @@ public class SurvivorToken : MonoBehaviour {
 			if(!cardsOut)
 				expandCards();
 			wanda.image.transform.localScale = newScale;
-			currButton = wanda;
 			if(philClicked) {
 				removeCards();
 				expandCards();
@@ -196,7 +197,6 @@ public class SurvivorToken : MonoBehaviour {
 				break;
 			}
 			phil.image.transform.localScale = newScale;
-			currButton = phil;
 			if(!cardsOut)
 				expandCards();
 			if(wandaClicked) {
@@ -215,8 +215,55 @@ public class SurvivorToken : MonoBehaviour {
 		}
 	}
 
-	void selectSearch() {
+	public void sendForSearch(string cardName) {
+		if (!GameController.S.playerSearching)
+			return;
+		Survivor surv = GameController.S.currSurvivor;
+		Card picked = new Card();
+		switch (cardName) {
+		case "front1":
+			picked = surv.front1;
+			surv.front1 = GameController.S.picked;
+			front1.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "front2":
+			picked = surv.front2;
+			surv.front2 = GameController.S.picked;
+			front2.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "back1":
+			picked = surv.back1;
+			surv.back1 = GameController.S.picked;
+			back1.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "back2":
+			picked = surv.back2;
+			surv.back2 = GameController.S.picked;
+			back2.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "back3":
+			picked = surv.back3;
+			surv.back3 = GameController.S.picked;
+			back3.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		}
+		cardSwitch = true;
+		whichCard = cardName;
+	}
 
+	public void deleteSearchCard() {
+		GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
+		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
 	}
 
 	void trade(Card surv1, Card surv2) {
