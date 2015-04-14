@@ -246,6 +246,7 @@ public class ZoneSelector : MonoBehaviour {
 			foreach(Survivor surv in GameController.S.survivors){
 				if(surv.CurrZone == zone){
 					zonesWithSurvivors.Add (zone);
+					break;
 				}
 			}
 		}
@@ -414,5 +415,12 @@ public class ZoneSelector : MonoBehaviour {
 		}
 
 		return zonesCanSee;
+	}
+
+	public bool IsPlayerZone(GameObject zone){
+		foreach(Survivor surv in GameController.S.survivors){
+			if(surv.CurrZone == zone) return true;
+		}
+		return false;
 	}
 }

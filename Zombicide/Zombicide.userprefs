@@ -1,15 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ZoneScript.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
     <Files>
-      <File FileName="Assets\Scripts\AttackScript.cs" Line="160" Column="25" />
-      <File FileName="Assets\Scripts\ActionWheel.cs" Line="132" Column="5" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="454" Column="53" />
-      <File FileName="Assets\Scripts\ZoneScript.cs" Line="137" Column="75" />
-      <File FileName="Assets\Scripts\ZoneSelector.cs" Line="416" Column="22" />
+      <File FileName="Assets\Scripts\ZoneScript.cs" Line="167" Column="67" />
+      <File FileName="Assets\Scripts\AttackScript.cs" Line="249" Column="1" />
+      <File FileName="Assets\Scripts\ActionWheel.cs" Line="373" Column="1" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="307" Column="64" />
+      <File FileName="Assets\Scripts\ZoneSelector.cs" Line="424" Column="16" />
       <File FileName="Assets\Scripts\Survivor.cs" Line="32" Column="27" />
-      <File FileName="Assets\Scripts\Enemy\Enemy.cs" Line="12" Column="7" />
-      <File FileName="Assets\Scripts\SpinnerScript.cs" Line="95" Column="48" />
+      <File FileName="Assets\Scripts\Enemy\Enemy.cs" Line="40" Column="32" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

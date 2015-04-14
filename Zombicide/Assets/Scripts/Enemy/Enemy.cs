@@ -13,13 +13,12 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public EnemyType type;
-	public bool hasDoneAction;
+	public bool hasDoneAction = false;
 	public GameObject currZone;
 	public int damageToKill;
 
 	// Use this for initialization
 	void Start () {
-		hasDoneAction = false;
 	
 	}
 
@@ -56,7 +55,7 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		print (hasDoneAction);
 	}
 
 	void OnMouseEnter(){

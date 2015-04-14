@@ -20,10 +20,10 @@ public class GameController : MonoBehaviour {
 	bool playerGoing;
 	bool zombieGoing;
 	List<GameObject> zombieSpawnZones = new List<GameObject>();
-	public Text turnText;
-	public Sprite gemEmpty;
-	public Sprite gemFull;
-	public List<Image> gems;
+	public Text survTurnText;
+	public Image survTurnImg;
+	public Text zombTurnText;
+	public Image zombTurnImg;
 
 	public Image zombieNumImg;
 	public Text zombieNum;
@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour {
 	//spawn from that randomly (until cards are done)
 	public List<GameObject> enemyTypes;
 
-	List<Enemy> allZombies = new List<Enemy>();
+	public List<Enemy> allZombies = new List<Enemy>();
 
 	// Use this for initialization
 	void Start () {
@@ -65,10 +65,6 @@ public class GameController : MonoBehaviour {
 		}
 
 		//survivors [1].front1 = deck.pan;
-
-		foreach(Image img in gems){
-			img.sprite = null;
-		}
 
 		StartCoroutine(GetZombieSpawnZones());
 	}
@@ -185,10 +181,16 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}
+		
+		if(!currSurvivor.CanMove()){
+			ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+			return;
+		}
 		ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
 	}
 
 	IEnumerator PlayerTurn(){
+		survTurnImg.rectTransform.anchoredPosition = new Vector2(222, -38);
 		playerGoing = true;
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
@@ -196,10 +198,7 @@ public class GameController : MonoBehaviour {
 
 		while(true){
 			if(currSurvivor == null){
-				turnText.text = "Choose a Survivor";
-				foreach(Image img in gems){
-					img.sprite = null;
-				}
+				survTurnText.text = "Choose a Survivor";
 				//check to see if all survivors have finished - otherwise, keep looping
 				bool allSurvivorsDone = true;
 				for(int i = 0; i < survivors.Count; ++i){
@@ -245,17 +244,7 @@ public class GameController : MonoBehaviour {
 				yield return 0;
 				continue;
 			}
-			turnText.text = "Actions Remaining: " + currSurvivor.numActions;
-			/*int ctr = 0;
-			foreach(Image gem in gems){
-				if(ctr < currSurvivor.numActions){
-					gem.sprite = gemFull;
-				}
-				else{
-					gem.sprite = gemEmpty;
-				}
-				ctr++;
-			}*/
+			survTurnText.text = "Actions Remaining: " + currSurvivor.numActions;
 
 			switch(ActionWheel.S.CurrAction){
 			case "Move":
@@ -291,7 +280,8 @@ public class GameController : MonoBehaviour {
 			
 			yield return 0;
 		}
-
+		
+		survTurnImg.rectTransform.anchoredPosition = new Vector2(-149, -38);
 		playerTurn = false;
 		playerGoing = false;
 	}
@@ -314,10 +304,8 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator ZombieTurn(){
 		zombieGoing = true;
-		turnText.text = "Zombies' Turn!";
-		foreach(Image img in gems){
-			img.sprite = null;
-		}
+		zombTurnImg.rectTransform.anchoredPosition = new Vector2(-222, -38);
+		zombTurnText.text = "Zombies' Move!";
 
 		//Move Zombies on board
 		CameraController.S.ZoomOut(0.5f);
@@ -330,7 +318,8 @@ public class GameController : MonoBehaviour {
 			yield return new WaitForSeconds(0.1f);
 		}
 		yield return new WaitForSeconds(1);
-
+		
+		zombTurnText.text = "Zombies' Spawn!";
 		//Spawn Zombies
 		foreach(GameObject zone in zombieSpawnZones){
 			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, 1, 0) + Vector3.back / 3, 1);
@@ -351,7 +340,8 @@ public class GameController : MonoBehaviour {
 		foreach(Enemy zomb in allZombies){
 			zomb.hasDoneAction = false;
 		}
-
+		
+		zombTurnImg.rectTransform.anchoredPosition = new Vector2(149, -38);
 		zombieGoing = false;
 		playerTurn = true;
 	}
@@ -376,7 +366,6 @@ public class GameController : MonoBehaviour {
 		topRightCorner.z += -0.03f;
 		topLeftCorner.z += -0.03f;
 
-
 		Vector3 spawnPos = Vector3.Lerp (topLeftCorner, topRightCorner, (zombieType + 1) / 5.0f);
 
 
@@ -395,7 +384,6 @@ public class GameController : MonoBehaviour {
 				walkersToSpawn--;
 			}
 		}
-
 		while(numToSpawn > 0){
 			GameObject zombie = Instantiate(enemyTypes[zombieType], spawnPos + Vector3.up / 5 * numToSpawn, Quaternion.identity) as GameObject;
 			zone.GetComponent<ZoneScript>().AddZombieToZone(zombie);
