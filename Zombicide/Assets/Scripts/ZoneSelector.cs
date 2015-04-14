@@ -246,6 +246,7 @@ public class ZoneSelector : MonoBehaviour {
 			foreach(Survivor surv in GameController.S.survivors){
 				if(surv.CurrZone == zone){
 					zonesWithSurvivors.Add (zone);
+					break;
 				}
 			}
 		}
@@ -401,5 +402,25 @@ public class ZoneSelector : MonoBehaviour {
 		}
 
 		return rangeZones;
+	}
+
+	public List<GameObject> GetZonesCanSeeFromInRange(GameObject startZone, int close, int far){
+		List<GameObject> zonesCanSee = GetZonesCanSeeFrom(startZone);
+
+		for(int i = zonesCanSee.Count - 1; i >= 0; --i){
+			int dist = ZoneDistance(startZone, zonesCanSee[i]);
+			if(dist < close || dist > far){
+				zonesCanSee.RemoveAt(i);
+			}
+		}
+
+		return zonesCanSee;
+	}
+
+	public bool IsPlayerZone(GameObject zone){
+		foreach(Survivor surv in GameController.S.survivors){
+			if(surv.CurrZone == zone) return true;
+		}
+		return false;
 	}
 }

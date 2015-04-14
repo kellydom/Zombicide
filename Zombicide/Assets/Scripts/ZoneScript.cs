@@ -49,6 +49,14 @@ public class ZoneScript : MonoBehaviour {
 		if(e.type == Enemy.EnemyType.Abomination) abombInZone.Add (zombie);
 	}
 
+	public int EnemiesInZone(){
+		int enemies = 0;
+
+		enemies += walkersInZone.Count + runnersInZone.Count + fattiesInZone.Count + abombInZone.Count;
+
+		return enemies;
+	}
+
 	public void DoZombieActions(){
 		//These are the zombies that actually have to do actions
 		//It may be exactly the lists above, but it is possible
@@ -61,17 +69,14 @@ public class ZoneScript : MonoBehaviour {
 		
 		foreach(GameObject zombie in walkersInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
-			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			walkersToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in runnersInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
-			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			runnersToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in fattiesInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
-			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			fattiesToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in abombInZone){
@@ -118,9 +123,14 @@ public class ZoneScript : MonoBehaviour {
 
 	public void DoAnAction(List<GameObject> zombies){
 		if(zombies.Count == 0) return;
-		print (zoneNum + " " + zombies.Count);
 		
 		GameObject enemyZone = zombies[0].GetComponent<Enemy>().currZone;
+
+		if(ZoneSelector.S.IsPlayerZone(enemyZone)){
+			//Attack the player
+			return;
+		}
+
 		List<GameObject> closestZones = ZoneSelector.S.NoisiestSeeableZonesWithSurvivor(enemyZone);
 
 		//if can't see any survivors, get one with highest noise
@@ -129,29 +139,52 @@ public class ZoneScript : MonoBehaviour {
 			closestZones = ZoneSelector.S.ClosestZonesFromList(noisiestZones, enemyZone);
 		}
 
+		print ("End zones: " + closestZones.Count);
+
 		//if closest zones is still count 0, then the survivors are behind locked doors
 		//which is something I don't think we need to worry about now (or ever?)
 		if(closestZones.Count == 0) return;
-		
-		if(closestZones[0] == enemyZone){
-			//The zombies are at a zone with a survivor, so attack
-		}
-		else{
-			List<GameObject> nextSteps = new List<GameObject>();
-			foreach(GameObject go in closestZones){
-				int dist = ZoneSelector.S.ZoneDistance(enemyZone, go);
-				List<GameObject> stepsToGO = ZoneSelector.S.StepTowardsZone(enemyZone, go, dist);
-				nextSteps.AddRange(stepsToGO);
-			}
 
-			GameObject nextZone = nextSteps[0];
-
-			float offsetCtr = 1;
-			foreach(GameObject zombie in zombies){
-				zombie.GetComponent<Enemy>().MoveTo(nextZone, enemyZone, offsetCtr);
-				offsetCtr+= 0.1f;
-			}
+		List<GameObject> nextSteps = new List<GameObject>();
+		foreach(GameObject go in closestZones){
+			int dist = ZoneSelector.S.ZoneDistance(enemyZone, go);
+			List<GameObject> stepsToGO = ZoneSelector.S.StepTowardsZone(enemyZone, go, dist);
+			nextSteps.AddRange(stepsToGO);
 		}
+
+		print ("Next step: " + nextSteps.Count);
+
+		int numDiffSteps = nextSteps.Count;
+		int extraZombies = 0;
+		if(zombies.Count % numDiffSteps != 0){
+			extraZombies = numDiffSteps - (zombies.Count - numDiffSteps);
+		}
+		while(extraZombies > 0){
+			GameObject newEnemy = Instantiate(zombies[0], zombies[0].transform.position + Vector3.up / extraZombies, Quaternion.identity) as GameObject;
+			newEnemy.GetComponent<Enemy>().currZone = enemyZone;
+			extraZombies--;
+			zombies.Add(newEnemy);
+			GameController.S.allZombies.Add (newEnemy.GetComponent<Enemy>());
+		}
+
+		int zombiesPerZone = zombies.Count / numDiffSteps;
+		print (zombiesPerZone + " " + zombies.Count + " " + numDiffSteps);
+
+
+		int currZombie = 1;
+		int currZoneCount = 0;
+		float offsetCtr = 1;
+		foreach(GameObject zombie in zombies){
+			zombie.GetComponent<Enemy>().MoveTo(nextSteps[currZoneCount], enemyZone, offsetCtr);
+			currZombie++;
+			if(currZombie > zombiesPerZone){
+				currZombie = 1;
+				currZoneCount++;
+			}
+			offsetCtr+= 0.1f;
+			zombie.GetComponent<Enemy>().hasDoneAction = true;
+		}
+
 	}
 	public void RemoveEnemy(GameObject zombie){
 		Enemy.EnemyType type = zombie.GetComponent<Enemy>().type;
