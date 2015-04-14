@@ -37,6 +37,10 @@ public class GameController : MonoBehaviour {
 
 	public List<Enemy> allZombies = new List<Enemy>();
 
+	bool needToChooseWeapon = false;
+	Card clickedCard = null;
+	Card attackingWeapon = null;
+
 	// Use this for initialization
 	void Start () {
 
@@ -150,17 +154,35 @@ public class GameController : MonoBehaviour {
 	public void RangedAttackSetup(GameObject zone){
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		ActionWheel.S.MoveWheelUp();
-		AttackScript.S.CreateAttackWheels(zone, false);
+		AttackScript.S.CreateAttackWheels(zone, false, attackingWeapon);
 	}
 
 	public void RangedZoneSetup(){
+		needToChooseWeapon = false;
 		GameObject survZone = currSurvivor.CurrZone;
-		List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, 0, 5);
+		List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, attackingWeapon.closeRange, attackingWeapon.farRange);
 
 		foreach(GameObject zone in rangeList){
 			if (zone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
 				zone.GetComponent<ZoneScript>().Highlight();
 			}
+		}
+	}
+
+	public void RangedWeaponSetup(){
+		if(currSurvivor.front1.ranged && currSurvivor.front2.ranged){
+			needToChooseWeapon = true;
+			clickedCard = null;
+			attackingWeapon = null;
+		}
+		else{
+			if(currSurvivor.front1.ranged){
+				attackingWeapon = currSurvivor.front1;
+			}
+			else{
+				attackingWeapon = currSurvivor.front2;
+			}
+			RangedZoneSetup();
 		}
 	}
 
@@ -172,7 +194,24 @@ public class GameController : MonoBehaviour {
 	public void MeleeSetup(){
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		ActionWheel.S.MoveWheelUp();
-		AttackScript.S.CreateAttackWheels(currSurvivor.CurrZone, true);
+		AttackScript.S.CreateAttackWheels(currSurvivor.CurrZone, true, attackingWeapon);
+	}
+
+	public void MeleeWeaponSetup(){
+		if(currSurvivor.front1.melee && currSurvivor.front2.melee){
+			needToChooseWeapon = true;
+			clickedCard = null;
+			attackingWeapon = null;
+		}
+		else{
+			if(currSurvivor.front1.melee){
+				attackingWeapon = currSurvivor.front1;
+			}
+			else{
+				attackingWeapon = currSurvivor.front2;
+			}
+			MeleeSetup();
+		}
 	}
 
 	public void DoNothingSetup(){
@@ -189,6 +228,15 @@ public class GameController : MonoBehaviour {
 			return;
 		}
 		ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
+	}
+
+	public void ClickedInvButton(Button clicked){
+		if(clicked.name == "Front1"){
+			clickedCard = currSurvivor.front1;
+		}
+		else if(clicked.name == "Front2"){
+			clickedCard = currSurvivor.front2;
+		}
 	}
 
 	IEnumerator PlayerTurn(){
@@ -252,6 +300,7 @@ public class GameController : MonoBehaviour {
 			case "Move":
 				if(Input.GetMouseButton(0) && !ActionWheel.S.mouseInWheel && !ActionWheel.S.mouseInWheelButton){
 					GameObject clickedZone = ZoneSelector.S.CurrZone;
+					if(clickedZone == null) break;
 					GameObject survZone = currSurvivor.CurrZone;
 					if(ZoneSelector.S.IsNeighborOf(clickedZone, survZone)){
 						ZoneScript zs = currSurvivor.CurrZone.GetComponent<ZoneScript>();
@@ -269,13 +318,30 @@ public class GameController : MonoBehaviour {
 				break;
 
 			case "Ranged":
-				if(Input.GetMouseButton(0) && !ActionWheel.S.mouseInWheel && !ActionWheel.S.mouseInWheelButton){
-					GameObject clickedZone = ZoneSelector.S.CurrZone;
-					GameObject survZone = currSurvivor.CurrZone;
-					List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, 0, 5);
-
-					if(rangeList.Contains(clickedZone) && clickedZone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
-						RangedAttackSetup(clickedZone);
+				if(needToChooseWeapon){
+					if(clickedCard == currSurvivor.front1 || clickedCard == currSurvivor.front2){
+						needToChooseWeapon = false;
+						attackingWeapon = clickedCard;
+						RangedZoneSetup();
+					}
+				}
+				else{
+					if(Input.GetMouseButton(0) && !ActionWheel.S.mouseInWheel && !ActionWheel.S.mouseInWheelButton){
+						GameObject clickedZone = ZoneSelector.S.CurrZone;
+						GameObject survZone = currSurvivor.CurrZone;
+						List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, attackingWeapon.closeRange, attackingWeapon.farRange);
+						
+						if(rangeList.Contains(clickedZone) && clickedZone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
+							RangedAttackSetup(clickedZone);
+						}
+					}
+				}
+				break;
+			case "Melee":
+				if(needToChooseWeapon){
+					if(clickedCard == currSurvivor.front1 || clickedCard == currSurvivor.front2){
+						needToChooseWeapon = false;
+						attackingWeapon = clickedCard;
 					}
 				}
 				break;
@@ -352,6 +418,7 @@ public class GameController : MonoBehaviour {
 		}
 		
 		zombTurnImg.rectTransform.anchoredPosition = new Vector2(149, -38);
+		zombTurnText.text = "";
 		zombieGoing = false;
 		playerTurn = true;
 	}
@@ -442,7 +509,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SetZombieNumText(Vector3 pos, int num){
-		zombieNum.text = "x"+num;
+		zombieNum.text = num+"x";
 		Vector2 viewportPoint = Camera.main.WorldToScreenPoint(pos - new Vector3(0, 0, 0.05f)); //convert game object position to VievportPoint
 		// set MIN and MAX Anchor values(positions) to the same position (ViewportPoint)
 		zombieNumImg.transform.position = viewportPoint;
