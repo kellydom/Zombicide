@@ -279,6 +279,13 @@ public class GameController : MonoBehaviour {
 					}
 				}
 				break;
+
+			case "Search":
+				if(!playerSearching) {
+					ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+					currSurvivor.numActions--;
+				}
+				break;
 			}
 			
 			yield return 0;

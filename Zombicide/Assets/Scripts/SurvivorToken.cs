@@ -264,6 +264,7 @@ public class SurvivorToken : MonoBehaviour {
 	public void deleteSearchCard() {
 		GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
 		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
+		GameController.S.playerSearching = false;
 	}
 
 	void trade(Card surv1, Card surv2) {
