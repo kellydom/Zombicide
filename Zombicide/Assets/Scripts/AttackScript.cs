@@ -18,6 +18,7 @@ public class AttackScript : MonoBehaviour {
 	public Image chooseZombieText;
 
 	bool needToMoveUp = true;
+	Card attWeapon;
 
 	// Use this for initialization
 	void Start () {
@@ -97,7 +98,7 @@ public class AttackScript : MonoBehaviour {
 						GameController.S.MoveZombieNumOff();
 						typeAttacking = Enemy.EnemyType.None;
 					}
-					if(typeAttacking == Enemy.EnemyType.Fatty){
+					if(typeAttacking == Enemy.EnemyType.Fatty && attWeapon.damage > 1){
 						while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
 							Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 							zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
@@ -107,7 +108,7 @@ public class AttackScript : MonoBehaviour {
 						GameController.S.MoveZombieNumOff();
 						typeAttacking = Enemy.EnemyType.None;
 					}
-					if(typeAttacking == Enemy.EnemyType.Abomination){
+					if(typeAttacking == Enemy.EnemyType.Abomination && attWeapon.damage > 2){
 						while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
 							Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 							zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
@@ -144,15 +145,17 @@ public class AttackScript : MonoBehaviour {
 						yield return 0;
 					}
 					while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
+						Attack ();
+						if(attWeapon.damage > 1) continue;
 						Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 						zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
-						Attack ();
 						yield return 0;
 					}
 					while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
+						Attack ();
+						if(attWeapon.damage > 2) continue;
 						Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 						zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
-						Attack ();
 						yield return 0;
 					}
 					while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
@@ -211,23 +214,24 @@ public class AttackScript : MonoBehaviour {
 		typeAttacking = newType;
 	}
 
-	public void CreateAttackWheels(GameObject zone, bool melee){
+	public void CreateAttackWheels(GameObject zone, bool melee, Card attackingWeapon){
 		attackingZone = zone;
 		isMelee = melee;
 		typeAttacking = Enemy.EnemyType.None;
 		waitingToGetEnemyType = false;
+		attWeapon = attackingWeapon;
 		GameObject canvas = GameObject.Find("Canvas");
 
-		int ran = Random.Range(6,7);
+		int numAttacking = attackingWeapon.dice;
 		int ctr = 0;
-		while(ran > 0){
-			ran--;
+		while(numAttacking > 0){
+			numAttacking--;
 			GameObject newAttackWheel = Instantiate(attackWheelPrefab) as GameObject;
 
-			float y = Mathf.FloorToInt(ran / 4);
+			float y = Mathf.FloorToInt(numAttacking / 4);
 			y = 1 - 1.0f/4 * (y + 1);
 
-			float x = ran % 4;
+			float x = numAttacking % 4;
 			x = 1.0f/5.0f * (x + 1);
 
 			Vector2 viewportPoint = Camera.main.ViewportToScreenPoint(new Vector2(x, y)); //convert game object position to VievportPoint
@@ -236,7 +240,7 @@ public class AttackScript : MonoBehaviour {
 			newAttackWheel.transform.position = viewportPoint;
 
 			
-			int hitChance = Random.Range(1, 6);
+			int hitChance = attackingWeapon.minDiceNumber;
 			newAttackWheel.GetComponent<SpinnerScript>().SetHitChance(hitChance);
 			newAttackWheel.GetComponent<SpinnerScript>().num = ctr;
 			attackWheels.Add (newAttackWheel);

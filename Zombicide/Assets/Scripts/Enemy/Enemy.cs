@@ -55,7 +55,6 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print (hasDoneAction);
 	}
 
 	void OnMouseEnter(){

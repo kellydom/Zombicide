@@ -24,7 +24,7 @@ public class SpinnerScript : MonoBehaviour {
 	}
 
 	public void SetHitChance(int hitChance){
-		for(int i = 0; i < hitChance; ++i){
+		for(int i = hitChance - 1; i < 6; ++i){
 			circles[i].color = Color.red;
 		}
 	}

@@ -317,11 +317,11 @@ public class ActionWheel : MonoBehaviour {
 
 		switch (action){
 		case "Melee":
-			GameController.S.MeleeSetup();
+			GameController.S.MeleeWeaponSetup();
 			actionText.text = "Melee";
 			break;
 		case "Ranged":
-			GameController.S.RangedZoneSetup();
+			GameController.S.RangedWeaponSetup();
 			actionText.text = "Ranged";
 			break;
 		case "Move":
