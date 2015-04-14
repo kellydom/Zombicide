@@ -1363,7 +1363,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dd32e922f2328504ca982c36c8326000, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &270173932
+--- !u!1 &270173932 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 132486, guid: dd32e922f2328504ca982c36c8326000, type: 2}
   m_PrefabInternal: {fileID: 270173931}
@@ -1752,7 +1752,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1db6e4b045577f44da8d5a93b45c1329, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &411257852
+--- !u!4 &411257852 stripped
 Transform:
   m_PrefabParentObject: {fileID: 420392, guid: 1db6e4b045577f44da8d5a93b45c1329, type: 2}
   m_PrefabInternal: {fileID: 411257851}
@@ -2850,7 +2850,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 421214, guid: 57c21a92a03f52c41b766c95a4526632, type: 2}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 57c21a92a03f52c41b766c95a4526632, type: 2}
@@ -3014,6 +3014,7 @@ RectTransform:
   - {fileID: 6377620}
   - {fileID: 1141000415}
   - {fileID: 1657739720}
+  - {fileID: 1097979931}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 0}
@@ -4148,6 +4149,68 @@ RectTransform:
   m_AnchoredPosition: {x: 311, y: -28}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: .5, y: .5}
+--- !u!1 &1097979930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1097979931}
+  - 222: {fileID: 1097979933}
+  - 114: {fileID: 1097979932}
+  m_Layer: 5
+  m_Name: Image 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1097979931
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1097979930}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1850995713}
+  m_Father: {fileID: 754850032}
+  m_RootOrder: 11
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 0}
+  m_AnchoredPosition: {x: 0, y: -30}
+  m_SizeDelta: {x: 383, y: 56.3599854}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &1097979932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1097979930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1097979933
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1097979930}
 --- !u!1 &1120183672
 GameObject:
   m_ObjectHideFlags: 0
@@ -4573,9 +4636,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25ff5d38f15b594096a3c420735b2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotgunButton: {fileID: 1519305258}
+  sawedoffButton: {fileID: 0}
   rifleButton: {fileID: 1932709388}
   emptyButton: {fileID: 1790149605}
+  masButton: {fileID: 0}
+  aaahButton: {fileID: 0}
+  ammoPButton: {fileID: 0}
+  ammoSButton: {fileID: 0}
+  axeButton: {fileID: 0}
+  batButton: {fileID: 0}
+  bottleButton: {fileID: 0}
+  foodButton: {fileID: 0}
+  chainButton: {fileID: 0}
+  crowbarButton: {fileID: 0}
+  twinButton: {fileID: 0}
+  flashButton: {fileID: 0}
+  gasButton: {fileID: 0}
+  katanaButton: {fileID: 0}
+  macheteButton: {fileID: 0}
+  maskButton: {fileID: 0}
+  molotovButton: {fileID: 0}
+  panButton: {fileID: 0}
+  pistolButton: {fileID: 0}
+  riceButton: {fileID: 0}
+  shotgunButton: {fileID: 1519305258}
+  scopeButton: {fileID: 0}
+  smgButton: {fileID: 0}
+  waterButton: {fileID: 0}
+  woundedButton: {fileID: 0}
   equipment: []
 --- !u!114 &1166976254
 MonoBehaviour:
@@ -4589,6 +4677,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackWheelPrefab: {fileID: 171472, guid: 47c7dc694aaaac04c99821f681aa1003, type: 2}
+  waitingToGetEnemyType: 0
+  chooseZombieText: {fileID: 1097979932}
 --- !u!1001 &1185809376
 Prefab:
   m_ObjectHideFlags: 0
@@ -4631,7 +4721,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fd65fac431e3a7e438ec2f1a519c584b, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &1185809377
+--- !u!4 &1185809377 stripped
 Transform:
   m_PrefabParentObject: {fileID: 460508, guid: fd65fac431e3a7e438ec2f1a519c584b, type: 2}
   m_PrefabInternal: {fileID: 1185809376}
@@ -5360,7 +5450,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 439336, guid: 50090fe9235dff6488a674c736941be8, type: 2}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 50090fe9235dff6488a674c736941be8, type: 2}
@@ -7315,6 +7405,72 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1837605014}
+--- !u!1 &1850995712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1850995713}
+  - 222: {fileID: 1850995715}
+  - 114: {fileID: 1850995714}
+  m_Layer: 5
+  m_Name: TurnText 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1850995713
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1850995712}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1097979931}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 418.900024, y: 41.9899902}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &1850995714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1850995712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: .279411793, g: 0, b: 0, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 05d8e22f6ea10fd448428ffb59888536, type: 3}
+    m_FontSize: 31
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Choose a zombie to attack
+--- !u!222 &1850995715
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1850995712}
 --- !u!1 &1874362462
 GameObject:
   m_ObjectHideFlags: 0
@@ -8099,7 +8255,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7f1665b1fe4df9449b959a591b353c9, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &2026797338
+--- !u!4 &2026797338 stripped
 Transform:
   m_PrefabParentObject: {fileID: 442926, guid: f7f1665b1fe4df9449b959a591b353c9, type: 2}
   m_PrefabInternal: {fileID: 2026797337}
@@ -8343,7 +8499,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5466a4d3adbc354c8c2f04470921079, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &2115980340
+--- !u!4 &2115980340 stripped
 Transform:
   m_PrefabParentObject: {fileID: 430500, guid: d5466a4d3adbc354c8c2f04470921079, type: 2}
   m_PrefabInternal: {fileID: 2115980339}

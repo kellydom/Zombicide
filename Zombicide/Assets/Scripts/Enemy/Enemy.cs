@@ -8,7 +8,8 @@ public class Enemy : MonoBehaviour {
 		Walker,
 		Runner,
 		Fatty,
-		Abomination
+		Abomination,
+		None
 	}
 
 	public EnemyType type;
@@ -85,6 +86,10 @@ public class Enemy : MonoBehaviour {
 
 	void OnMouseExit(){
 		GameController.S.MoveZombieNumOff();
+	}
+
+	void OnMouseDown(){
+		AttackScript.S.SetEnemyType(type, currZone);
 	}
 
 }

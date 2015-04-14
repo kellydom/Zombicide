@@ -29,6 +29,7 @@ public class Survivor : MonoBehaviour {
 	public Card back1;
 	public Card back2;
 	public Card back3;
+	public int numWounds = 0;
 
 	public bool currTurn = false;
 

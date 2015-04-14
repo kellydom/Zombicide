@@ -49,6 +49,14 @@ public class ZoneScript : MonoBehaviour {
 		if(e.type == Enemy.EnemyType.Abomination) abombInZone.Add (zombie);
 	}
 
+	public int EnemiesInZone(){
+		int enemies = 0;
+
+		enemies += walkersInZone.Count + runnersInZone.Count + fattiesInZone.Count + abombInZone.Count;
+
+		return enemies;
+	}
+
 	public void DoZombieActions(){
 		//These are the zombies that actually have to do actions
 		//It may be exactly the lists above, but it is possible
@@ -61,17 +69,14 @@ public class ZoneScript : MonoBehaviour {
 		
 		foreach(GameObject zombie in walkersInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
-			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			walkersToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in runnersInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
-			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			runnersToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in fattiesInZone){
 			if(zombie.GetComponent<Enemy>().hasDoneAction) continue;
-			print (zombie.GetComponent<Enemy>().hasDoneAction);
 			fattiesToGo.Add (zombie);
 		}
 		foreach(GameObject zombie in abombInZone){
@@ -118,7 +123,6 @@ public class ZoneScript : MonoBehaviour {
 
 	public void DoAnAction(List<GameObject> zombies){
 		if(zombies.Count == 0) return;
-		print (zoneNum + " " + zombies.Count);
 		
 		GameObject enemyZone = zombies[0].GetComponent<Enemy>().currZone;
 		List<GameObject> closestZones = ZoneSelector.S.NoisiestSeeableZonesWithSurvivor(enemyZone);
@@ -143,14 +147,37 @@ public class ZoneScript : MonoBehaviour {
 				List<GameObject> stepsToGO = ZoneSelector.S.StepTowardsZone(enemyZone, go, dist);
 				nextSteps.AddRange(stepsToGO);
 			}
+			print (closestZones.Count);
 
-			GameObject nextZone = nextSteps[0];
+			int numDiffSteps = nextSteps.Count;
+			int extraZombies = 0;
+			if(zombies.Count % numDiffSteps != 0){
+				extraZombies = numDiffSteps - (zombies.Count - numDiffSteps);
+			}
+			while(extraZombies > 0){
+				GameObject newEnemy = Instantiate(zombies[0], zombies[0].transform.position + Vector3.up / extraZombies, Quaternion.identity) as GameObject;
+				AddZombieToZone(newEnemy);
+				newEnemy.GetComponent<Enemy>().hasDoneAction = true;
+				newEnemy.GetComponent<Enemy>().currZone = enemyZone;
+				extraZombies--;
+			}
 
+			int zombiesPerZone = zombies.Count / numDiffSteps;
+
+			int currZombie = 0;
+			int currZoneCount = 0;
 			float offsetCtr = 1;
 			foreach(GameObject zombie in zombies){
-				zombie.GetComponent<Enemy>().MoveTo(nextZone, enemyZone, offsetCtr);
+				zombie.GetComponent<Enemy>().MoveTo(nextSteps[currZoneCount], enemyZone, offsetCtr);
+				currZombie++;
+				if(currZombie > zombiesPerZone){
+					currZombie = 0;
+					currZoneCount++;
+				}
 				offsetCtr+= 0.1f;
 			}
+
+
 		}
 	}
 	public void RemoveEnemy(GameObject zombie){

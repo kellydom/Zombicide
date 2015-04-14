@@ -148,12 +148,32 @@ public class GameController : MonoBehaviour {
 
 	}
 
-	public void RangedSetup(){
+	public void RangedAttackSetup(GameObject zone){
+		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+		ActionWheel.S.MoveWheelUp();
+		AttackScript.S.CreateAttackWheels(zone, false);
+	}
 
+	public void RangedZoneSetup(){
+		GameObject survZone = currSurvivor.CurrZone;
+		List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, 0, 5);
+
+		foreach(GameObject zone in rangeList){
+			if (zone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
+				zone.GetComponent<ZoneScript>().Highlight();
+			}
+		}
+	}
+
+	public void FinishAttackAction(){
+		ActionWheel.S.MoveWheelDown();
+		currSurvivor.numActions--;
 	}
 
 	public void MeleeSetup(){
-		AttackScript.S.CreateAttackWheels();
+		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+		ActionWheel.S.MoveWheelUp();
+		AttackScript.S.CreateAttackWheels(currSurvivor.CurrZone, true);
 	}
 
 	public void DoNothingSetup(){
@@ -252,6 +272,17 @@ public class GameController : MonoBehaviour {
 						if(zs.abombInZone.Count > 0) actionCount = 2;
 
 						currSurvivor.MoveTo(clickedZone, actionCount);
+					}
+				}
+				break;
+			case "Ranged":
+				if(Input.GetMouseButton(0) && !ActionWheel.S.mouseInWheel && !ActionWheel.S.mouseInWheelButton){
+					GameObject clickedZone = ZoneSelector.S.CurrZone;
+					GameObject survZone = currSurvivor.CurrZone;
+					List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, 0, 5);
+
+					if(rangeList.Contains(clickedZone) && clickedZone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
+						RangedAttackSetup(clickedZone);
 					}
 				}
 				break;
@@ -420,6 +451,6 @@ public class GameController : MonoBehaviour {
 
 	public void MoveZombieNumOff(){
 		zombieNum.text = "";
-		zombieNumImg.transform.position = new Vector2(-1, -1);
+		zombieNumImg.transform.position = new Vector2(2, 2);
 	}
 }

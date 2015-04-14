@@ -40,6 +40,8 @@ public class ActionWheel : MonoBehaviour {
 	public Button searchBtn;
 	public Button invBtn;
 
+	Vector3 wheelStartingPos;
+
 	// Use this for initialization
 	void Start () {
 		if(S == null){
@@ -61,6 +63,8 @@ public class ActionWheel : MonoBehaviour {
 		wheelImage.transform.eulerAngles = new Vector3(0,0,90);
 
 		actionText.text = "";
+
+		wheelStartingPos = Camera.main.ScreenToViewportPoint(wheelImage.transform.position);
 	}
 
 	void CheckDoor(){
@@ -121,10 +125,11 @@ public class ActionWheel : MonoBehaviour {
 		else objBtn.interactable = true;
 
 
-		meleeBtn.interactable = true;
-		//if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;
-		//else  meleeBtn.interactable = false;
-		
+		//meleeBtn.interactable = true;
+		if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;
+		else  meleeBtn.interactable = false;
+
+		//rangedBtn.interactable = true;
 		if(GameController.S.currSurvivor.CanDoRanged()) rangedBtn.interactable = true;
 		else  rangedBtn.interactable = false;
 	
@@ -197,6 +202,38 @@ public class ActionWheel : MonoBehaviour {
 		wheelIsChanging = false;
 		wheelIsMinimized = true;
 
+	}
+
+	IEnumerator WheelUpCo(){
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			
+			wheelImage.transform.position = Camera.main.ViewportToScreenPoint(Vector3.Lerp(wheelStartingPos, wheelStartingPos + Vector3.up, t));
+
+			yield return 0;
+		}
+	}
+
+	IEnumerator WheelDownCo(){
+		
+		float t = 0;
+		Vector3 currPos = wheelImage.transform.position;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			
+			wheelImage.transform.position = Camera.main.ViewportToScreenPoint(Vector3.Lerp(currPos, wheelStartingPos, t));
+			
+			yield return 0;
+		}
+	}
+
+	public void MoveWheelUp(){
+		StartCoroutine(WheelUpCo());
+	}
+
+	public void MoveWheelDown(){
+		StartCoroutine(WheelDownCo());
 	}
 
 	public void ActionWheelButtonClick(){
@@ -284,7 +321,7 @@ public class ActionWheel : MonoBehaviour {
 			actionText.text = "Melee";
 			break;
 		case "Ranged":
-			GameController.S.RangedSetup();
+			GameController.S.RangedZoneSetup();
 			actionText.text = "Ranged";
 			break;
 		case "Move":
