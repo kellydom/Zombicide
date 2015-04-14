@@ -28,6 +28,9 @@ public class GameController : MonoBehaviour {
 	public Image zombieNumImg;
 	public Text zombieNum;
 
+	public Button deleteForSearch;
+	public bool playerSearching = false;
+
 	//for now, I'm just going to have a list of each zombie type, and 
 	//spawn from that randomly (until cards are done)
 	public List<GameObject> enemyTypes;
@@ -99,15 +102,15 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SearchSetup(){
+		if(currSurvivor == null) return;
+
 		picked = deck.draw ();
 		currSurvivor.hasSearched = true;
-		currSurvivor.numActions--;
 
-		//need to figure out where to divert the program to for the search function
 		pickedImage.image.sprite = picked.but.image.sprite;
 		pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
-		
-		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+		deleteForSearch.transform.position = new Vector3 (Screen.width - 25, Screen.height / 2, 0);
+		playerSearching = true;
 	}
 
 	public void OpenDoorSetup(){
@@ -134,7 +137,6 @@ public class GameController : MonoBehaviour {
 		if(currSurvivor == null) return;
 		currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
 		currSurvivor.numActions--;
-
 	}
 
 	public void ChangeSeatsSetup(){
@@ -314,6 +316,7 @@ public class GameController : MonoBehaviour {
 					}
 				}
 				break;
+
 			case "Ranged":
 				if(needToChooseWeapon){
 					if(clickedCard == currSurvivor.front1 || clickedCard == currSurvivor.front2){
