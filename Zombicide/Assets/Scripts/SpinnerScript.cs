@@ -86,10 +86,6 @@ public class SpinnerScript : MonoBehaviour {
 
 	public void Click(){
 		if(beenClicked) return;
-
-		if(AttackScript.S.attWeapon.noise){
-			GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
-		}
 		StartCoroutine(SpinWheel ());
 	}
 

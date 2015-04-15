@@ -46,6 +46,9 @@ public class Survivor : MonoBehaviour {
 	public List<string> skills;
 	public int currLevel = 0;
 	public Image levelImage;
+	public bool doingSkillStuff = false;
+
+	bool waitingToSelectSkill = false;
 
 
 	// Use this for initialization
@@ -200,11 +203,99 @@ public class Survivor : MonoBehaviour {
 		//Unhighlight();
 	}
 
+	IEnumerator ShowNewSkill(string newSkill){
+		doingSkillStuff = true;
+		skills.Add(newSkill);
+		SurvivorToken.S.newSkillImage.rectTransform.anchoredPosition = new Vector3(0,0,0);
+		SurvivorToken.S.newSkillImage.transform.FindChild("Skill1").GetComponentInChildren<Text>().text = newSkill;
+		ActionWheel.S.MoveWheelUp();
+
+		while(true){
+			if(Input.GetMouseButton(0)) break;
+			yield return 0;
+		}
+
+		
+		ActionWheel.S.MoveWheelDown();
+		SurvivorToken.S.newSkillImage.rectTransform.anchoredPosition = new Vector3(0,-1000,0);
+		doingSkillStuff = false;
+	}
+
+	IEnumerator ChooseNewSkill(){
+		doingSkillStuff = true;
+		SurvivorToken.S.chooseSkillImage.rectTransform.anchoredPosition = new Vector3(0,0,0);
+		if(currLevel == 2){
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill1").GetComponentInChildren<Text>().text = skillsAtOrangeLevel[0];
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill1").GetComponent<RectTransform>().anchoredPosition = new Vector3(0,11,0);
+
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill2").GetComponentInChildren<Text>().text = skillsAtOrangeLevel[1];
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill2").GetComponent<RectTransform>().anchoredPosition = new Vector3(0,-78,0);
+
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill3").GetComponent<Image>().enabled = false;
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill3").GetComponentInChildren<Text>().enabled = false;
+
+			SurvivorToken.S.chooseSkillImage.rectTransform.sizeDelta = new Vector2(410.36f, 278.9f);
+		}
+		else if(currLevel == 3){
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill1").GetComponentInChildren<Text>().text = skillsAtRedLevel[0];
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill1").GetComponent<RectTransform>().anchoredPosition = new Vector3(0,73.3f,0);
+
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill2").GetComponentInChildren<Text>().text = skillsAtRedLevel[1];
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill2").GetComponent<RectTransform>().anchoredPosition = new Vector3(0,-15,0);
+
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill3").GetComponent<Image>().enabled = true;
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill3").GetComponentInChildren<Text>().enabled = true;
+			SurvivorToken.S.chooseSkillImage.transform.FindChild("Skill3").GetComponentInChildren<Text>().text = skillsAtRedLevel[2];
+
+			SurvivorToken.S.chooseSkillImage.rectTransform.sizeDelta = new Vector2(410.36f, 435.9f);
+		}
+
+		waitingToSelectSkill = true;
+
+		while(waitingToSelectSkill){
+			yield return 0;
+		}
+
+		StartCoroutine(ShowNewSkill(skills[currLevel]));
+		SurvivorToken.S.chooseSkillImage.rectTransform.anchoredPosition = new Vector3(0, -1300, 0);
+	}
+
+	public void SelectedSkill(int num){
+
+		if(currLevel == 2){
+			if(num != 0 && num != 1) return;
+			skills[2] = skillsAtOrangeLevel[num];
+		}
+		else if(currLevel == 3){
+			
+			if(num != 0 && num != 1 && num != 2) return;
+			skills[3] = skillsAtRedLevel[num];
+		}
+
+		waitingToSelectSkill = false;
+	}
+
+	void LevelUp(){
+		if(currLevel == 1){
+			skills[1] = skillsAtYellowLevel[0];
+			StartCoroutine(ShowNewSkill(skillsAtYellowLevel[0]));
+		}
+		else if(currLevel == 2){
+			StartCoroutine(ChooseNewSkill());
+		}
+		else if(currLevel == 3){
+			StartCoroutine(ChooseNewSkill());
+		}
+	}
+
 	public void GiveEXP(int numXP){
 		currExp += numXP;
 
 		if(currExp >= expToRed){
 			currLevel = 3;
+			if(levelImage.sprite != SurvivorToken.S.levelSprites[3]){
+				LevelUp();
+			}
 			levelImage.sprite = SurvivorToken.S.levelSprites[3];
 		}
 		else if(currExp >= expToOrange){
@@ -212,6 +303,7 @@ public class Survivor : MonoBehaviour {
 			if(levelImage.sprite != SurvivorToken.S.levelSprites[2]){
 				levelImage.sprite = SurvivorToken.S.levelSprites[2];
 				levelImage.transform.rotation = Quaternion.identity;
+				LevelUp();
 			}
 			else{
 				levelImage.transform.Rotate(0.0f,0.0f,(-360.0f / (expToRed - expToOrange)));
@@ -222,6 +314,7 @@ public class Survivor : MonoBehaviour {
 			if(levelImage.sprite != SurvivorToken.S.levelSprites[1]){
 				levelImage.sprite = SurvivorToken.S.levelSprites[1];
 				levelImage.transform.rotation = Quaternion.identity;
+				LevelUp();
 			}
 			else{
 				levelImage.transform.Rotate(0.0f,0.0f,(-360.0f / (expToOrange - expToYellow)));

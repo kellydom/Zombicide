@@ -50,6 +50,10 @@ public class SurvivorToken : MonoBehaviour {
 	Card right;
 
 	public Button tradeCards;
+
+	public Image skillList;
+	public Image chooseSkillImage;
+	public Image newSkillImage;
 	
 	public List<Sprite>	levelSprites;
 	// Use this for initialization
@@ -63,6 +67,8 @@ public class SurvivorToken : MonoBehaviour {
 			if(this != S)
 				Destroy(this.gameObject);
 		}
+
+		//Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
 	}
 	
 	// Update is called once per frame
@@ -71,6 +77,12 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void tokenOnHover(string name) {
+		if(GameController.S.currSurvivor != null){
+			if(GameController.S.currSurvivor.doingSkillStuff){
+				return;
+			}
+		}
+
 		if (ActionWheel.S.CurrAction == "Trade") 
 			return;
 		Vector3 newScale = new Vector3 (4, 4, 0);
@@ -103,21 +115,34 @@ public class SurvivorToken : MonoBehaviour {
 		}
 		if (!clicked) {
 			expandCards ();
+			Survivor surv = null;
+			foreach(Survivor tempSurv in GameController.S.survivors){
+				if(name == tempSurv.name) surv = tempSurv;
+			}
+			ShowSkills(surv);
 		} 
 		else if(currSurvivor.name != name && !inTrade){
 			expandTempCards();
 			tempOut = true;
+			HideSkills();
 		}
 	}
 
 	public void tokenOnLeave(string name) {
+		if(GameController.S.currSurvivor != null){
+			if(GameController.S.currSurvivor.doingSkillStuff){
+				return;
+			}
+		}
 		Vector3 newScale = new Vector3 (1, 1, 0);
 		if (!clicked) {
 			removeCards ();
+			HideSkills();
 		} 
 		if (tempOut) {
 			removeTempCards ();
 			tempOut = false;
+			ShowSkills(GameController.S.currSurvivor);
 		}
 		switch (name) {
 		case "Wanda":
@@ -155,11 +180,23 @@ public class SurvivorToken : MonoBehaviour {
 		tempb1.image.sprite = tempSurvivor.back1.but.image.sprite;
 		tempb2.image.sprite = tempSurvivor.back2.but.image.sprite;
 		tempb3.image.sprite = tempSurvivor.back3.but.image.sprite;
-		tempf1.transform.position = new Vector3 (tempFrontCards, front1.transform.position.y);
-		tempf2.transform.position = new Vector3 (tempFrontCards, front2.transform.position.y);
-		tempb1.transform.position = new Vector3 (tempBackCards, back1.transform.position.y);
-		tempb2.transform.position = new Vector3 (tempBackCards, back2.transform.position.y);
-		tempb3.transform.position = new Vector3 (tempBackCards, back3.transform.position.y);
+
+		float frontPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 3.0f/2.0f;
+		float backPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 1.0f/2.0f;
+
+		tempf1.transform.position = new Vector3 (frontPos, front1.transform.position.y);
+		tempf2.transform.position = new Vector3 (frontPos, front2.transform.position.y);
+		tempb1.transform.position = new Vector3 (backPos, back1.transform.position.y);
+		tempb2.transform.position = new Vector3 (backPos, back2.transform.position.y);
+		tempb3.transform.position = new Vector3 (backPos, back3.transform.position.y);
+
+
+		//tempf1.transform.position = new Vector3 (tempFrontCards, tempf1.transform.position.y);
+		//tempf2.transform.position = new Vector3 (tempFrontCards, tempf2.transform.position.y);
+		//tempb1.transform.position = new Vector3 (tempBackCards, tempb1.transform.position.y);
+		//tempb2.transform.position = new Vector3 (tempBackCards, tempb2.transform.position.y);
+		//tempb3.transform.position = new Vector3 (tempBackCards, tempb3.transform.position.y);
+
 	}
 
 	void removeTempCards() {
@@ -193,7 +230,54 @@ public class SurvivorToken : MonoBehaviour {
 		back3.transform.position = new Vector3 (setCards, back3.transform.position.y);
 	}
 
+	IEnumerator MoveSkillsOnscreen(){
+		Vector3 currPos = skillList.rectTransform.anchoredPosition;
+
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.3f;
+			skillList.rectTransform.anchoredPosition = Vector3.Lerp(currPos, new Vector3(-90, 103, 0),t);
+			yield return 0;
+		}
+	}
+	
+	IEnumerator MoveSkillsOffscreen(){
+		Vector3 currPos = skillList.rectTransform.anchoredPosition;
+		
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.3f;
+			skillList.rectTransform.anchoredPosition = Vector3.Lerp(currPos, new Vector3(180, 103, 0),t);
+			yield return 0;
+		}
+	}
+
+	public void ShowSkills(Survivor surv){
+		Text skill1 = skillList.transform.FindChild("Skill1").GetComponentInChildren<Text>();
+		skill1.text = surv.skills[0];
+		
+		Text skill2 = skillList.transform.FindChild("Skill2").GetComponentInChildren<Text>();
+		skill2.text = surv.skills[1];
+		
+		Text skill3 = skillList.transform.FindChild("Skill3").GetComponentInChildren<Text>();
+		skill3.text = surv.skills[2];
+		
+		Text skill4 = skillList.transform.FindChild("Skill4").GetComponentInChildren<Text>();
+		skill4.text = surv.skills[3];
+
+		StartCoroutine(MoveSkillsOnscreen());
+	}
+
+	public void HideSkills(){
+		StartCoroutine(MoveSkillsOffscreen());
+	}
+
 	public void tokenOnClicked(string name) {
+		if(GameController.S.currSurvivor != null){
+			if(GameController.S.currSurvivor.doingSkillStuff){
+				return;
+			}
+		}
 		bool reload = false;
 		Vector3 newScale = new Vector3 (4, 4, 0);
 		if (ActionWheel.S.CurrAction == "Trade")
@@ -354,6 +438,13 @@ public class SurvivorToken : MonoBehaviour {
 			}
 			break;
 		}
+
+		if(GameController.S.currSurvivor == null){
+			HideSkills();
+		}
+		else{
+			ShowSkills(GameController.S.currSurvivor);
+		}
 	}
 
 	public void sendForSearch(string cardName) {
@@ -408,22 +499,29 @@ public class SurvivorToken : MonoBehaviour {
 		GameController.S.deleteForSearch.transform.position = new Vector3 (-1000,0,0);
 		GameController.S.playerSearching = false;
 		ActionWheel.S.MoveWheelDown ();
+		ShowSkills(GameController.S.currSurvivor);
 	}
 
 	void expandTrade() {
+		HideSkills();
 		tempf1.image.sprite = tradingSurvivor.front1.but.image.sprite;
 		tempf2.image.sprite = tradingSurvivor.front2.but.image.sprite;
 		tempb1.image.sprite = tradingSurvivor.back1.but.image.sprite;
 		tempb2.image.sprite = tradingSurvivor.back2.but.image.sprite;
 		tempb3.image.sprite = tradingSurvivor.back3.but.image.sprite;
-		tempf1.transform.position = new Vector3 (tempFrontCards, front1.transform.position.y);
-		tempf2.transform.position = new Vector3 (tempFrontCards, front2.transform.position.y);
-		tempb1.transform.position = new Vector3 (tempBackCards, back1.transform.position.y);
-		tempb2.transform.position = new Vector3 (tempBackCards, back2.transform.position.y);
-		tempb3.transform.position = new Vector3 (tempBackCards, back3.transform.position.y);
+		
+		float frontPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 3.0f/2.0f;
+		float backPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 1.0f/2.0f;
+		
+		tempf1.transform.position = new Vector3 (frontPos, front1.transform.position.y);
+		tempf2.transform.position = new Vector3 (frontPos, front2.transform.position.y);
+		tempb1.transform.position = new Vector3 (backPos, back1.transform.position.y);
+		tempb2.transform.position = new Vector3 (backPos, back2.transform.position.y);
+		tempb3.transform.position = new Vector3 (backPos, back3.transform.position.y);
 	}
 
 	public void finishTrade() {
+		ShowSkills(GameController.S.currSurvivor);
 		Card tempCard;
 		//there's gotta be a very straightforward, easy way to do this but I'm dead
 		//so.. here goes!
@@ -759,5 +857,9 @@ public class SurvivorToken : MonoBehaviour {
 			}
 			expandTrade();
 		}
+	}
+
+	public void ChooseSkill(int skillNum){
+		GameController.S.currSurvivor.SelectedSkill(skillNum);
 	}
 }

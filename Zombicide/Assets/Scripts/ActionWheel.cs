@@ -146,6 +146,11 @@ public class ActionWheel : MonoBehaviour {
 	
 	}
 	public void MouseEnterWheel(){
+		if(GameController.S.currSurvivor != null){
+			if(GameController.S.currSurvivor.doingSkillStuff){
+				return;
+			}
+		}
 		mouseInWheel = true;
 	}
 	
@@ -155,6 +160,12 @@ public class ActionWheel : MonoBehaviour {
 	}
 	
 	public void MouseEnterButton(){
+		if(GameController.S.currSurvivor != null){
+			if(GameController.S.currSurvivor.doingSkillStuff){
+				return;
+			}
+		}
+
 		mouseInWheelButton = true;
 
 		if(wheelIsMinimized && !wheelIsChanging){
@@ -217,10 +228,11 @@ public class ActionWheel : MonoBehaviour {
 
 	IEnumerator WheelUpCo(){
 		float t = 0;
+		Vector3 currPos = wheelImage.transform.position;
 		while(t < 1){
 			t += Time.deltaTime * Time.timeScale / 0.5f;
 			
-			wheelImage.transform.position = Camera.main.ViewportToScreenPoint(Vector3.Lerp(wheelStartingPos, wheelStartingPos + Vector3.up, t));
+			wheelImage.transform.position = Camera.main.ViewportToScreenPoint(Vector3.Lerp(currPos, wheelStartingPos + Vector3.up, t));
 
 			yield return 0;
 		}
@@ -255,6 +267,11 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionHover(string action){
+		if(GameController.S.currSurvivor != null){
+			if(GameController.S.currSurvivor.doingSkillStuff){
+				return;
+			}
+		}
 		MouseEnterButton();
 		switch (action){
 		case "Melee":
