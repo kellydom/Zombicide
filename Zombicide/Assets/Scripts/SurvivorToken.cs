@@ -68,7 +68,7 @@ public class SurvivorToken : MonoBehaviour {
 				Destroy(this.gameObject);
 		}
 
-		Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
+		//Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
 	}
 	
 	// Update is called once per frame
@@ -180,11 +180,15 @@ public class SurvivorToken : MonoBehaviour {
 		tempb1.image.sprite = tempSurvivor.back1.but.image.sprite;
 		tempb2.image.sprite = tempSurvivor.back2.but.image.sprite;
 		tempb3.image.sprite = tempSurvivor.back3.but.image.sprite;
-		tempf1.transform.position = new Vector3 (tempFrontCards, front1.transform.position.y);
-		tempf2.transform.position = new Vector3 (tempFrontCards, front2.transform.position.y);
-		tempb1.transform.position = new Vector3 (tempBackCards, back1.transform.position.y);
-		tempb2.transform.position = new Vector3 (tempBackCards, back2.transform.position.y);
-		tempb3.transform.position = new Vector3 (tempBackCards, back3.transform.position.y);
+
+		float frontPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 3.0f/2.0f;
+		float backPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 1.0f/2.0f;
+
+		tempf1.transform.position = new Vector3 (frontPos, front1.transform.position.y);
+		tempf2.transform.position = new Vector3 (frontPos, front2.transform.position.y);
+		tempb1.transform.position = new Vector3 (backPos, back1.transform.position.y);
+		tempb2.transform.position = new Vector3 (backPos, back2.transform.position.y);
+		tempb3.transform.position = new Vector3 (backPos, back3.transform.position.y);
 
 
 		//tempf1.transform.position = new Vector3 (tempFrontCards, tempf1.transform.position.y);
@@ -499,19 +503,25 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	void expandTrade() {
+		HideSkills();
 		tempf1.image.sprite = tradingSurvivor.front1.but.image.sprite;
 		tempf2.image.sprite = tradingSurvivor.front2.but.image.sprite;
 		tempb1.image.sprite = tradingSurvivor.back1.but.image.sprite;
 		tempb2.image.sprite = tradingSurvivor.back2.but.image.sprite;
 		tempb3.image.sprite = tradingSurvivor.back3.but.image.sprite;
-		tempf1.transform.position = new Vector3 (tempFrontCards, front1.transform.position.y);
-		tempf2.transform.position = new Vector3 (tempFrontCards, front2.transform.position.y);
-		tempb1.transform.position = new Vector3 (tempBackCards, back1.transform.position.y);
-		tempb2.transform.position = new Vector3 (tempBackCards, back2.transform.position.y);
-		tempb3.transform.position = new Vector3 (tempBackCards, back3.transform.position.y);
+		
+		float frontPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 3.0f/2.0f;
+		float backPos = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x - tempf1.GetComponent<RectTransform>().sizeDelta.x * 1.0f/2.0f;
+		
+		tempf1.transform.position = new Vector3 (frontPos, front1.transform.position.y);
+		tempf2.transform.position = new Vector3 (frontPos, front2.transform.position.y);
+		tempb1.transform.position = new Vector3 (backPos, back1.transform.position.y);
+		tempb2.transform.position = new Vector3 (backPos, back2.transform.position.y);
+		tempb3.transform.position = new Vector3 (backPos, back3.transform.position.y);
 	}
 
 	public void finishTrade() {
+		ShowSkills(GameController.S.currSurvivor);
 		Card tempCard;
 		//there's gotta be a very straightforward, easy way to do this but I'm dead
 		//so.. here goes!

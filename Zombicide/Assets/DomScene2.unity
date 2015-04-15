@@ -6200,13 +6200,10 @@ RectTransform:
   - {fileID: 1657739720}
   - {fileID: 1097979931}
   - {fileID: 1904400449}
-<<<<<<< HEAD
-  - {fileID: 1483964886}
+  - {fileID: 1919385858}
   - {fileID: 194890605}
   - {fileID: 2126486876}
-=======
-  - {fileID: 1919385858}
->>>>>>> origin/master
+  - {fileID: 1483964886}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_AnchorMin: {x: 0, y: 0}
@@ -9684,14 +9681,10 @@ MonoBehaviour:
   tempb1: {fileID: 747025291}
   tempb2: {fileID: 935112347}
   tempb3: {fileID: 1887549017}
-<<<<<<< HEAD
-  tradeCards: {fileID: 0}
+  tradeCards: {fileID: 1919385859}
   skillList: {fileID: 1483964887}
   chooseSkillImage: {fileID: 194890606}
   newSkillImage: {fileID: 2126486877}
-=======
-  tradeCards: {fileID: 1919385859}
->>>>>>> origin/master
   levelSprites:
   - {fileID: 21300000, guid: fc80054d38881cc48a0deb72e99c06d1, type: 3}
   - {fileID: 21300000, guid: 90040c423d2cf1e4595266868076b0b3, type: 3}
@@ -12044,7 +12037,7 @@ RectTransform:
   - {fileID: 968005181}
   - {fileID: 435807205}
   m_Father: {fileID: 754850032}
-  m_RootOrder: 12
+  m_RootOrder: 15
   m_AnchorMin: {x: 1, y: .5}
   m_AnchorMax: {x: 1, y: .5}
   m_AnchoredPosition: {x: 160, y: 103}

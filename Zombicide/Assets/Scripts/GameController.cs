@@ -520,8 +520,7 @@ public class GameController : MonoBehaviour {
 
 			if(ActionWheel.S.CurrAction != "Trade" && ActionWheel.S.CurrAction != "Search")
 				survTurnText.text = "Actions Remaining: " + currSurvivor.numActions;
-			
-			currSurvivor.front2.but.image.color = Color.yellow;
+
 			yield return 0;
 		}
 
