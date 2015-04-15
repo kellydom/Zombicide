@@ -336,6 +336,7 @@ GameObject:
   - 224: {fileID: 43716640}
   - 222: {fileID: 43716642}
   - 114: {fileID: 43716641}
+  - 114: {fileID: 43716643}
   m_Layer: 5
   m_Name: Skill1
   m_TagString: Untagged
@@ -355,7 +356,7 @@ RectTransform:
   m_Children:
   - {fileID: 800417031}
   m_Father: {fileID: 1483964886}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_AnchorMin: {x: .5, y: 0}
   m_AnchorMax: {x: .5, y: 0}
   m_AnchoredPosition: {x: -13, y: -35}
@@ -388,6 +389,54 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 43716639}
+--- !u!114 &43716643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 43716639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: ShowSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 43716641}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: HideSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 43716641}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &56744630
 GameObject:
   m_ObjectHideFlags: 0
@@ -3346,6 +3395,7 @@ GameObject:
   - 224: {fileID: 435807205}
   - 222: {fileID: 435807207}
   - 114: {fileID: 435807206}
+  - 114: {fileID: 435807208}
   m_Layer: 5
   m_Name: Skill4
   m_TagString: Untagged
@@ -3365,7 +3415,7 @@ RectTransform:
   m_Children:
   - {fileID: 252841776}
   m_Father: {fileID: 1483964886}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: 0}
   m_AnchorMax: {x: .5, y: 0}
   m_AnchoredPosition: {x: -13, y: -180}
@@ -3398,6 +3448,54 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 435807204}
+--- !u!114 &435807208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 435807204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: ShowSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 435807206}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: HideSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 435807206}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &437710417
 GameObject:
   m_ObjectHideFlags: 0
@@ -6203,6 +6301,7 @@ RectTransform:
   - {fileID: 1919385858}
   - {fileID: 194890605}
   - {fileID: 2126486876}
+  - {fileID: 1711757077}
   - {fileID: 1483964886}
   m_Father: {fileID: 0}
   m_RootOrder: 9
@@ -6743,6 +6842,88 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 807940090}
+--- !u!1 &809500714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 809500715}
+  - 222: {fileID: 809500717}
+  - 114: {fileID: 809500716}
+  m_Layer: 5
+  m_Name: TurnText 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &809500715
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 809500714}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1711757077}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 556.599976, y: 447.899994}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &809500716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 809500714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: .279411793, g: 0, b: 0, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 05d8e22f6ea10fd448428ffb59888536, type: 3}
+    m_FontSize: 18
+    m_FontStyle: 2
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eu
+    lectus pharetra, pretium metus vitae, tristique velit. Donec in commodo odio,
+    ac dictum tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+    fermentum lobortis lorem, vulputate facilisis eros ultricies et. Fusce eu magna
+    id lorem hendrerit sodales. Sed a lorem ut mauris condimentum fringilla id vel
+    justo. Fusce molestie quis nulla a sollicitudin. Nulla ex eros, placerat quis
+    sapien nec, ultricies mollis libero.\r\n\r\nPhasellus tincidunt eleifend lectus
+    eget vestibulum. In in tortor ex. Nullam turpis orci, placerat nec mauris vel,
+    varius accumsan nulla. Proin interdum, massa sed bibendum lobortis, nibh elit
+    tincidunt mauris, vel dapibus nibh ex tristique orci. Morbi placerat ornare dui,
+    vitae iaculis leo lobortis eget. Sed sit amet orci porttitor, condimentum lectus
+    at, auctor quam. Fusce et urna ac justo vestibulum consectetur vel quis dolor.
+    Vestibulum nunc arcu, hendrerit vitae pulvinar at, molestie eu magna. Proin convallis
+    imperdiet posuere. Fusce eu fringilla felis. Cras posuere est sapien, quis auctor
+    nunc tempus in. Duis eleifend eget felis a cursus. Vivamus fringilla erat ut iaculis
+    consectetur. Suspendisse id porttitor nunc. Nulla cursus dignissim vestibulum.
+    Pellentesque faucibus leo id elit convallis sollicitudin. "
+--- !u!222 &809500717
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 809500714}
 --- !u!1 &824649393
 GameObject:
   m_ObjectHideFlags: 0
@@ -8333,6 +8514,7 @@ GameObject:
   - 224: {fileID: 968005181}
   - 222: {fileID: 968005183}
   - 114: {fileID: 968005182}
+  - 114: {fileID: 968005184}
   m_Layer: 5
   m_Name: Skill3
   m_TagString: Untagged
@@ -8352,7 +8534,7 @@ RectTransform:
   m_Children:
   - {fileID: 185321119}
   m_Father: {fileID: 1483964886}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_AnchorMin: {x: .5, y: 0}
   m_AnchorMax: {x: .5, y: 0}
   m_AnchoredPosition: {x: -13, y: -133}
@@ -8385,6 +8567,54 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 968005180}
+--- !u!114 &968005184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 968005180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: ShowSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 968005182}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: HideSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 968005182}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &992238726
 GameObject:
   m_ObjectHideFlags: 0
@@ -9494,6 +9724,7 @@ GameObject:
   - 114: {fileID: 1166976252}
   - 114: {fileID: 1166976253}
   - 114: {fileID: 1166976254}
+  - 114: {fileID: 1166976255}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -9615,6 +9846,7 @@ MonoBehaviour:
   - {fileID: 164642, guid: 481a52d8f9fcf004ca7924b4d8b553e7, type: 2}
   - {fileID: 137568, guid: d1c126e188859884bbae4d70ba0bc249, type: 2}
   allZombies: []
+  zombiesAttacking: 0
 --- !u!114 &1166976250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9690,6 +9922,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 90040c423d2cf1e4595266868076b0b3, type: 3}
   - {fileID: 21300000, guid: 4d7feece09d6be24c97942abfe1ac9cd, type: 3}
   - {fileID: 21300000, guid: 9d0d62b1381b9fc4db70f374d9deadd3, type: 3}
+  skillDescription: {fileID: 1711757079}
 --- !u!114 &1166976253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9745,6 +9978,56 @@ MonoBehaviour:
   attackWheelPrefab: {fileID: 171472, guid: 47c7dc694aaaac04c99821f681aa1003, type: 2}
   waitingToGetEnemyType: 0
   chooseZombieText: {fileID: 1097979932}
+--- !u!114 &1166976255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1166976242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8dcead806de2a44bbd3cf5502b32d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillDescriptions:
+  - skillName: Slippery
+    description: 
+  - skillName: +1 Action
+    description: 
+  - skillName: '+1 die: Melee'
+    description: 
+  - skillName: 1 re-roll per turn
+    description: 
+  - skillName: +1 free Move Action
+    description: 
+  - skillName: '+1 to dice roll: Combat'
+    description: 
+  - skillName: Lucky
+    description: 
+  - skillName: 2 Zones per Move Action
+    description: 
+  - skillName: '+1 to dice roll: Melee'
+    description: 
+  - skillName: '+1 die: Combat'
+    description: 
+  - skillName: +1 Zone per Move
+    description: 
+  - skillName: Starts with a Pistol
+    description: 
+  - skillName: +1 free Search Action
+    description: 
+  - skillName: '+1 to dice roll: Ranged'
+    description: 
+  - skillName: '+1 die: Ranged'
+    description: 
+  - skillName: Born leader
+    description: 
+  - skillName: Sniper
+    description: 
+  - skillName: +1 free Combat Action
+    description: 
+  - skillName: Tough
+    description: 
 --- !u!1 &1173252776
 GameObject:
   m_ObjectHideFlags: 0
@@ -12032,12 +12315,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2038777304}
-  - {fileID: 43716640}
-  - {fileID: 1787354692}
-  - {fileID: 968005181}
   - {fileID: 435807205}
+  - {fileID: 968005181}
+  - {fileID: 1787354692}
+  - {fileID: 43716640}
   m_Father: {fileID: 754850032}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_AnchorMin: {x: 1, y: .5}
   m_AnchorMax: {x: 1, y: .5}
   m_AnchoredPosition: {x: 160, y: 103}
@@ -13009,6 +13292,117 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1675728232}
+--- !u!1 &1711757076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1711757077}
+  - 222: {fileID: 1711757080}
+  - 114: {fileID: 1711757079}
+  - 114: {fileID: 1711757078}
+  m_Layer: 5
+  m_Name: SkillDescription
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1711757077
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1711757076}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 809500715}
+  m_Father: {fileID: 754850032}
+  m_RootOrder: 15
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 1356, y: 40}
+  m_SizeDelta: {x: 558.200012, y: 449}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &1711757078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1711757076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: ShowSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1711757079}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: HideSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1711757079}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &1711757079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1711757076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1711757080
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1711757076}
 --- !u!1 &1730070707
 GameObject:
   m_ObjectHideFlags: 0
@@ -13504,6 +13898,7 @@ GameObject:
   - 224: {fileID: 1787354692}
   - 222: {fileID: 1787354694}
   - 114: {fileID: 1787354693}
+  - 114: {fileID: 1787354695}
   m_Layer: 5
   m_Name: Skill2
   m_TagString: Untagged
@@ -13523,7 +13918,7 @@ RectTransform:
   m_Children:
   - {fileID: 1439950435}
   m_Father: {fileID: 1483964886}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_AnchorMin: {x: .5, y: 0}
   m_AnchorMax: {x: .5, y: 0}
   m_AnchoredPosition: {x: -13, y: -86}
@@ -13556,6 +13951,54 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1787354691}
+--- !u!114 &1787354695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1787354691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: ShowSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1787354693}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976252}
+          m_MethodName: HideSkillText
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1787354693}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI,
+              Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1811997365
 GameObject:
   m_ObjectHideFlags: 0

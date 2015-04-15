@@ -209,6 +209,8 @@ public class Survivor : MonoBehaviour {
 		SurvivorToken.S.newSkillImage.rectTransform.anchoredPosition = new Vector3(0,0,0);
 		SurvivorToken.S.newSkillImage.transform.FindChild("Skill1").GetComponentInChildren<Text>().text = newSkill;
 		ActionWheel.S.MoveWheelUp();
+		SurvivorToken.S.ShowSkills(GameController.S.currSurvivor);
+
 
 		while(true){
 			if(Input.GetMouseButton(0)) break;

@@ -56,6 +56,9 @@ public class SurvivorToken : MonoBehaviour {
 	public Image newSkillImage;
 	
 	public List<Sprite>	levelSprites;
+
+	public Image skillDescription;
+	Image skillShowingDescriptionOf;
 	// Use this for initialization
 	void Start () {
 		//Singleton initialization
@@ -268,14 +271,32 @@ public class SurvivorToken : MonoBehaviour {
 		Text skill1 = skillList.transform.FindChild("Skill1").GetComponentInChildren<Text>();
 		skill1.text = surv.skills[0];
 		
+		skillList.transform.FindChild("Skill2").GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, -82, 0);
 		Text skill2 = skillList.transform.FindChild("Skill2").GetComponentInChildren<Text>();
 		skill2.text = surv.skills[1];
 		
+		skillList.transform.FindChild("Skill3").GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, -129, 0);
 		Text skill3 = skillList.transform.FindChild("Skill3").GetComponentInChildren<Text>();
 		skill3.text = surv.skills[2];
 		
+		skillList.transform.FindChild("Skill4").GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, -176, 0);
 		Text skill4 = skillList.transform.FindChild("Skill4").GetComponentInChildren<Text>();
 		skill4.text = surv.skills[3];
+
+		if(skill4.text == ""){
+			skillList.transform.FindChild("Skill4").GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 45);
+		}
+		if(skill3.text == ""){
+			skillList.transform.FindChild("Skill4").GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 45);
+			skillList.transform.FindChild("Skill3").GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 45);
+
+		}
+		if(skill2.text == ""){
+			skillList.transform.FindChild("Skill4").GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 45);
+			skillList.transform.FindChild("Skill3").GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 45);
+			skillList.transform.FindChild("Skill2").GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 45);
+
+		}
 
 		StartCoroutine(MoveSkillsOnscreen());
 	}
@@ -873,5 +894,22 @@ public class SurvivorToken : MonoBehaviour {
 
 	public void ChooseSkill(int skillNum){
 		GameController.S.currSurvivor.SelectedSkill(skillNum);
+	}
+
+	public void ShowSkillText(Image skillToShow){
+		if(skillToShow.GetComponentInChildren<Text>().text == "") return;
+
+		skillShowingDescriptionOf = skillToShow;
+		skillDescription.rectTransform.anchoredPosition = new Vector3(0,0,0);
+		skillToShow.color = new Color(0.6f, 0.6f, 1);
+	}
+
+	public void HideSkillText(Image skillToHide){
+		if(skillToHide.GetComponentInChildren<Text>().text == "") return;
+
+		if(skillShowingDescriptionOf != skillToHide) return;
+		skillShowingDescriptionOf = null;
+		skillDescription.rectTransform.anchoredPosition = new Vector3(-2000,-2000,0);
+		skillToHide.color = Color.white;
 	}
 }

@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\ObjectiveToken.cs" />
      <Compile Include="Assets\Scripts\PlayerSpawner.cs" />
+     <Compile Include="Assets\Scripts\SkillDescriptions.cs" />
      <Compile Include="Assets\Scripts\SpinnerScript.cs" />
      <Compile Include="Assets\Scripts\Survivor.cs" />
      <Compile Include="Assets\Scripts\SurvivorToken.cs" />
