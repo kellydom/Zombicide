@@ -18,7 +18,7 @@ public class AttackScript : MonoBehaviour {
 	public Image chooseZombieText;
 
 	bool needToMoveUp = true;
-	Card attWeapon;
+	public Card attWeapon;
 
 	// Use this for initialization
 	void Start () {

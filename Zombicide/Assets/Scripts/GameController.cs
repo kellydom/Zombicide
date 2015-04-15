@@ -44,6 +44,7 @@ public class GameController : MonoBehaviour {
 	Card clickedCard = null;
 	Card attackingWeapon = null;
 
+
 	// Use this for initialization
 	void Start () {
 
@@ -166,6 +167,17 @@ public class GameController : MonoBehaviour {
 					BoardLayout.S.doors[i].transform.position = newPos;
 					door.isOpened = true;
 				}
+			}
+		}
+
+		if(currSurvivor.front1.openDoor){
+			if(currSurvivor.front1.doorNoise){
+				currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
+			}
+		}
+		else if(currSurvivor.front2.openDoor){
+			if(currSurvivor.front2.doorNoise){
+				currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
 			}
 		}
 
@@ -565,6 +577,9 @@ public class GameController : MonoBehaviour {
 		}
 		foreach(Enemy zomb in allZombies){
 			zomb.hasDoneAction = false;
+		}
+		foreach(GameObject zone in BoardLayout.S.createdZones){
+			zone.GetComponent<ZoneScript>().RemoveNoiseTokens();
 		}
 
 		zombieGoing = false;

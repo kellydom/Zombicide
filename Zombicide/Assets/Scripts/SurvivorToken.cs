@@ -46,7 +46,8 @@ public class SurvivorToken : MonoBehaviour {
 	Card right;
 
 	public Button tradeCards;
-
+	
+	public List<Sprite>	levelSprites;
 	// Use this for initialization
 	void Start () {
 		//Singleton initialization
@@ -173,6 +174,7 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void tokenOnClicked(string name) {
+		print ("Clicked!: " + wandaClicked + " " + philClicked);
 		bool reload = false;
 		Vector3 newScale = new Vector3 (4, 4, 0);
 		if (ActionWheel.S.CurrAction == "Trade")

@@ -126,6 +126,18 @@ public class ZoneScript : MonoBehaviour {
 		
 		GameObject enemyZone = zombies[0].GetComponent<Enemy>().currZone;
 
+		for(int i = zombies.Count - 1; i >= 0; --i){
+			GameObject zom = zombies[i];
+			GameObject nextZone = zom.GetComponent<Enemy>().currZone;
+			if(nextZone != enemyZone){
+				zombies.Remove(zom);
+				List<GameObject> newZombies = new List<GameObject>();
+				newZombies.Add (zom);
+				DoAnAction(newZombies);
+			}
+		}
+
+
 		if(ZoneSelector.S.IsPlayerZone(enemyZone)){
 			//Attack the player
 			return;

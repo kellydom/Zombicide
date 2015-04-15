@@ -32,6 +32,7 @@ public class SpinnerScript : MonoBehaviour {
 	IEnumerator SpinWheel(){
 		beenClicked = true;
 		hitText.text = "";
+
 		float t = 0;
 		float ctr = 0;
 
@@ -85,6 +86,10 @@ public class SpinnerScript : MonoBehaviour {
 
 	public void Click(){
 		if(beenClicked) return;
+
+		if(AttackScript.S.attWeapon.noise){
+			GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
+		}
 		StartCoroutine(SpinWheel ());
 	}
 

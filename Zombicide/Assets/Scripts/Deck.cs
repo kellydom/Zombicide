@@ -246,7 +246,7 @@ public class Deck : MonoBehaviour {
 		pistol.ranged = true;
 		pistol.melee = false;
 		pistol.openDoor = false;
-		pistol.noise = false;
+		pistol.noise = true;
 		pistol.dualWield = true;
 		pistol.combinable = false;
 		pistol.farRange = 1;

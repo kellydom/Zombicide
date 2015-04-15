@@ -41,6 +41,7 @@ public class Survivor : MonoBehaviour {
 	int expToRed = 43;
 
 	public int currLevel = 0;
+	public Image levelImage;
 
 
 	// Use this for initialization
@@ -198,14 +199,32 @@ public class Survivor : MonoBehaviour {
 	public void GiveEXP(int numXP){
 		currExp += numXP;
 
-		if(currExp >= expToYellow){
-			currLevel = 1;
-		}
-		if(currExp >= expToOrange){
-			currLevel = 2;
-		}
 		if(currExp >= expToRed){
 			currLevel = 3;
+			levelImage.sprite = SurvivorToken.S.levelSprites[3];
+		}
+		else if(currExp >= expToOrange){
+			currLevel = 2;
+			if(levelImage.sprite != SurvivorToken.S.levelSprites[2]){
+				levelImage.sprite = SurvivorToken.S.levelSprites[2];
+				levelImage.transform.rotation = Quaternion.identity;
+			}
+			else{
+				levelImage.transform.Rotate(0.0f,0.0f,(-360.0f / (expToRed - expToOrange)));
+			}
+		}
+		else if(currExp >= expToYellow){
+			currLevel = 1;
+			if(levelImage.sprite != SurvivorToken.S.levelSprites[1]){
+				levelImage.sprite = SurvivorToken.S.levelSprites[1];
+				levelImage.transform.rotation = Quaternion.identity;
+			}
+			else{
+				levelImage.transform.Rotate(0.0f,0.0f,(-360.0f / (expToOrange - expToYellow)));
+			}
+		}
+		else{
+			levelImage.transform.Rotate(0.0f,0.0f,(-360.0f / expToYellow));
 		}
 	}
 

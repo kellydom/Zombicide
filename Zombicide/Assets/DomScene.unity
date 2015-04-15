@@ -3137,6 +3137,10 @@ Prefab:
       propertyPath: name
       value: Wanda
       objectReference: {fileID: 0}
+    - target: {fileID: 11493706, guid: 4ff1b48b33837d443b231c2b925795ac, type: 2}
+      propertyPath: levelImage
+      value: 
+      objectReference: {fileID: 658756377}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4ff1b48b33837d443b231c2b925795ac, type: 2}
   m_IsPrefabParent: 0
@@ -8088,6 +8092,7 @@ MonoBehaviour:
   zombieNum: {fileID: 1440482477}
   deleteForSearch: {fileID: 1904400450}
   playerSearching: 0
+  playerTrading: 0
   enemyTypes:
   - {fileID: 157352, guid: 526550de7ab311e4889105906c3a718e, type: 2}
   - {fileID: 164642, guid: 481a52d8f9fcf004ca7924b4d8b553e7, type: 2}
@@ -8129,7 +8134,7 @@ MonoBehaviour:
   meleeBtn: {fileID: 113528803}
   openDoorBtn: {fileID: 992238729}
   driveBtn: {fileID: 605825317}
-  getInCarBtn: {fileID: 1730070710}
+  tradeBtn: {fileID: 1730070710}
   switchSeatsBtn: {fileID: 1945431512}
   makeNoiseBtn: {fileID: 1886797160}
   searchBtn: {fileID: 151954461}
@@ -8157,6 +8162,12 @@ MonoBehaviour:
   tempb1: {fileID: 747025291}
   tempb2: {fileID: 935112347}
   tempb3: {fileID: 1887549017}
+  tradeCards: {fileID: 0}
+  levelSprites:
+  - {fileID: 21300000, guid: fc80054d38881cc48a0deb72e99c06d1, type: 3}
+  - {fileID: 21300000, guid: 90040c423d2cf1e4595266868076b0b3, type: 3}
+  - {fileID: 21300000, guid: 4d7feece09d6be24c97942abfe1ac9cd, type: 3}
+  - {fileID: 21300000, guid: 9d0d62b1381b9fc4db70f374d9deadd3, type: 3}
 --- !u!114 &1166976253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9669,6 +9680,10 @@ Prefab:
       propertyPath: name
       value: Phil
       objectReference: {fileID: 0}
+    - target: {fileID: 11493706, guid: 4ff1b48b33837d443b231c2b925795ac, type: 2}
+      propertyPath: levelImage
+      value: 
+      objectReference: {fileID: 1076347911}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4ff1b48b33837d443b231c2b925795ac, type: 2}
   m_IsPrefabParent: 0
@@ -10781,7 +10796,7 @@ GameObject:
   - 114: {fileID: 1730070710}
   - 114: {fileID: 1730070709}
   m_Layer: 5
-  m_Name: GetIntoCarButton
+  m_Name: TradeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10830,7 +10845,7 @@ MonoBehaviour:
               Culture=neutral, PublicKeyToken=null
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: GetIntoCar
+            m_StringArgument: Trade
             m_BoolArgument: 0
           m_CallState: 2
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
@@ -10901,7 +10916,7 @@ MonoBehaviour:
             Culture=neutral, PublicKeyToken=null
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: GetIntoCar
+          m_StringArgument: Trade
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
