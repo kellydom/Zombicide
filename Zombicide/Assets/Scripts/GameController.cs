@@ -117,7 +117,7 @@ public class GameController : MonoBehaviour {
 
 		pickedImage.image.sprite = picked.but.image.sprite;
 		pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
-		deleteForSearch.transform.position = new Vector3 (Screen.width - 25, Screen.height / 2, 0);
+		deleteForSearch.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, 0);
 		playerSearching = true;
 	}
 
