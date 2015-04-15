@@ -30,6 +30,9 @@ public class GameController : MonoBehaviour {
 
 	public Button deleteForSearch;
 	public bool playerSearching = false;
+	public bool playerTrading = false;
+
+	//public bool playerJustStarted = false;
 
 	//for now, I'm just going to have a list of each zombie type, and 
 	//spawn from that randomly (until cards are done)
@@ -104,13 +107,49 @@ public class GameController : MonoBehaviour {
 	public void SearchSetup(){
 		if(currSurvivor == null) return;
 
+		ActionWheel.S.MoveWheelUp ();
 		picked = deck.draw ();
 		currSurvivor.hasSearched = true;
+		GameController.S.survTurnText.text = "Replace and/or Discard";
 
 		pickedImage.image.sprite = picked.but.image.sprite;
 		pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
 		deleteForSearch.transform.position = new Vector3 (Screen.width - 25, Screen.height / 2, 0);
 		playerSearching = true;
+	}
+
+	public void tradeSetup() {
+		if(currSurvivor == null) return;
+		playerTrading = true;
+		survTurnText.text = "Select another Survivor";
+
+		//deactivate the buttons that cant be traded with
+		foreach (Survivor guy in GameController.S.survivors) {
+			if(guy.CurrZone == GameController.S.currSurvivor.CurrZone) {
+				if(guy.name != GameController.S.currSurvivor.name) {
+					switch(guy.name) {
+					case "Wanda":
+						SurvivorToken.S.wanda.interactable = true;
+						break;
+					case "Phil":
+						SurvivorToken.S.phil.interactable = true;
+						break;
+						//add the other two once we have all the tokens on the board
+					}
+				}
+			}
+			else {
+				switch(guy.name) {
+				case "Wanda":
+					SurvivorToken.S.wanda.interactable = false;
+					break;
+				case "Phil":
+					SurvivorToken.S.phil.interactable = false;
+					break;
+				}
+			}
+		}
+		ActionWheel.S.MoveWheelUp ();
 	}
 
 	public void OpenDoorSetup(){
@@ -222,6 +261,8 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}
+
+		ActionWheel.S.tradeBtn.interactable = false;
 		
 		if(!currSurvivor.CanMove()){
 			ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
@@ -231,6 +272,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ClickedInvButton(Button clicked){
+		if (ActionWheel.S.CurrAction == "Trade")
+			return;
 		if(clicked.name == "Front1"){
 			clickedCard = currSurvivor.front1;
 		}
@@ -294,12 +337,12 @@ public class GameController : MonoBehaviour {
 				yield return 0;
 				continue;
 			}
-			survTurnText.text = "Actions Remaining: " + currSurvivor.numActions;
 
 			switch(ActionWheel.S.CurrAction){
 			case "Move":
 				if(Input.GetMouseButton(0) && !ActionWheel.S.mouseInWheel && !ActionWheel.S.mouseInWheelButton){
 					GameObject clickedZone = ZoneSelector.S.CurrZone;
+					ActionWheel.S.tradeBtn.interactable = false;
 					if(clickedZone == null) break;
 					GameObject survZone = currSurvivor.CurrZone;
 					if(ZoneSelector.S.IsNeighborOf(clickedZone, survZone)){
@@ -352,7 +395,16 @@ public class GameController : MonoBehaviour {
 					currSurvivor.numActions--;
 				}
 				break;
+			case "Trade":
+				if(!playerTrading) {
+					ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+					currSurvivor.numActions--;
+				}
+				break;
 			}
+
+			if(ActionWheel.S.CurrAction != "Trade" && ActionWheel.S.CurrAction != "Search")
+				survTurnText.text = "Actions Remaining: " + currSurvivor.numActions;
 			
 			yield return 0;
 		}

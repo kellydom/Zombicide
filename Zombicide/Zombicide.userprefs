@@ -1,12 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SurvivorToken.cs">
     <Files>
-      <File FileName="Assets\Scripts\GameController.cs" Line="18" Column="2" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="35" Column="4" />
+      <File FileName="Assets\Scripts\SurvivorToken.cs" Line="510" Column="61" />
+      <File FileName="Assets\Scripts\ActionWheel.cs" Line="127" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets\Scripts\GameController.cs" line="312" offsetX="605" offsetY="5287" expression="ZoneSelector.S.CurrZone" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

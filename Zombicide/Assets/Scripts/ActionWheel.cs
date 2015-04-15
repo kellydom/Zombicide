@@ -34,7 +34,7 @@ public class ActionWheel : MonoBehaviour {
 	public Button meleeBtn;
 	public Button openDoorBtn;
 	public Button driveBtn;
-	public Button getInCarBtn;
+	public Button tradeBtn;
 	public Button switchSeatsBtn;
 	public Button makeNoiseBtn;
 	public Button searchBtn;
@@ -98,7 +98,7 @@ public class ActionWheel : MonoBehaviour {
 			meleeBtn.interactable = false;
 			openDoorBtn.interactable = false;
 			driveBtn.interactable = false;
-			getInCarBtn.interactable = false;
+			tradeBtn.interactable = false;
 			switchSeatsBtn.interactable = false;
 			makeNoiseBtn.interactable = false;
 			searchBtn.interactable = false;
@@ -123,7 +123,13 @@ public class ActionWheel : MonoBehaviour {
 
 		if(GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom == null) objBtn.interactable = false;
 		else objBtn.interactable = true;
-
+		
+		foreach (Survivor guy in GameController.S.survivors) {
+			if(guy.CurrZone == GameController.S.currSurvivor.CurrZone) {
+				if(guy.name != GameController.S.currSurvivor.name)
+					tradeBtn.interactable = true;
+			}
+		}
 
 		//meleeBtn.interactable = true;
 		if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;
@@ -270,8 +276,8 @@ public class ActionWheel : MonoBehaviour {
 		case "DoNothing":
 			actionText.text = "Do Nothing";
 			break;
-		case "GetIntoCar":
-			actionText.text = "Get Into Car";
+		case "Trade":
+			actionText.text = "Trade";
 			break;
 		case "SwitchSeats":
 			actionText.text = "Switch Seats";
@@ -348,9 +354,9 @@ public class ActionWheel : MonoBehaviour {
 			GameController.S.DoNothingSetup();
 			actionText.text = "Do Nothing";
 			break;
-		case "GetIntoCar":
-			GameController.S.GetIntoOutOfCarSetup();
-			actionText.text = "Get Into Car";
+		case "Trade":
+			GameController.S.tradeSetup();
+			actionText.text = "Trade";
 			break;
 		case "SwitchSeats":
 			GameController.S.ChangeSeatsSetup();
