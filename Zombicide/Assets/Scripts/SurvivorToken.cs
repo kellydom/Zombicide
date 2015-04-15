@@ -70,8 +70,8 @@ public class SurvivorToken : MonoBehaviour {
 			if(this != S)
 				Destroy(this.gameObject);
 		}
-		int high = Screen.width/9;
-		int wide = Screen.height / 6;
+		float high = Screen.width/8.0f;
+		float wide = high * 2063/3186;
 
 		front1.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
 		front2.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
@@ -898,6 +898,18 @@ public class SurvivorToken : MonoBehaviour {
 
 		skillShowingDescriptionOf = skillToShow;
 		skillDescription.rectTransform.anchoredPosition = new Vector3(0,0,0);
+
+		string textToShow = "";
+
+		foreach(SkillDescriptions.SkillsAndDescriptions sad in SkillDescriptions.S.skillDescriptions){
+			if(sad.skillName == skillToShow.GetComponentInChildren<Text>().text){
+				textToShow = sad.description;
+				break;
+			}
+		}
+
+		skillDescription.GetComponentInChildren<Text>().text = textToShow;
+
 		skillToShow.color = new Color(0.6f, 0.6f, 1);
 	}
 

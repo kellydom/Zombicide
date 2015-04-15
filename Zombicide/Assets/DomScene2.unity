@@ -6303,6 +6303,8 @@ RectTransform:
   - {fileID: 2126486876}
   - {fileID: 1711757077}
   - {fileID: 1483964886}
+  - {fileID: 1761780551}
+  - {fileID: 2087144375}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_AnchorMin: {x: 0, y: 0}
@@ -6874,7 +6876,7 @@ RectTransform:
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 556.599976, y: 447.899994}
+  m_SizeDelta: {x: 530.650024, y: 403.100006}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &809500716
 MonoBehaviour:
@@ -6891,9 +6893,9 @@ MonoBehaviour:
   m_Color: {r: .279411793, g: 0, b: 0, a: 1}
   m_FontData:
     m_Font: {fileID: 12800000, guid: 05d8e22f6ea10fd448428ffb59888536, type: 3}
-    m_FontSize: 18
+    m_FontSize: 25
     m_FontStyle: 2
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 4
@@ -9978,6 +9980,8 @@ MonoBehaviour:
   attackWheelPrefab: {fileID: 171472, guid: 47c7dc694aaaac04c99821f681aa1003, type: 2}
   waitingToGetEnemyType: 0
   chooseZombieText: {fileID: 1097979932}
+  rerollButton: {fileID: 1761780552}
+  keepButton: {fileID: 2087144376}
 --- !u!114 &1166976255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9990,44 +9994,117 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillDescriptions:
-  - skillName: Slippery
-    description: 
   - skillName: +1 Action
-    description: 
-  - skillName: '+1 die: Melee'
-    description: 
-  - skillName: 1 re-roll per turn
-    description: 
-  - skillName: +1 free Move Action
-    description: 
+    description: The Survivor has an extra Action he may use as he pleases
+  - skillName: '+1 Damage: Melee'
+    description: The Survivor gets a +1 Damage bonus with Melee Actions
+  - skillName: '+1 Damage: Ranged'
+    description: The Survivor gets a +1 Damage bonus with Ranged Actions
   - skillName: '+1 to dice roll: Combat'
-    description: 
-  - skillName: Lucky
-    description: 
-  - skillName: 2 Zones per Move Action
-    description: 
+    description: The Survivor gets an extra hit chance on each attack on a Combat
+      Action (Melee or Ranged). The highest hit chance is always 6
   - skillName: '+1 to dice roll: Melee'
-    description: 
-  - skillName: '+1 die: Combat'
-    description: 
-  - skillName: +1 Zone per Move
-    description: 
-  - skillName: Starts with a Pistol
-    description: 
-  - skillName: +1 free Search Action
-    description: 
+    description: The Survivor gets an extra hit chance on each attack on a Melee Action.
+      The highest hit chance is always 6
   - skillName: '+1 to dice roll: Ranged'
-    description: 
+    description: The Survivor gets an extra hit chance on each attack on a Ranged
+      Action. The highest hit chance is always 6
+  - skillName: '+1 die: Combat'
+    description: The Survivor's weapons have an extra attack circle in Combat (Melee
+      or Ranged). Dual weapons gain an attack circle each, for a total of +2 circles
+      per Dual Combat Action.
+  - skillName: '+1 die: Melee'
+    description: The Survivor's Melee weapons have an extra attack circle in Combat.
+      Dual weapons gain an attack circle each, for a total of +2 circles per Dual
+      Melee Combat Action.
   - skillName: '+1 die: Ranged'
-    description: 
-  - skillName: Born leader
-    description: 
-  - skillName: Sniper
-    description: 
+    description: The Survivor's Ranged weapons have an extra attack circle in Combat.
+      Dual weapons gain an attack circle each, for a total of +2 circles per Dual
+      Ranged Combat Action.
   - skillName: +1 free Combat Action
-    description: 
+    description: The Survivor has one free extra Combat Action.
+  - skillName: +1 free Move Action
+    description: The Survivor has one free extra Move Action
+  - skillName: +1 free Search Action
+    description: The Survivor has one free extra Search Action. The Survivor can still
+      only Search once per turn.
+  - skillName: +1 max Range
+    description: The Survivor's Ranged weapons' maximum Range is increased by 1.
+  - skillName: +1 Zone per Move
+    description: The Survivor can move through one extra Zone ech time she performs
+      a Move Action. This Skill stacks with other effects benefitting Move Action
+  - skillName: 1 re-roll per turn
+    description: Once per turn, you can re-roll all attacks related to the resolution
+      of an Action made by the Survivor. The new result takes the place of the previous
+      one. This Skill stacks with  the effects of Equipment that allow re-rolls
+  - skillName: 2 cocktails are better than 1
+    description: The Survivor gets two Molotov cards instead of one when he creates
+      a Molotov.
+  - skillName: 2 Zones per Move Action
+    description: When the Survivor spends one Action to Move, he can move one or two
+      Zones instead of one.
+  - skillName: Ambidextrous
+    description: The Survivor treats all Melee and Ranged weapons as if they had the
+      Dual symbol
+  - skillName: Born leader
+    description: During the Survivor's turn, he may give one free Action to another
+      Survivor, to use as she pleases. This Action must be used during the recipient's
+      next turn or it is lost.
+  - skillName: Destiny
+    description: The Survivor can use this Skill once per turn when he reveals an
+      Equiment card he drew. Discard that card and draw another Equipment card.
+  - skillName: Gunslinger
+    description: The Survivor treats all Ranged weapons as if they had the Dual symbol.
+  - skillName: Hoard
+    description: The Survivor can carry one extra Equpment card in reserve.
+  - skillName: Hold your nose
+    description: This Skill can be used once per turn. The Survivor gets a free Search
+      Action in the Zone if she has eliminated a Zombie (exen outside a building)
+      the very same turn. The Survivor can still only Search once per turn.
+  - skillName: Is that all you've got?
+    description: You can use this Skill any time the Survivor is about to get Wounded
+      cards. Discard one Equipment card in your Survivor's inventory for each Wound
+      he's about to receive. Negate a Wounded card per discarded Equipment card.
+  - skillName: Lock it down
+    description: At the cost of one Action, the Survivor can close an open door. Opening
+      it again later does not trigger a new Zombie Spawn.
+  - skillName: Loud
+    description: Once per turn, the Survivor can make a huge amount of noise! Until
+      this Survivor's next turn, the Zone he used this Skill in is considered to have
+      the highest number of Noise tokens on the entire map. If different Survivors
+      have this Skill, only the last one who used it applies the effects.
+  - skillName: Lucky
+    description: The Survivor can re-roll once all the attacks of each Action she
+      takes. The new result takes the place of the previous one. This Skill stacks
+      with the effects of other Skills and Equipment that allows re-rolls
+  - skillName: Matching Set!
+    description: When a Survivor performs a Search Action and draws a weapon card
+      with the dual symbol, he can immediately take a second card of the same type
+      from the Equipment deck.
+  - skillName: Medic
+    description: Once per turn, the Survivor can freely remove one Wounded card from
+      a Survivor in the same Zone. He may also heal himself.
+  - skillName: Ninja
+    description: The Survivor makes no Noise. At all. His token does not cound as
+      a Noise token, and his use of Equipment or weapons produces no Noise tokens
+      either! The Survivor may choose not to use this Skill at any time, if he wishes
+      to be noisy.
+  - skillName: Slippery
+    description: The Survivor does not spend extra Actions when he performs a Move
+      Action through a Zone where there are Zombies
+  - skillName: Sniper
+    description: The Survivor may freely choose the targets of all his Ranged Combat
+      Actions.
+  - skillName: Starts with a Pistol
+    description: The Survivor begins the game with the Pistol
+  - skillName: Swordmaster
+    description: The Survivor treats all Melee weapons as if they had the Dual symbol
   - skillName: Tough
-    description: 
+    description: The Survivor ignores the first Attack she receives from a single
+      Zombie every Zombie's Phase
+  - skillName: Trick Shot
+    description: When the Survivor is equipped with Dual Ranged weapons, he can aim
+      at targets in different Zones with each weapon in the same Action
 --- !u!1 &1173252776
 GameObject:
   m_ObjectHideFlags: 0
@@ -13748,6 +13825,122 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1746473089}
+--- !u!1 &1761780550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1761780551}
+  - 222: {fileID: 1761780554}
+  - 114: {fileID: 1761780553}
+  - 114: {fileID: 1761780552}
+  m_Layer: 5
+  m_Name: Reroll
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1761780551
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1761780550}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1951600983}
+  m_Father: {fileID: 754850032}
+  m_RootOrder: 17
+  m_AnchorMin: {x: .5, y: 1}
+  m_AnchorMax: {x: .5, y: 1}
+  m_AnchoredPosition: {x: -159, y: 59}
+  m_SizeDelta: {x: 240.020004, y: 54.2000008}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &1761780552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1761780550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .514705896, g: .939756632, b: 1, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1761780553}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1166976254}
+        m_MethodName: Reroll
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1761780553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1761780550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1761780554
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1761780550}
 --- !u!1 &1770837091
 GameObject:
   m_ObjectHideFlags: 0
@@ -15698,6 +15891,72 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1950563311}
+--- !u!1 &1951600982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1951600983}
+  - 222: {fileID: 1951600985}
+  - 114: {fileID: 1951600984}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1951600983
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1951600982}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1761780551}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &1951600984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1951600982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 05d8e22f6ea10fd448428ffb59888536, type: 3}
+    m_FontSize: 51
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Re-Spin
+--- !u!222 &1951600985
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1951600982}
 --- !u!1 &1957546857
 GameObject:
   m_ObjectHideFlags: 0
@@ -16733,6 +16992,72 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2063154204}
+--- !u!1 &2065397071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 2065397072}
+  - 222: {fileID: 2065397074}
+  - 114: {fileID: 2065397073}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2065397072
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2065397071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2087144375}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &2065397073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2065397071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 05d8e22f6ea10fd448428ffb59888536, type: 3}
+    m_FontSize: 51
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Keep Spin
+--- !u!222 &2065397074
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2065397071}
 --- !u!1 &2065697029
 GameObject:
   m_ObjectHideFlags: 0
@@ -16964,6 +17289,122 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2075258836}
+--- !u!1 &2087144374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 2087144375}
+  - 222: {fileID: 2087144378}
+  - 114: {fileID: 2087144377}
+  - 114: {fileID: 2087144376}
+  m_Layer: 5
+  m_Name: Keep
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2087144375
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2087144374}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2065397072}
+  m_Father: {fileID: 754850032}
+  m_RootOrder: 18
+  m_AnchorMin: {x: .5, y: 1}
+  m_AnchorMax: {x: .5, y: 1}
+  m_AnchoredPosition: {x: 159, y: 59}
+  m_SizeDelta: {x: 240.020004, y: 54.2000008}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &2087144376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2087144374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .514705896, g: .939756632, b: 1, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2087144377}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1166976254}
+        m_MethodName: DontWantReroll
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &2087144377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2087144374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &2087144378
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2087144374}
 --- !u!1 &2092786620
 GameObject:
   m_ObjectHideFlags: 0

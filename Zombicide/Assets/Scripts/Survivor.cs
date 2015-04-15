@@ -20,6 +20,7 @@ public class Survivor : MonoBehaviour {
 	}
 	public string name;
 	public int numActions;
+	public int maxActions = 3;
 	public bool slippery = false;
 	public bool extraAction = false;
 	public bool freeSearch = false;
@@ -48,6 +49,8 @@ public class Survivor : MonoBehaviour {
 	public Image levelImage;
 	public bool doingSkillStuff = false;
 
+	public bool hasDoneMove = false;
+	public bool hasDoneCombatAction = false;
 	bool waitingToSelectSkill = false;
 
 
@@ -86,7 +89,17 @@ public class Survivor : MonoBehaviour {
 	}
 
 	public void MoveTo(GameObject newZone, int actionCost){
-		numActions -= actionCost;
+		if(skills.Contains("+1 free Move Action")){
+			if(hasDoneMove){
+				numActions -= actionCost;
+			}
+			else{
+				hasDoneMove = true;
+			}
+		}
+		else{
+			numActions -= actionCost;
+		}
 		SetZone(newZone);
 		GameController.S.MoveSetup();
 	}
@@ -94,6 +107,9 @@ public class Survivor : MonoBehaviour {
 		ZoneScript zs = currZone.GetComponent<ZoneScript>();
 		
 		if(numActions > 1) return true;
+		if(numActions == 0) return false;
+
+		if(skills.Contains("Slippery")) return true;
 		
 		if(zs.walkersInZone.Count > 0) return false;
 		if(zs.runnersInZone.Count > 0) return false;
@@ -281,6 +297,7 @@ public class Survivor : MonoBehaviour {
 		if(currLevel == 1){
 			skills[1] = skillsAtYellowLevel[0];
 			StartCoroutine(ShowNewSkill(skillsAtYellowLevel[0]));
+			maxActions = 4;
 		}
 		else if(currLevel == 2){
 			StartCoroutine(ChooseNewSkill());

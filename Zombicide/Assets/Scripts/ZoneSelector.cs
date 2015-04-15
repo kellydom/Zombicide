@@ -102,6 +102,14 @@ public class ZoneSelector : MonoBehaviour {
 
 	}
 
+	public void HighlightZonesInRange(GameObject zone, int close, int far){
+		foreach(GameObject nextZone in BoardLayout.S.createdZones){
+			if(ZoneDistance(zone, nextZone) >= close && ZoneDistance(zone, nextZone) <= far){
+				nextZone.GetComponent<ZoneScript>().Highlight();
+			}
+		}
+	}
+
 	public bool IsNeighborOf(GameObject zone, GameObject possibleNeighbor){
 		if(zone.GetComponent<ZoneScript>() == null) return false;
 		if(possibleNeighbor.GetComponent<ZoneScript>() == null) return false;

@@ -13,6 +13,8 @@ public class SpinnerScript : MonoBehaviour {
 	public bool finishedSpinning = false;
 	public bool finishedAttacking = false;
 
+	int hitChance;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -23,14 +25,24 @@ public class SpinnerScript : MonoBehaviour {
 	
 	}
 
-	public void SetHitChance(int hitChance){
+	public void SetHitChance(int hitChanceNew){
+		hitChance = hitChanceNew;
 		for(int i = hitChance - 1; i < 6; ++i){
 			circles[i].color = Color.red;
 		}
 	}
 
+	void ResetColors(){
+		SetHitChance(hitChance);
+		for(int i = 0; i < hitChance - 1; ++i){
+			circles[i].color = Color.white;
+		}
+	}
+
 	IEnumerator SpinWheel(){
 		beenClicked = true;
+		finishedAttacking = false;
+		finishedSpinning = false;
 		hitText.text = "";
 
 		float t = 0;
@@ -60,28 +72,26 @@ public class SpinnerScript : MonoBehaviour {
 			yield return 0;
 		}
 
-		if(currColor == Color.red) hitText.text = "HIT!";
+		if(currColor == Color.red){
+			hitText.text = "HIT!";
+			hitText.color = Color.red;
+		}
 		if(currColor == Color.white) {
 			hitText.text = "Miss";
 			hitText.color = Color.black;
 			finishedAttacking = true;
-			t = 0;
-			
-			while(t < 1){
-				t += Time.deltaTime * Time.timeScale / 0.5f;
-				yield return 0;
-			}
-
-			Vector2 startPos = Camera.main.ScreenToViewportPoint(transform.position);
-			t = 0;
-			while(t < 1){
-				t += Time.deltaTime * Time.timeScale / 0.5f;
-				transform.position = Camera.main.ViewportToScreenPoint(Vector2.Lerp(startPos, startPos + Vector2.up, t));
-				yield return 0;
-			}
 		}
 		finishedSpinning = true;
 
+	}
+
+	public void MoveOffscreen(){
+		StartCoroutine(MoveOut());
+	}
+
+	public void Respin(){
+		ResetColors();
+		StartCoroutine(SpinWheel());
 	}
 
 	public void Click(){

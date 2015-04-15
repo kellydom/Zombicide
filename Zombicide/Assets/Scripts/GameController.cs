@@ -262,7 +262,18 @@ public class GameController : MonoBehaviour {
 		SurvivorToken.S.front2.image.color = Color.white;
 
 		ActionWheel.S.MoveWheelDown();
-		currSurvivor.numActions--;
+
+		if(currSurvivor.skills.Contains("+1 free Combat Action")){
+			if(!currSurvivor.hasDoneCombatAction){
+				currSurvivor.hasDoneCombatAction = true;
+			}
+			else{
+				currSurvivor.numActions--;
+			}
+		}
+		else{
+			currSurvivor.numActions--;
+		}
 	}
 
 	public void MeleeSetup(){
@@ -318,7 +329,17 @@ public class GameController : MonoBehaviour {
 			ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 			return;
 		}
-		ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
+
+		
+		int distCanTravel = 1;
+		if(currSurvivor.skills.Contains("2 Zones per Move Action")){
+			distCanTravel++;
+		}
+		if(currSurvivor.skills.Contains("+1 Zone per Move")){
+			distCanTravel++;
+		}
+
+		ZoneSelector.S.HighlightZonesInRange(currSurvivor.CurrZone, 1, distCanTravel);
 	}
 
 	public void ClickedInvButton(Button clicked){
@@ -442,15 +463,23 @@ public class GameController : MonoBehaviour {
 					ActionWheel.S.tradeBtn.interactable = false;
 					if(clickedZone == null) break;
 					GameObject survZone = currSurvivor.CurrZone;
-					if(ZoneSelector.S.IsNeighborOf(clickedZone, survZone)){
+
+					int distCanTravel = 1;
+					if(currSurvivor.skills.Contains("2 Zones per Move Action")){
+						distCanTravel++;
+					}
+					if(currSurvivor.skills.Contains("+1 Zone per Move")){
+						distCanTravel++;
+					}
+
+					if(ZoneSelector.S.ZoneDistance(survZone, clickedZone) <= distCanTravel && ZoneSelector.S.ZoneDistance(survZone, clickedZone) > 0){
 						ZoneScript zs = currSurvivor.CurrZone.GetComponent<ZoneScript>();
 
 						int actionCount = 1;
 						
-						if(zs.walkersInZone.Count > 0) actionCount = 2;
-						if(zs.runnersInZone.Count > 0) actionCount = 2;
-						if(zs.fattiesInZone.Count > 0) actionCount = 2;
-						if(zs.abombInZone.Count > 0) actionCount = 2;
+						if(zs.EnemiesInZone() > 0) actionCount = 2;
+
+						if(currSurvivor.skills.Contains("Slippery")) actionCount = 1;
 
 						currSurvivor.MoveTo(clickedZone, actionCount);
 					}
@@ -509,7 +538,8 @@ public class GameController : MonoBehaviour {
 			case "Search":
 				if(!playerSearching) {
 					ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
-					currSurvivor.numActions--;
+					if(!currSurvivor.skills.Contains("+1 free Search Action"))
+						currSurvivor.numActions--;
 				}
 				break;
 			case "Trade":
@@ -556,6 +586,8 @@ public class GameController : MonoBehaviour {
 
 		foreach(GameObject zone in BoardLayout.S.createdZones){
 			if(allZombies.Count == 0) continue;
+			if(zone.GetComponent<ZoneScript>().EnemiesInZone() == 0) continue;
+
 			while(zombiesAttacking){
 				yield return 0;
 				continue;
@@ -577,13 +609,12 @@ public class GameController : MonoBehaviour {
 
 		}
 
-
-		yield return 0;
-
 		foreach(Survivor surv in survivors){
 			surv.HasGone = false;
-			surv.numActions = 3;
+			surv.numActions = surv.maxActions;
 			surv.hasSearched = false;
+			surv.hasDoneMove = false;
+			surv.hasDoneCombatAction = false;
 		}
 		foreach(Enemy zomb in allZombies){
 			zomb.hasDoneAction = false;
