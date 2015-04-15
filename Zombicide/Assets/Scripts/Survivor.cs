@@ -37,9 +37,13 @@ public class Survivor : MonoBehaviour {
 
 	int currExp = 0;
 	int expToYellow = 7;
+	public List<string> skillsAtYellowLevel;
 	int expToOrange = 19;
+	public List<string> skillsAtOrangeLevel;
 	int expToRed = 43;
+	public List<string> skillsAtRedLevel;
 
+	public List<string> skills;
 	public int currLevel = 0;
 	public Image levelImage;
 

@@ -8,6 +8,8 @@ public class SurvivorToken : MonoBehaviour {
 
 	public Button phil;
 	public Button wanda;
+	public Button josh;
+	public Button ned;
 	public Button front1;
 	public Button front2;
 	public Button back1;
@@ -20,6 +22,8 @@ public class SurvivorToken : MonoBehaviour {
 	public Button tempb3;
 	bool philClicked = false;
 	bool wandaClicked = false;
+	bool nedClicked = false;
+	bool joshClicked = false;
 	bool clicked = false;
 	Survivor currSurvivor;
 	Survivor tempSurvivor;
@@ -77,6 +81,12 @@ public class SurvivorToken : MonoBehaviour {
 		case "Phil":
 			phil.image.transform.localScale = newScale;
 			break;
+		case "Ned":
+			ned.image.transform.localScale = newScale;
+			break;
+		case "Josh":
+			josh.image.transform.localScale = newScale;
+			break;
 		}
 		for (int i = 0; i < GameController.S.survivors.Count; i++) {
 			if(name == GameController.S.survivors[i].name) {
@@ -118,6 +128,16 @@ public class SurvivorToken : MonoBehaviour {
 		case "Phil":
 			if(!philClicked) {
 				phil.image.transform.localScale = newScale;
+			}
+			break;
+		case "Ned":
+			if(!nedClicked) {
+				ned.image.transform.localScale = newScale;
+			}
+			break;
+		case "Josh":
+			if(!joshClicked) {
+				josh.image.transform.localScale = newScale;
 			}
 			break;
 		}
@@ -174,7 +194,6 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void tokenOnClicked(string name) {
-		print ("Clicked!: " + wandaClicked + " " + philClicked);
 		bool reload = false;
 		Vector3 newScale = new Vector3 (4, 4, 0);
 		if (ActionWheel.S.CurrAction == "Trade")
@@ -193,7 +212,7 @@ public class SurvivorToken : MonoBehaviour {
 			if(!cardsOut)
 				expandCards();
 			wanda.image.transform.localScale = newScale;
-			if(philClicked) {
+			if(philClicked || nedClicked || joshClicked) {
 				if (GameController.S.currSurvivor != null)
 					if (GameController.S.currSurvivor.numActions < 3)
 						return;
@@ -203,6 +222,10 @@ public class SurvivorToken : MonoBehaviour {
 				GameController.S.currSurvivor.Unhighlight();
 				phil.image.transform.localScale = new Vector3(1, 1, 0);
 				philClicked = false;
+				ned.image.transform.localScale = new Vector3(1, 1, 0);
+				nedClicked = false;
+				josh.image.transform.localScale = new Vector3(1, 1, 0);
+				joshClicked = false;
 			}
 			wandaClicked = true;
 			for (int i = 0; i < GameController.S.survivors.Count; i++) {
@@ -228,12 +251,16 @@ public class SurvivorToken : MonoBehaviour {
 			phil.image.transform.localScale = newScale;
 			if(!cardsOut)
 				expandCards();
-			if(wandaClicked) {
+			if(wandaClicked || nedClicked || joshClicked) {
 				if (GameController.S.currSurvivor != null)
 					if (GameController.S.currSurvivor.numActions < 3)
 						return;
 				wanda.image.transform.localScale = new Vector3(1, 1, 0);
 				wandaClicked = false;
+				ned.image.transform.localScale = new Vector3(1, 1, 0);
+				nedClicked = false;
+				josh.image.transform.localScale = new Vector3(1, 1, 0);
+				joshClicked = false;
 				removeCards();
 				//expandCards();
 				reload = true;
@@ -247,6 +274,82 @@ public class SurvivorToken : MonoBehaviour {
 					if(reload)
 						removeTempCards();
 						expandCards();
+				}
+			}
+			break;
+		case "Ned":
+			if(nedClicked) {
+				nedClicked = false;
+				removeCards();
+				clicked = false;
+				ned.image.transform.localScale = new Vector3(1, 1, 0);
+				GameController.S.currSurvivor = null;
+				break;
+			}
+			ned.image.transform.localScale = newScale;
+			if(!cardsOut)
+				expandCards();
+			if(wandaClicked || philClicked || joshClicked) {
+				if (GameController.S.currSurvivor != null)
+					if (GameController.S.currSurvivor.numActions < 3)
+						return;
+				wanda.image.transform.localScale = new Vector3(1, 1, 0);
+				wandaClicked = false;
+				phil.image.transform.localScale = new Vector3(1, 1, 0);
+				philClicked = false;
+				josh.image.transform.localScale = new Vector3(1, 1, 0);
+				joshClicked = false;
+				removeCards();
+				//expandCards();
+				reload = true;
+				GameController.S.currSurvivor.Unhighlight();
+			}
+			nedClicked = true;
+			for (int i = 0; i < GameController.S.survivors.Count; i++) {
+				if("Ned" == GameController.S.survivors[i].name) {
+					GameController.S.currSurvivor = GameController.S.survivors[i];
+					currSurvivor = GameController.S.survivors[i];
+					if(reload)
+						removeTempCards();
+					expandCards();
+				}
+			}
+			break;
+		case "Josh":
+			if(joshClicked) {
+				joshClicked = false;
+				removeCards();
+				clicked = false;
+				josh.image.transform.localScale = new Vector3(1, 1, 0);
+				GameController.S.currSurvivor = null;
+				break;
+			}
+			josh.image.transform.localScale = newScale;
+			if(!cardsOut)
+				expandCards();
+			if(wandaClicked || nedClicked || philClicked) {
+				if (GameController.S.currSurvivor != null)
+					if (GameController.S.currSurvivor.numActions < 3)
+						return;
+				wanda.image.transform.localScale = new Vector3(1, 1, 0);
+				wandaClicked = false;
+				ned.image.transform.localScale = new Vector3(1, 1, 0);
+				nedClicked = false;
+				phil.image.transform.localScale = new Vector3(1, 1, 0);
+				philClicked = false;
+				removeCards();
+				//expandCards();
+				reload = true;
+				GameController.S.currSurvivor.Unhighlight();
+			}
+			joshClicked = true;
+			for (int i = 0; i < GameController.S.survivors.Count; i++) {
+				if("Josh" == GameController.S.survivors[i].name) {
+					GameController.S.currSurvivor = GameController.S.survivors[i];
+					currSurvivor = GameController.S.survivors[i];
+					if(reload)
+						removeTempCards();
+					expandCards();
 				}
 			}
 			break;
@@ -632,6 +735,20 @@ public class SurvivorToken : MonoBehaviour {
 			case "Phil":
 				for (int i = 0; i < GameController.S.survivors.Count; i++) {
 					if("Phil" == GameController.S.survivors[i].name) {
+						tradingSurvivor = GameController.S.survivors[i];
+					}
+				}
+				break;
+			case "Ned":
+				for (int i = 0; i < GameController.S.survivors.Count; i++) {
+					if("Ned" == GameController.S.survivors[i].name) {
+						tradingSurvivor = GameController.S.survivors[i];
+					}
+				}
+				break;
+			case "Josh":
+				for (int i = 0; i < GameController.S.survivors.Count; i++) {
+					if("Josh" == GameController.S.survivors[i].name) {
 						tradingSurvivor = GameController.S.survivors[i];
 					}
 				}
