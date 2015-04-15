@@ -102,9 +102,9 @@ public class ActionWheel : MonoBehaviour {
 			rangedBtn.interactable = false;
 			meleeBtn.interactable = false;
 			openDoorBtn.interactable = false;
-			driveBtn.interactable = false;
+			//driveBtn.interactable = false;
 			tradeBtn.interactable = false;
-			switchSeatsBtn.interactable = false;
+			//switchSeatsBtn.interactable = false;
 			makeNoiseBtn.interactable = false;
 			searchBtn.interactable = false;
 			invBtn.interactable = false;
