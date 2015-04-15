@@ -67,7 +67,19 @@ public class SurvivorToken : MonoBehaviour {
 			if(this != S)
 				Destroy(this.gameObject);
 		}
+		int high = Screen.width/9;
+		int wide = Screen.height / 6;
 
+		front1.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		front2.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		back1.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		back2.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		back3.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		tempf1.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		tempf2.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		tempb1.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		tempb2.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+		tempb3.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
 		//Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
 	}
 	
