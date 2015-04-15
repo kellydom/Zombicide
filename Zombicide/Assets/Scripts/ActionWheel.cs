@@ -68,6 +68,11 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	void CheckDoor(){
+		if(!GameController.S.currSurvivor.front1.openDoor && !GameController.S.currSurvivor.front2.openDoor){
+			openDoorBtn.interactable = false;
+			return;
+		}
+
 		int pZone = GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().zoneNum;
 
 		bool interactable = false;

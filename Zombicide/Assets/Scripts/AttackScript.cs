@@ -83,6 +83,7 @@ public class AttackScript : MonoBehaviour {
 							Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 							zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 							Attack ();
+							GameController.S.currSurvivor.GiveEXP(1);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
@@ -93,6 +94,7 @@ public class AttackScript : MonoBehaviour {
 							Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 							zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
 							Attack ();
+							GameController.S.currSurvivor.GiveEXP(1);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
@@ -103,6 +105,7 @@ public class AttackScript : MonoBehaviour {
 							Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 							zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
 							Attack ();
+							GameController.S.currSurvivor.GiveEXP(1);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
@@ -113,6 +116,7 @@ public class AttackScript : MonoBehaviour {
 							Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 							zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
 							Attack ();
+							GameController.S.currSurvivor.GiveEXP(5);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
@@ -142,25 +146,29 @@ public class AttackScript : MonoBehaviour {
 						Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 						zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 						Attack ();
+						GameController.S.currSurvivor.GiveEXP(1);
 						yield return 0;
 					}
 					while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
 						Attack ();
-						if(attWeapon.damage > 1) continue;
+						if(attWeapon.damage < 2) continue;
 						Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 						zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
+						GameController.S.currSurvivor.GiveEXP(1);
 						yield return 0;
 					}
 					while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
 						Attack ();
-						if(attWeapon.damage > 2) continue;
+						if(attWeapon.damage < 3) continue;
 						Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 						zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
+						GameController.S.currSurvivor.GiveEXP(5);
 						yield return 0;
 					}
 					while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
 						Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 						zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
+						GameController.S.currSurvivor.GiveEXP(1);
 						Attack ();
 						yield return 0;
 					}
@@ -214,7 +222,7 @@ public class AttackScript : MonoBehaviour {
 		typeAttacking = newType;
 	}
 
-	public void CreateAttackWheels(GameObject zone, bool melee, Card attackingWeapon){
+	public void CreateAttackWheels(GameObject zone, bool melee, Card attackingWeapon, bool dualWield){
 		attackingZone = zone;
 		isMelee = melee;
 		typeAttacking = Enemy.EnemyType.None;
@@ -223,6 +231,7 @@ public class AttackScript : MonoBehaviour {
 		GameObject canvas = GameObject.Find("Canvas");
 
 		int numAttacking = attackingWeapon.dice;
+		if(dualWield) numAttacking += numAttacking;
 		int ctr = 0;
 		while(numAttacking > 0){
 			numAttacking--;

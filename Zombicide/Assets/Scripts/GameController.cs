@@ -92,7 +92,8 @@ public class GameController : MonoBehaviour {
 
 		Destroy(currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom);
 		currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom = null;
-		
+		currSurvivor.GiveEXP(5);
+
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		currSurvivor.numActions--;
 	}
@@ -154,7 +155,12 @@ public class GameController : MonoBehaviour {
 	public void RangedAttackSetup(GameObject zone){
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		ActionWheel.S.MoveWheelUp();
-		AttackScript.S.CreateAttackWheels(zone, false, attackingWeapon);
+
+		bool dualWield = false;
+		if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
+			dualWield = true;
+		}
+		AttackScript.S.CreateAttackWheels(zone, false, attackingWeapon, dualWield);
 	}
 
 	public void RangedZoneSetup(){
@@ -171,22 +177,36 @@ public class GameController : MonoBehaviour {
 
 	public void RangedWeaponSetup(){
 		if(currSurvivor.front1.ranged && currSurvivor.front2.ranged){
-			needToChooseWeapon = true;
-			clickedCard = null;
-			attackingWeapon = null;
+			SurvivorToken.S.front1.image.color = Color.yellow;
+			SurvivorToken.S.front2.image.color = Color.yellow;
+			if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
+
+				attackingWeapon = currSurvivor.front1;
+				RangedZoneSetup();
+			}
+			else{
+				needToChooseWeapon = true;
+				clickedCard = null;
+				attackingWeapon = null;
+			}
 		}
 		else{
 			if(currSurvivor.front1.ranged){
 				attackingWeapon = currSurvivor.front1;
+				SurvivorToken.S.front1.image.color = Color.yellow;
 			}
 			else{
 				attackingWeapon = currSurvivor.front2;
+				SurvivorToken.S.front2.image.color = Color.yellow;
 			}
 			RangedZoneSetup();
 		}
 	}
 
 	public void FinishAttackAction(){
+		SurvivorToken.S.front1.image.color = Color.white;
+		SurvivorToken.S.front2.image.color = Color.white;
+
 		ActionWheel.S.MoveWheelDown();
 		currSurvivor.numActions--;
 	}
@@ -194,21 +214,36 @@ public class GameController : MonoBehaviour {
 	public void MeleeSetup(){
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		ActionWheel.S.MoveWheelUp();
-		AttackScript.S.CreateAttackWheels(currSurvivor.CurrZone, true, attackingWeapon);
+		bool dualWield = false;
+		if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
+			dualWield = true;
+		}
+		AttackScript.S.CreateAttackWheels(currSurvivor.CurrZone, true, attackingWeapon, dualWield);
 	}
 
 	public void MeleeWeaponSetup(){
 		if(currSurvivor.front1.melee && currSurvivor.front2.melee){
-			needToChooseWeapon = true;
-			clickedCard = null;
-			attackingWeapon = null;
+			SurvivorToken.S.front1.image.color = Color.yellow;
+			SurvivorToken.S.front2.image.color = Color.yellow;
+			if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
+				
+				attackingWeapon = currSurvivor.front1;
+				MeleeSetup();
+			}
+			else{
+				needToChooseWeapon = true;
+				clickedCard = null;
+				attackingWeapon = null;
+			}
 		}
 		else{
 			if(currSurvivor.front1.melee){
 				attackingWeapon = currSurvivor.front1;
+				SurvivorToken.S.front1.image.color = Color.yellow;
 			}
 			else{
 				attackingWeapon = currSurvivor.front2;
+				SurvivorToken.S.front2.image.color = Color.yellow;
 			}
 			MeleeSetup();
 		}
@@ -239,8 +274,51 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	IEnumerator MoveSurvTurnImgOut(){
+
+		float t = 0;
+
+		Vector2 currSurvPos = survTurnImg.rectTransform.anchoredPosition;
+		Vector2 newSurvPos = new Vector2(222, -38);
+		
+		Vector2 currZombPos = zombTurnImg.rectTransform.anchoredPosition;
+		Vector2 newZombPos = new Vector2(149, -38);
+
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+
+			survTurnImg.rectTransform.anchoredPosition = Vector2.Lerp(currSurvPos, newSurvPos, t);
+			zombTurnImg.rectTransform.anchoredPosition = Vector2.Lerp(currZombPos, newZombPos, t);
+
+			yield return 0;
+		}
+
+		zombTurnText.text = "";
+	}
+
+	IEnumerator MoveZombTurnImgOut(){
+		zombTurnText.text = "Zombies' Move!";
+		float t = 0;
+		
+		Vector2 currSurvPos = survTurnImg.rectTransform.anchoredPosition;
+		Vector2 newSurvPos = new Vector2(-149, -38);
+		
+		Vector2 currZombPos = zombTurnImg.rectTransform.anchoredPosition;
+		Vector2 newZombPos = new Vector2(-222, -38);
+		
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			
+			survTurnImg.rectTransform.anchoredPosition = Vector2.Lerp(currSurvPos, newSurvPos, t);
+			zombTurnImg.rectTransform.anchoredPosition = Vector2.Lerp(currZombPos, newZombPos, t);
+			
+			yield return 0;
+		}
+
+	}
+
 	IEnumerator PlayerTurn(){
-		survTurnImg.rectTransform.anchoredPosition = new Vector2(222, -38);
+		StartCoroutine(MoveSurvTurnImgOut());
 		playerGoing = true;
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
@@ -319,9 +397,19 @@ public class GameController : MonoBehaviour {
 
 			case "Ranged":
 				if(needToChooseWeapon){
+					survTurnText.text = "Choose A Weapon!";
 					if(clickedCard == currSurvivor.front1 || clickedCard == currSurvivor.front2){
 						needToChooseWeapon = false;
 						attackingWeapon = clickedCard;
+						if(clickedCard == currSurvivor.front1){
+							SurvivorToken.S.front1.image.color = Color.yellow;
+							SurvivorToken.S.front2.image.color = Color.white;
+						}
+						if(clickedCard == currSurvivor.front2){
+							SurvivorToken.S.front2.image.color = Color.yellow;
+							SurvivorToken.S.front1.image.color = Color.white;
+						}
+
 						RangedZoneSetup();
 					}
 				}
@@ -339,9 +427,19 @@ public class GameController : MonoBehaviour {
 				break;
 			case "Melee":
 				if(needToChooseWeapon){
+					survTurnText.text = "Choose A Weapon!";
 					if(clickedCard == currSurvivor.front1 || clickedCard == currSurvivor.front2){
 						needToChooseWeapon = false;
 						attackingWeapon = clickedCard;
+						if(clickedCard == currSurvivor.front1){
+							SurvivorToken.S.front1.image.color = Color.yellow;
+							SurvivorToken.S.front2.image.color = Color.white;
+						}
+						if(clickedCard == currSurvivor.front2){
+							SurvivorToken.S.front2.image.color = Color.yellow;
+							SurvivorToken.S.front1.image.color = Color.white;
+						}
+						MeleeSetup();
 					}
 				}
 				break;
@@ -354,10 +452,10 @@ public class GameController : MonoBehaviour {
 				break;
 			}
 			
+			currSurvivor.front2.but.image.color = Color.yellow;
 			yield return 0;
 		}
-		
-		survTurnImg.rectTransform.anchoredPosition = new Vector2(-149, -38);
+
 		playerTurn = false;
 		playerGoing = false;
 	}
@@ -379,9 +477,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	IEnumerator ZombieTurn(){
+		StartCoroutine(MoveZombTurnImgOut());
 		zombieGoing = true;
-		zombTurnImg.rectTransform.anchoredPosition = new Vector2(-222, -38);
-		zombTurnText.text = "Zombies' Move!";
 
 		//Move Zombies on board
 		CameraController.S.ZoomOut(0.5f);
@@ -412,13 +509,12 @@ public class GameController : MonoBehaviour {
 		foreach(Survivor surv in survivors){
 			surv.HasGone = false;
 			surv.numActions = 3;
+			surv.hasSearched = false;
 		}
 		foreach(Enemy zomb in allZombies){
 			zomb.hasDoneAction = false;
 		}
-		
-		zombTurnImg.rectTransform.anchoredPosition = new Vector2(149, -38);
-		zombTurnText.text = "";
+
 		zombieGoing = false;
 		playerTurn = true;
 	}
@@ -510,13 +606,21 @@ public class GameController : MonoBehaviour {
 
 	public void SetZombieNumText(Vector3 pos, int num){
 		zombieNum.text = num+"x";
-		Vector2 viewportPoint = Camera.main.WorldToScreenPoint(pos - new Vector3(0, 0, 0.05f)); //convert game object position to VievportPoint
+		Vector2 viewportPoint = Camera.main.WorldToScreenPoint(pos + new Vector3(0, 0, 0.1f)); //convert game object position to VievportPoint
 		// set MIN and MAX Anchor values(positions) to the same position (ViewportPoint)
 		zombieNumImg.transform.position = viewportPoint;
 	}
 
 	public void MoveZombieNumOff(){
 		zombieNum.text = "";
-		zombieNumImg.transform.position = new Vector2(2, 2);
+		zombieNumImg.transform.position = Camera.main.ViewportToScreenPoint(new Vector2(2, 2));
+	}
+
+	public int HighestPlayerLevel(){
+		int highestLevel = 0;
+		foreach(Survivor surv in survivors){
+			if(surv.currLevel > highestLevel) highestLevel = surv.currLevel;
+		}
+		return highestLevel;
 	}
 }

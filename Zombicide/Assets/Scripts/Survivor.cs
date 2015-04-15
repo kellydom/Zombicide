@@ -35,6 +35,13 @@ public class Survivor : MonoBehaviour {
 
 	public bool hasSearched = false;
 
+	int currExp = 0;
+	int expToYellow = 7;
+	int expToOrange = 19;
+	int expToRed = 43;
+
+	public int currLevel = 0;
+
 
 	// Use this for initialization
 	void Start () {
@@ -186,6 +193,20 @@ public class Survivor : MonoBehaviour {
 	void OnMouseExit(){
 		if(currTurn) return;
 		//Unhighlight();
+	}
+
+	public void GiveEXP(int numXP){
+		currExp += numXP;
+
+		if(currExp >= expToYellow){
+			currLevel = 1;
+		}
+		if(currExp >= expToOrange){
+			currLevel = 2;
+		}
+		if(currExp >= expToRed){
+			currLevel = 3;
+		}
 	}
 
 }

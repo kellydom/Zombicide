@@ -540,6 +540,7 @@ public class Deck : MonoBehaviour {
 		int at = Random.Range (0, equipment.Count);
 		string cardName	= equipment [at];
 		equipment.RemoveAt (at);
+		print (cardName);
 		switch (cardName) {
 		case "Pan":
 			picked = pan;
@@ -615,6 +616,12 @@ public class Deck : MonoBehaviour {
 			break;
 		case "Plenty of Ammo (Light)":
 			picked = ammoL;
+			break;
+		case "Goalie Mask":
+			picked = mask;
+			break;
+		case "Glass Bottle":
+			picked = bottle;
 			break;
 		}
 		//print (picked.cardName);

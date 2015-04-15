@@ -139,8 +139,6 @@ public class ZoneScript : MonoBehaviour {
 			closestZones = ZoneSelector.S.ClosestZonesFromList(noisiestZones, enemyZone);
 		}
 
-		print ("End zones: " + closestZones.Count);
-
 		//if closest zones is still count 0, then the survivors are behind locked doors
 		//which is something I don't think we need to worry about now (or ever?)
 		if(closestZones.Count == 0) return;
@@ -151,8 +149,6 @@ public class ZoneScript : MonoBehaviour {
 			List<GameObject> stepsToGO = ZoneSelector.S.StepTowardsZone(enemyZone, go, dist);
 			nextSteps.AddRange(stepsToGO);
 		}
-
-		print ("Next step: " + nextSteps.Count);
 
 		int numDiffSteps = nextSteps.Count;
 		int extraZombies = 0;
@@ -168,8 +164,6 @@ public class ZoneScript : MonoBehaviour {
 		}
 
 		int zombiesPerZone = zombies.Count / numDiffSteps;
-		print (zombiesPerZone + " " + zombies.Count + " " + numDiffSteps);
-
 
 		int currZombie = 1;
 		int currZoneCount = 0;
