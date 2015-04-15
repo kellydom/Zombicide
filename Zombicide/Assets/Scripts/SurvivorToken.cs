@@ -205,13 +205,6 @@ public class SurvivorToken : MonoBehaviour {
 		tempb2.transform.position = new Vector3 (backPos, back2.transform.position.y);
 		tempb3.transform.position = new Vector3 (backPos, back3.transform.position.y);
 
-
-		//tempf1.transform.position = new Vector3 (tempFrontCards, tempf1.transform.position.y);
-		//tempf2.transform.position = new Vector3 (tempFrontCards, tempf2.transform.position.y);
-		//tempb1.transform.position = new Vector3 (tempBackCards, tempb1.transform.position.y);
-		//tempb2.transform.position = new Vector3 (tempBackCards, tempb2.transform.position.y);
-		//tempb3.transform.position = new Vector3 (tempBackCards, tempb3.transform.position.y);
-
 	}
 
 	void removeTempCards() {
@@ -229,11 +222,15 @@ public class SurvivorToken : MonoBehaviour {
 		back1.image.sprite = currSurvivor.back1.but.image.sprite;
 		back2.image.sprite = currSurvivor.back2.but.image.sprite;
 		back3.image.sprite = currSurvivor.back3.but.image.sprite;
-		front1.transform.position = new Vector3 (frontCards, front1.transform.position.y);
-		front2.transform.position = new Vector3 (frontCards, front2.transform.position.y);
-		back1.transform.position = new Vector3 (backCards, back1.transform.position.y);
-		back2.transform.position = new Vector3 (backCards, back2.transform.position.y);
-		back3.transform.position = new Vector3 (backCards, back3.transform.position.y);
+		
+		float frontPos = front1.GetComponent<RectTransform>().sizeDelta.x * 3.0f/2.0f;
+		float backPos = front1.GetComponent<RectTransform>().sizeDelta.x * 1.0f/2.0f;
+
+		front1.transform.position = new Vector3 (frontPos, back2.transform.position.y + back2.GetComponent<RectTransform>().sizeDelta.y/2.0f);
+		front2.transform.position = new Vector3 (frontPos, back2.transform.position.y - back2.GetComponent<RectTransform>().sizeDelta.y/2.0f);
+		back1.transform.position = new Vector3 (backPos, back2.transform.position.y + back2.GetComponent<RectTransform>().sizeDelta.y);
+		back2.transform.position = new Vector3 (backPos, back2.transform.position.y);
+		back3.transform.position = new Vector3 (backPos, back2.transform.position.y - back2.GetComponent<RectTransform>().sizeDelta.y);
 	}
 
 	void removeCards() {
