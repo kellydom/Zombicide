@@ -151,6 +151,12 @@ public class ActionWheel : MonoBehaviour {
 				return;
 			}
 		}
+		if(GameController.S.waitForAaahhSpawn){
+			return;
+		}
+		if(GameController.S.spawningIndoors){
+			return;
+		}
 		mouseInWheel = true;
 	}
 	
@@ -164,6 +170,12 @@ public class ActionWheel : MonoBehaviour {
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
 			}
+		}
+		if(GameController.S.waitForAaahhSpawn){
+			return;
+		}
+		if(GameController.S.spawningIndoors){
+			return;
 		}
 
 		mouseInWheelButton = true;
@@ -271,6 +283,12 @@ public class ActionWheel : MonoBehaviour {
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
 			}
+		}
+		if(GameController.S.waitForAaahhSpawn){
+			return;
+		}
+		if(GameController.S.spawningIndoors){
+			return;
 		}
 		MouseEnterButton();
 		switch (action){

@@ -45,6 +45,8 @@ public class GameController : MonoBehaviour {
 	Card attackingWeapon = null;
 
 	public bool zombiesAttacking = false;
+	public bool waitForAaahhSpawn = false;
+	public bool spawningIndoors = false;
 	
 
 	// Use this for initialization
@@ -108,13 +110,57 @@ public class GameController : MonoBehaviour {
 
 	}
 
+	IEnumerator SpawnAaahhCard(){
+		waitForAaahhSpawn = true;
+		
+		zombTurnText.text = "New Zombie Spawning!";
+		StartCoroutine(MoveZombTurnImgOut());
+
+		yield return new WaitForSeconds(1);
+
+		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
+
+		CameraController.S.MoveTo(currSurvivor.CurrZone.transform.position + new Vector3(0, 1, 0) + Vector3.back / 3, 0.5f);
+		yield return new WaitForSeconds(0.5f);
+
+		
+		Vector3 topRightCorner = currSurvivor.CurrZone.GetComponent<BoxCollider>().bounds.max;
+		Vector3 topLeftCorner = topRightCorner;
+		topLeftCorner.x = currSurvivor.CurrZone.GetComponent<BoxCollider>().bounds.min.x;
+		topRightCorner.z += -0.03f;
+		topLeftCorner.z += -0.03f;
+		Vector3 walkerSpawnPos = Vector3.Lerp (topLeftCorner, topRightCorner, 1/5.0f);
+		GameObject zombie = Instantiate(enemyTypes[0], topLeftCorner + Vector3.up / 5, Quaternion.identity) as GameObject;
+		currSurvivor.CurrZone.GetComponent<ZoneScript>().AddZombieToZone(zombie);
+		zombie.GetComponent<Enemy>().currZone = currSurvivor.CurrZone;
+		allZombies.Add (zombie.GetComponent<Enemy>());
+
+		yield return new WaitForSeconds(0.5f);
+
+		SurvivorToken.S.ShowSkills(GameController.S.currSurvivor);
+		ActionWheel.S.MoveWheelDown ();
+		if(!currSurvivor.skills.Contains("+1 free Search Action"))
+			currSurvivor.numActions--;
+		waitForAaahhSpawn = false;
+		StartCoroutine(MoveSurvTurnImgOut());
+	}
+
 	public void SearchSetup(){
 		if(currSurvivor == null) return;
 
 		SurvivorToken.S.HideSkills();
 		ActionWheel.S.MoveWheelUp ();
 		picked = deck.draw ();
+		
 		currSurvivor.hasSearched = true;
+		pickedImage.image.sprite = picked.but.image.sprite;
+		pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
+
+		if(picked.cardName == "Aaahh!"){
+			StartCoroutine(SpawnAaahhCard());
+			return;
+		}
+
 		GameController.S.survTurnText.text = "Replace and/or Discard";
 
 		pickedImage.image.sprite = picked.but.image.sprite;
@@ -157,10 +203,32 @@ public class GameController : MonoBehaviour {
 		ActionWheel.S.MoveWheelUp ();
 	}
 
+	IEnumerator SpawningZombiesInsideCo(GameObject zoneToStart){
+		spawningIndoors = true;
+
+		List<GameObject> buildingNeighbors = ZoneSelector.S.BuildingNeighbors(zoneToStart);
+		zombTurnText.text = "Zombies' Spawn!";
+		StartCoroutine(MoveZombTurnImgOut());
+		//Spawn Zombies
+		foreach(GameObject zone in buildingNeighbors){
+			zone.GetComponent<ZoneScript>().hasSpawnedZombies = true;
+			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, 1, 0) + Vector3.back / 3, 0.2f);
+			yield return new WaitForSeconds(0.2f);
+			
+			SpawnZombiesAt(zone);
+			yield return new WaitForSeconds(0.5f);
+			
+		}
+		
+		StartCoroutine(MoveSurvTurnImgOut());
+		spawningIndoors = false;
+	}
+
 	public void OpenDoorSetup(){
 		if(currSurvivor == null) return;
 
 		int pZone = currSurvivor.CurrZone.GetComponent<ZoneScript>().zoneNum;
+		GameObject zoneToStartSpawn = null;
 		for(int i = 0; i < BoardLayout.S.doorConnections.Count; ++i){
 			BoardLayout.Door door = BoardLayout.S.doorConnections[i];
 			if(door.zoneOne == pZone || door.zoneTwo == pZone){
@@ -169,6 +237,13 @@ public class GameController : MonoBehaviour {
 					Vector3 newPos = BoardLayout.S.doors[i].transform.position + Vector3.up / 3.0f;
 					BoardLayout.S.doors[i].transform.position = newPos;
 					door.isOpened = true;
+
+					int otherZone = door.zoneOne;
+					if(door.zoneOne == pZone) otherZone = door.zoneTwo;
+
+					if(!BoardLayout.S.isStreetZone[otherZone] && !BoardLayout.S.createdZones[otherZone].GetComponent<ZoneScript>().hasSpawnedZombies){
+						zoneToStartSpawn = BoardLayout.S.createdZones[otherZone];
+					}
 				}
 			}
 		}
@@ -182,6 +257,10 @@ public class GameController : MonoBehaviour {
 			if(currSurvivor.front2.doorNoise){
 				currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
 			}
+		}
+
+		if(zoneToStartSpawn != null){
+			StartCoroutine(SpawningZombiesInsideCo(zoneToStartSpawn));
 		}
 
 		currSurvivor.numActions--;
@@ -376,7 +455,6 @@ public class GameController : MonoBehaviour {
 	}
 
 	IEnumerator MoveZombTurnImgOut(){
-		zombTurnText.text = "Zombies' Move!";
 		float t = 0;
 		
 		Vector2 currSurvPos = survTurnImg.rectTransform.anchoredPosition;
@@ -404,6 +482,15 @@ public class GameController : MonoBehaviour {
 		}
 
 		while(true){
+			if(waitForAaahhSpawn){
+				yield return 0;
+				continue;
+			}
+			if(spawningIndoors){
+				yield return 0;
+				continue;
+			}
+
 			if(currSurvivor == null){
 				survTurnText.text = "Choose a Survivor";
 				//check to see if all survivors have finished - otherwise, keep looping
@@ -577,6 +664,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	IEnumerator ZombieTurn(){
+		zombTurnText.text = "Zombies' Move!";
 		StartCoroutine(MoveZombTurnImgOut());
 		zombieGoing = true;
 
@@ -646,7 +734,7 @@ public class GameController : MonoBehaviour {
 		topLeftCorner.x = zone.GetComponent<BoxCollider>().bounds.min.x;
 		topRightCorner.z += -0.03f;
 		topLeftCorner.z += -0.03f;
-
+		
 		Vector3 spawnPos = Vector3.Lerp (topLeftCorner, topRightCorner, (zombieType + 1) / 5.0f);
 
 

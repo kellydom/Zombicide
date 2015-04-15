@@ -97,6 +97,12 @@ public class SurvivorToken : MonoBehaviour {
 				return;
 			}
 		}
+		if(GameController.S.waitForAaahhSpawn){
+			return;
+		}
+		if(GameController.S.spawningIndoors){
+			return;
+		}
 
 		if (ActionWheel.S.CurrAction == "Trade") 
 			return;
@@ -148,6 +154,12 @@ public class SurvivorToken : MonoBehaviour {
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
 			}
+		}
+		if(GameController.S.waitForAaahhSpawn){
+			return;
+		}
+		if(GameController.S.spawningIndoors){
+			return;
 		}
 		Vector3 newScale = new Vector3 (1, 1, 0);
 		if (!clicked) {
@@ -307,6 +319,12 @@ public class SurvivorToken : MonoBehaviour {
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
 			}
+		}
+		if(GameController.S.waitForAaahhSpawn){
+			return;
+		}
+		if(GameController.S.spawningIndoors){
+			return;
 		}
 		bool reload = false;
 		Vector3 newScale = new Vector3 (4, 4, 0);

@@ -431,4 +431,41 @@ public class ZoneSelector : MonoBehaviour {
 		}
 		return false;
 	}
+
+	public List<GameObject> BuildingNeighbors(GameObject startZone){
+		List<GameObject> buildingNeighbors = new List<GameObject>();
+		buildingNeighbors.Add (startZone);
+		List<GameObject> zonesChecked = new List<GameObject>();
+
+		List<GameObject> zonesToCheck = new List<GameObject>();
+		zonesToCheck.Add (startZone);
+
+		while(zonesToCheck.Count > 0){
+			GameObject zone = zonesToCheck[0];
+			if(zonesChecked.Contains(zone)){
+				zonesToCheck.RemoveAt(0);
+				continue;
+			}
+
+			zonesChecked.Add (zone);
+
+			List<GameObject> neighbors = GetNeighborsOf(zone);
+			foreach(GameObject neigh in neighbors){
+				if(zonesChecked.Contains(neigh)) continue;
+				if(BoardLayout.S.isStreetZone[neigh.GetComponent<ZoneScript>().zoneNum]){
+					zonesChecked.Add (neigh);
+					continue;
+				}
+				if(zonesToCheck.Contains(neigh)){
+					continue;
+				}
+				buildingNeighbors.Add (neigh);
+				zonesToCheck.Add (neigh);
+			}
+			zonesToCheck.RemoveAt(0);
+		}
+
+
+		return buildingNeighbors;
+	}
 }
