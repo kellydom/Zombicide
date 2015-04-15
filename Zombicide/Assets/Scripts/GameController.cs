@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour {
 	bool needToChooseWeapon = false;
 	Card clickedCard = null;
 	Card attackingWeapon = null;
-
+	
 
 	// Use this for initialization
 	void Start () {
@@ -109,6 +109,7 @@ public class GameController : MonoBehaviour {
 	public void SearchSetup(){
 		if(currSurvivor == null) return;
 
+		SurvivorToken.S.HideSkills();
 		ActionWheel.S.MoveWheelUp ();
 		picked = deck.draw ();
 		currSurvivor.hasSearched = true;
@@ -418,6 +419,10 @@ public class GameController : MonoBehaviour {
 			currSurvivor.Highlight();
 
 			if(currSurvivor.numActions == 0){
+				if(currSurvivor.doingSkillStuff){
+					yield return 0;
+					continue;
+				}
 				ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 				currSurvivor.currTurn = false;
 				currSurvivor.Unhighlight();

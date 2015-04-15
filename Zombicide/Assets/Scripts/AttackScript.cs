@@ -69,6 +69,12 @@ public class AttackScript : MonoBehaviour {
 
 
 		while(AttacksLeft() > 0 && attackingZone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
+			if(GameController.S.currSurvivor != null){
+				if(GameController.S.currSurvivor.doingSkillStuff){
+					yield return 0;
+					continue;
+				}
+			}
 			waitingToGetEnemyType = true;
 			
 			ZoneScript zone = attackingZone.GetComponent<ZoneScript>();
@@ -80,6 +86,12 @@ public class AttackScript : MonoBehaviour {
 					
 					if(typeAttacking == Enemy.EnemyType.Walker){
 						while(zone.walkersInZone.Count > 0 && AttacksLeft() > 0){
+							if(GameController.S.currSurvivor != null){
+								if(GameController.S.currSurvivor.doingSkillStuff){
+									yield return 0;
+									continue;
+								}
+							}
 							Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 							zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 							Attack ();
@@ -91,6 +103,12 @@ public class AttackScript : MonoBehaviour {
 					}
 					if(typeAttacking == Enemy.EnemyType.Runner){
 						while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
+							if(GameController.S.currSurvivor != null){
+								if(GameController.S.currSurvivor.doingSkillStuff){
+									yield return 0;
+									continue;
+								}
+							}
 							Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 							zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
 							Attack ();
@@ -101,6 +119,12 @@ public class AttackScript : MonoBehaviour {
 						typeAttacking = Enemy.EnemyType.None;
 					}
 					if(typeAttacking == Enemy.EnemyType.Fatty && attWeapon.damage > 1){
+						if(GameController.S.currSurvivor != null){
+							if(GameController.S.currSurvivor.doingSkillStuff){
+								yield return 0;
+								continue;
+							}
+						}
 						while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
 							Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 							zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
@@ -113,6 +137,12 @@ public class AttackScript : MonoBehaviour {
 					}
 					if(typeAttacking == Enemy.EnemyType.Abomination && attWeapon.damage > 2){
 						while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
+							if(GameController.S.currSurvivor != null){
+								if(GameController.S.currSurvivor.doingSkillStuff){
+									yield return 0;
+									continue;
+								}
+							}
 							Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 							zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
 							Attack ();
@@ -131,6 +161,12 @@ public class AttackScript : MonoBehaviour {
 			}
 			else{
 				while(zone.EnemiesInZone() > 0 && AttacksLeft() > 0){
+					if(GameController.S.currSurvivor != null){
+						if(GameController.S.currSurvivor.doingSkillStuff){
+							yield return 0;
+							continue;
+						}
+					}
 					foreach(Survivor surv in GameController.S.survivors){
 						if(surv == GameController.S.currSurvivor) continue;
 
@@ -143,6 +179,12 @@ public class AttackScript : MonoBehaviour {
 						}
 					}
 					while(zone.walkersInZone.Count > 0 && AttacksLeft() > 0){
+						if(GameController.S.currSurvivor != null){
+							if(GameController.S.currSurvivor.doingSkillStuff){
+								yield return 0;
+								continue;
+							}
+						}
 						Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 						zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 						Attack ();
@@ -150,6 +192,12 @@ public class AttackScript : MonoBehaviour {
 						yield return 0;
 					}
 					while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
+						if(GameController.S.currSurvivor != null){
+							if(GameController.S.currSurvivor.doingSkillStuff){
+								yield return 0;
+								continue;
+							}
+						}
 						Attack ();
 						if(attWeapon.damage < 2) continue;
 						Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
@@ -158,6 +206,12 @@ public class AttackScript : MonoBehaviour {
 						yield return 0;
 					}
 					while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
+						if(GameController.S.currSurvivor != null){
+							if(GameController.S.currSurvivor.doingSkillStuff){
+								yield return 0;
+								continue;
+							}
+						}
 						Attack ();
 						if(attWeapon.damage < 3) continue;
 						Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
@@ -166,6 +220,12 @@ public class AttackScript : MonoBehaviour {
 						yield return 0;
 					}
 					while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
+						if(GameController.S.currSurvivor != null){
+							if(GameController.S.currSurvivor.doingSkillStuff){
+								yield return 0;
+								continue;
+							}
+						}
 						Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 						zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
 						GameController.S.currSurvivor.GiveEXP(1);
@@ -229,6 +289,10 @@ public class AttackScript : MonoBehaviour {
 		waitingToGetEnemyType = false;
 		attWeapon = attackingWeapon;
 		GameObject canvas = GameObject.Find("Canvas");
+		
+		if(attWeapon.noise){
+			GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();
+		}
 
 		int numAttacking = attackingWeapon.dice;
 		if(dualWield) numAttacking += numAttacking;

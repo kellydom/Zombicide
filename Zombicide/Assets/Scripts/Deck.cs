@@ -623,6 +623,9 @@ public class Deck : MonoBehaviour {
 		case "Glass Bottle":
 			picked = bottle;
 			break;
+		case "Bag of Rice":
+			picked = rice;
+			break;
 		}
 		//print (picked.cardName);
 		return picked;
