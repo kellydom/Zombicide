@@ -43,6 +43,8 @@ public class GameController : MonoBehaviour {
 	bool needToChooseWeapon = false;
 	Card clickedCard = null;
 	Card attackingWeapon = null;
+
+	public bool zombiesAttacking = false;
 	
 
 	// Use this for initialization
@@ -554,6 +556,10 @@ public class GameController : MonoBehaviour {
 
 		foreach(GameObject zone in BoardLayout.S.createdZones){
 			if(allZombies.Count == 0) continue;
+			while(zombiesAttacking){
+				yield return 0;
+				continue;
+			}
 
 			zone.GetComponent<ZoneScript>().DoZombieActions();
 			yield return new WaitForSeconds(0.1f);

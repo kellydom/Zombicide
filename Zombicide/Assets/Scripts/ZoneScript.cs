@@ -110,14 +110,50 @@ public class ZoneScript : MonoBehaviour {
 		//if zombies split to go down multiple paths,
 		//each group must have the same number of each type of enemy,
 		//so the current list groupings are important
+		while(GameController.S.zombiesAttacking){
+			yield return 0;
+			continue;
+		}
+
 		DoAnAction(walkersToGo);
+		while(GameController.S.zombiesAttacking){
+			yield return 0;
+			continue;
+		}
 		DoAnAction(runnersToGo);
+		while(GameController.S.zombiesAttacking){
+			yield return 0;
+			continue;
+		}
 		DoAnAction(fattiesToGo);
+		while(GameController.S.zombiesAttacking){
+			yield return 0;
+			continue;
+		}
 		DoAnAction(abombToGo);
+		while(GameController.S.zombiesAttacking){
+			yield return 0;
+			continue;
+		}
 
 		yield return new WaitForSeconds(0.5f);
+		while(GameController.S.zombiesAttacking){
+			yield return 0;
+			continue;
+		}
 		//Runners get to go again!
 		DoAnAction(runnersToGo);
+
+	}
+
+	IEnumerator ZombieAttack(){
+		GameController.S.zombiesAttacking = true;
+
+		//do zombie attacking stuff here
+
+		yield return 0;
+
+		GameController.S.zombiesAttacking = false;
 
 	}
 
@@ -140,6 +176,8 @@ public class ZoneScript : MonoBehaviour {
 
 		if(ZoneSelector.S.IsPlayerZone(enemyZone)){
 			//Attack the player
+			StartCoroutine(ZombieAttack());
+
 			return;
 		}
 
