@@ -664,6 +664,9 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void tradingCards(string whichPos) {
+		if (ActionWheel.S.CurrAction != "Trade") {
+			return;
+		}
 		switch (whichPos) {
 		case "front1":
 			//tempLeft = front1;
