@@ -646,10 +646,10 @@ RectTransform:
   - {fileID: 924884925}
   m_Father: {fileID: 754850032}
   m_RootOrder: 8
-  m_AnchorMin: {x: .5, y: .5}
-  m_AnchorMax: {x: .5, y: .5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 599.099976, y: 347.299988}
+  m_SizeDelta: {x: -6.90002441, y: 7.29998779}
   m_Pivot: {x: .5, y: .5}
 --- !u!1 &94606837
 GameObject:
