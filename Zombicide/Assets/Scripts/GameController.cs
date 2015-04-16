@@ -174,30 +174,11 @@ public class GameController : MonoBehaviour {
 		playerTrading = true;
 		survTurnText.text = "Select another Survivor";
 
+		SurvivorToken.S.MoveTokensOffscreen();
 		//deactivate the buttons that cant be traded with
 		foreach (Survivor guy in GameController.S.survivors) {
-			if(guy.CurrZone == GameController.S.currSurvivor.CurrZone) {
-				if(guy.name != GameController.S.currSurvivor.name) {
-					switch(guy.name) {
-					case "Wanda":
-						SurvivorToken.S.wanda.interactable = true;
-						break;
-					case "Phil":
-						SurvivorToken.S.phil.interactable = true;
-						break;
-						//add the other two once we have all the tokens on the board
-					}
-				}
-			}
-			else {
-				switch(guy.name) {
-				case "Wanda":
-					SurvivorToken.S.wanda.interactable = false;
-					break;
-				case "Phil":
-					SurvivorToken.S.phil.interactable = false;
-					break;
-				}
+			if(guy.CurrZone == currSurvivor.CurrZone){
+				SurvivorToken.S.MoveSpecificTokenOn(guy);
 			}
 		}
 		ActionWheel.S.MoveWheelUp ();
