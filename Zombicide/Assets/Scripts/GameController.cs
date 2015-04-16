@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour {
 
 	string btnShowingReload;
 	bool reloadImgOut = false;
-	Image reloadImg;
+	public Image reloadImg;
 	
 
 	// Use this for initialization
@@ -938,6 +938,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ShowReload(string slot){
+		if(GameController.S.currSurvivor == null) return;
+
 		switch(slot){
 		case("front1"):
 			if(currSurvivor.front1.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty){
@@ -958,6 +960,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void HideReload(string slot){
+		if(GameController.S.currSurvivor == null) return;
 		if(btnShowingReload != slot) return;
 
 		reloadImgOut = false;
@@ -971,6 +974,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ClickReload(string slot){
+		if(GameController.S.currSurvivor == null) return;
 		switch(slot){
 		case("front1"):
 			if(currSurvivor.front1.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty){

@@ -20,7 +20,7 @@ public class SpawnDeck : MonoBehaviour {
 		public int blueLevelNum;
 	}
 	public List<SpawnCard> spawnCards;
-	List<SpawnCard> discardedSpawns;
+	List<SpawnCard> discardedSpawns = new List<SpawnCard>();
 
 
 	// Use this for initialization
@@ -37,9 +37,23 @@ public class SpawnDeck : MonoBehaviour {
 	
 	}
 
+	void Reshuffle(){
+		spawnCards.AddRange(discardedSpawns);
+		discardedSpawns.Clear();
+	}
+
 	public SpawnCard GetSpawnCard(){
 		int ran = Random.Range(0, spawnCards.Count);
-		return spawnCards[ran];
+
+		SpawnCard returnVal = spawnCards[ran];
+		spawnCards.RemoveAt(ran);
+		discardedSpawns.Add (returnVal);
+
+		if(spawnCards.Count == 0){
+			Reshuffle();
+		}
+
+		return returnVal;
 	}
 	
 	// Update is called once per frame

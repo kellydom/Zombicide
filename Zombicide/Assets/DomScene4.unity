@@ -1680,6 +1680,7 @@ GameObject:
   - 222: {fileID: 136086970}
   - 114: {fileID: 136086969}
   - 114: {fileID: 136086968}
+  - 114: {fileID: 136086971}
   m_Layer: 5
   m_Name: Front1
   m_TagString: Untagged
@@ -1792,6 +1793,18 @@ MonoBehaviour:
           m_StringArgument: front1
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1166976249}
+        m_MethodName: ClickReload
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: front1
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &136086969
@@ -1821,6 +1834,54 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 136086966}
+--- !u!114 &136086971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 136086966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976249}
+          m_MethodName: ShowReload
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: front1
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976249}
+          m_MethodName: HideReload
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: front1
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &137886610
 GameObject:
   m_ObjectHideFlags: 0
@@ -12681,6 +12742,7 @@ MonoBehaviour:
   zombiesAttacking: 0
   waitForAaahhSpawn: 0
   spawningIndoors: 0
+  reloadImg: {fileID: 65651788}
 --- !u!114 &1166976250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13239,6 +13301,38 @@ MonoBehaviour:
     yellowLevelNum: 1
     blueLevelType: 1
     blueLevelNum: 1
+  - redLevelType: 0
+    redLevelNum: 5
+    orangeLevelType: 1
+    orangeLevelNum: 2
+    yellowLevelType: 0
+    yellowLevelNum: 4
+    blueLevelType: 0
+    blueLevelNum: 0
+  - redLevelType: 0
+    redLevelNum: 5
+    orangeLevelType: 1
+    orangeLevelNum: 2
+    yellowLevelType: 0
+    yellowLevelNum: 4
+    blueLevelType: 0
+    blueLevelNum: 0
+  - redLevelType: 0
+    redLevelNum: 5
+    orangeLevelType: 1
+    orangeLevelNum: 2
+    yellowLevelType: 0
+    yellowLevelNum: 4
+    blueLevelType: 0
+    blueLevelNum: 0
+  - redLevelType: 0
+    redLevelNum: 5
+    orangeLevelType: 1
+    orangeLevelNum: 2
+    yellowLevelType: 0
+    yellowLevelNum: 4
+    blueLevelType: 0
+    blueLevelNum: 0
   - redLevelType: 0
     redLevelNum: 5
     orangeLevelType: 1
@@ -13945,6 +14039,7 @@ GameObject:
   - 222: {fileID: 1248766892}
   - 114: {fileID: 1248766891}
   - 114: {fileID: 1248766890}
+  - 114: {fileID: 1248766893}
   m_Layer: 5
   m_Name: Front2
   m_TagString: Untagged
@@ -14057,6 +14152,18 @@ MonoBehaviour:
           m_StringArgument: front2
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1166976249}
+        m_MethodName: ClickReload
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: front2
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1248766891
@@ -14086,6 +14193,54 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1248766888}
+--- !u!114 &1248766893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1248766888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976249}
+          m_MethodName: ShowReload
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: front2
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1166976249}
+          m_MethodName: HideReload
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: front2
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1251222276
 GameObject:
   m_ObjectHideFlags: 0

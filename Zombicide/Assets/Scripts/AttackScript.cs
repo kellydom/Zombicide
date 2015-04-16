@@ -380,13 +380,13 @@ public class AttackScript : MonoBehaviour {
 		else{
 			hasRerolledLucky = true;
 		}
-		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Light)") && melee){
+		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Light)") && (attackingWeapon.cardName == "Pistol" || attackingWeapon.cardName == "Rifle")){
 			hasRerolledCard = false;
 		}
 		else{
 			hasRerolledCard = true;
 		}
-		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Heavy)") && !melee){
+		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Heavy)") && (attackingWeapon.cardName == "Shotgun" || attackingWeapon.cardName == "Sawed Off Shotgun")){
 			hasRerolledCard = false;
 		}
 		else{
