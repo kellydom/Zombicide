@@ -124,10 +124,22 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void moveActionThingBack() {
-		tinyJ.transform.position = new Vector3 (josh.transform.position.x, moveTinyTo);
-		tinyP.transform.position = new Vector3 (phil.transform.position.x, moveTinyTo);
-		tinyW.transform.position = new Vector3 (wanda.transform.position.x, moveTinyTo);
-		tinyN.transform.position = new Vector3 (ned.transform.position.x, moveTinyTo);
+		foreach (Survivor guy in GameController.S.survivors) {
+			switch (guy.name) {
+			case "Wanda":
+				tinyW.transform.position = new Vector3 (wanda.transform.position.x, moveTinyTo);
+				break;
+			case "Phil":
+				tinyP.transform.position = new Vector3 (phil.transform.position.x, moveTinyTo);
+				break;
+			case "Ned":
+				tinyN.transform.position = new Vector3 (ned.transform.position.x, moveTinyTo);
+				break;
+			case "Josh":
+				tinyJ.transform.position = new Vector3 (josh.transform.position.x, moveTinyTo);
+				break;
+			}
+		}
 	}
 
 	public void tokenOnHover(string name) {
