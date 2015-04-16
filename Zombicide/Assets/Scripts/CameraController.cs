@@ -48,37 +48,25 @@ public class CameraController : MonoBehaviour {
 		if((Input.GetKeyDown(KeyCode.PageUp) || Input.GetAxis("Mouse ScrollWheel") > 0) && transform.position.y > closeDist)
 		{
 			transform.Translate(Vector3.forward * zoomSpeed);
-			//SurvivorToken.S.phil.enabled = false;
-			//SurvivorToken.S.wanda.enabled = false;
 		}
 		
 		// Mouse wheel moving backward
 		if((Input.GetKeyDown(KeyCode.PageDown) || Input.GetAxis("Mouse ScrollWheel") < 0) && transform.position.y < farDist)
 		{
 			transform.Translate(Vector3.back * zoomSpeed);
-			//SurvivorToken.S.phil.enabled = false;
-			//SurvivorToken.S.wanda.enabled = false;
 		}
 
 		if(Input.GetKey(KeyCode.W)){
 			transform.Translate(Vector3.forward / 25 / panSpeed, Space.World);
-			//SurvivorToken.S.phil.enabled = false;
-			//SurvivorToken.S.wanda.enabled = false;
 		}
 		if(Input.GetKey(KeyCode.S)){
 			transform.Translate(-Vector3.forward / 25 / panSpeed, Space.World);
-			//SurvivorToken.S.phil.enabled = false;
-			//SurvivorToken.S.wanda.enabled = false;
 		}
 		if(Input.GetKey(KeyCode.A)){
 			transform.Translate(-Vector3.right / 25 / panSpeed, Space.World);
-			//SurvivorToken.S.phil.enabled = false;
-			//SurvivorToken.S.wanda.enabled = false;
 		}
 		if(Input.GetKey(KeyCode.D)){
 			transform.Translate(Vector3.right / 25 / panSpeed, Space.World);
-			//SurvivorToken.S.phil.enabled = false;
-			//SurvivorToken.S.wanda.enabled = false;
 		}
 		Vector3 pos = transform.position;
 

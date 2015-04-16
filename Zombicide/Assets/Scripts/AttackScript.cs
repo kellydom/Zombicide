@@ -20,6 +20,13 @@ public class AttackScript : MonoBehaviour {
 	bool needToMoveUp = true;
 	public Card attWeapon;
 
+	bool hasRerolledLucky = false;
+	bool hasRerolled1PerTurn = false;
+	bool askForReroll = true;
+
+	public Button rerollButton;
+	public Button keepButton;
+
 	// Use this for initialization
 	void Start () {
 		if(S == null){
@@ -54,6 +61,33 @@ public class AttackScript : MonoBehaviour {
 
 	}
 
+	public void Reroll(){
+		if(!hasRerolled1PerTurn){
+			hasRerolled1PerTurn = true;
+		}
+		else{
+			if(!hasRerolledLucky){
+				hasRerolledLucky = true;
+			}
+		} 
+		rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, 30);
+		keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, 30);
+		rerollButton.enabled = false;
+		rerollButton.enabled = true;
+
+		foreach(GameObject wheel in attackWheels){
+			wheel.GetComponent<SpinnerScript>().Respin();
+		}
+	}
+
+	public void DontWantReroll(){
+		askForReroll = false;
+		rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, 30);
+		keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, 30);
+		keepButton.enabled = false;
+		keepButton.enabled = true;
+	}
+
 	IEnumerator PrepareForAttacks(){
 		bool allFinished = false;
 		while(!allFinished){
@@ -64,7 +98,27 @@ public class AttackScript : MonoBehaviour {
 				}
 			}
 
+			if(allFinished && askForReroll){
+				if(!hasRerolled1PerTurn){
+					allFinished = false;
+					rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, -30);
+					keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, -30);
+				}
+				if(!hasRerolledLucky){
+					allFinished = false;
+					rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, -30);
+					keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, -30);
+				}
+			}
+
 			yield return 0;
+		}
+
+		yield return new WaitForSeconds(0.5f);
+		foreach(GameObject wheel in attackWheels){
+			if(wheel.GetComponent<SpinnerScript>().finishedAttacking){
+				wheel.GetComponent<SpinnerScript>().MoveOffscreen();
+			}
 		}
 
 
@@ -283,6 +337,20 @@ public class AttackScript : MonoBehaviour {
 	}
 
 	public void CreateAttackWheels(GameObject zone, bool melee, Card attackingWeapon, bool dualWield){
+		if(GameController.S.currSurvivor.skills.Contains("1 re-roll per turn")){
+			hasRerolled1PerTurn = false;
+		}
+		else{
+			hasRerolled1PerTurn = true;
+		}
+		if(GameController.S.currSurvivor.skills.Contains("Lucky")){
+			hasRerolledLucky = false;
+		}
+		else{
+			hasRerolledLucky = true;
+		}
+
+		askForReroll = true;
 		attackingZone = zone;
 		isMelee = melee;
 		typeAttacking = Enemy.EnemyType.None;
@@ -295,6 +363,16 @@ public class AttackScript : MonoBehaviour {
 		}
 
 		int numAttacking = attackingWeapon.dice;
+		if(GameController.S.currSurvivor.skills.Contains("+1 die: Combat")){
+			numAttacking++;
+		}
+		if(GameController.S.currSurvivor.skills.Contains("+1 die: Melee") && attackingWeapon.melee){
+			numAttacking++;
+		}
+		if(GameController.S.currSurvivor.skills.Contains("+1 die: Ranged") && attackingWeapon.ranged){
+			numAttacking++;
+		}
+
 		if(dualWield) numAttacking += numAttacking;
 		int ctr = 0;
 		while(numAttacking > 0){
@@ -314,6 +392,17 @@ public class AttackScript : MonoBehaviour {
 
 			
 			int hitChance = attackingWeapon.minDiceNumber;
+			if(GameController.S.currSurvivor.skills.Contains("+1 to dice roll: Combat")){
+				hitChance--;
+			}
+			if(GameController.S.currSurvivor.skills.Contains("+1 to dice roll: Melee") && attackingWeapon.melee){
+				hitChance--;
+			}
+			if(GameController.S.currSurvivor.skills.Contains("+1 to dice roll: Ranged") && attackingWeapon.ranged){
+				hitChance--;
+			}
+			if(hitChance < 1) hitChance = 1;
+
 			newAttackWheel.GetComponent<SpinnerScript>().SetHitChance(hitChance);
 			newAttackWheel.GetComponent<SpinnerScript>().num = ctr;
 			attackWheels.Add (newAttackWheel);

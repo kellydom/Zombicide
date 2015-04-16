@@ -20,6 +20,8 @@ public class ZoneScript : MonoBehaviour {
 
 	public GameObject objectiveInRoom;
 
+	public bool hasSpawnedZombies = false;
+
 
 	// Use this for initialization
 	void Start () {
