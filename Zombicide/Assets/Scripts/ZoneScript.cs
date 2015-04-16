@@ -159,7 +159,8 @@ public class ZoneScript : MonoBehaviour {
 
 		Vector2 currPos = ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition;
 		Vector2 desired = new Vector2(0, -35);
-
+		
+		ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "";
 		float t = 0;
 		while(t < 1){
 			t += Time.deltaTime * Time.timeScale / 0.5f;
@@ -190,6 +191,7 @@ public class ZoneScript : MonoBehaviour {
 		currPos = desired;
 		desired = new Vector2(0, 35);
 		
+		ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "";
 		t = 0;
 		while(t < 1){
 			t += Time.deltaTime * Time.timeScale / 0.5f;
@@ -242,6 +244,12 @@ public class ZoneScript : MonoBehaviour {
 			int dist = ZoneSelector.S.ZoneDistance(enemyZone, go);
 			List<GameObject> stepsToGO = ZoneSelector.S.StepTowardsZone(enemyZone, go, dist);
 			nextSteps.AddRange(stepsToGO);
+		}
+
+		if(zombies[0].GetComponent<Enemy>().type == Enemy.EnemyType.Abomination){
+			zombies[0].GetComponent<Enemy>().MoveTo(nextSteps[0], enemyZone, 0);
+			zombies[0].GetComponent<Enemy>().hasDoneAction = true;
+			return;
 		}
 
 		int numDiffSteps = nextSteps.Count;

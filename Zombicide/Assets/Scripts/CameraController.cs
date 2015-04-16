@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour {
 			if(child.position.z > topZ) topZ = child.position.z;
 			if(child.position.z < bottomZ) bottomZ = child.position.z - 0.01f;
 		}
-		topZ -= 0.1f;
+		topZ += 0.1f;
 		bottomZ -= 1;
 	}
 	

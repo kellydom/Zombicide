@@ -190,15 +190,40 @@ public class GameController : MonoBehaviour {
 		List<GameObject> buildingNeighbors = ZoneSelector.S.BuildingNeighbors(zoneToStart);
 		zombTurnText.text = "Zombies' Spawn!";
 		StartCoroutine(MoveZombTurnImgOut());
+
+		Vector2 currPos = ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition;
+		Vector2 desired = new Vector2(0, -35);
+		ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "";
+		
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition = Vector2.Lerp(currPos, desired, t);
+			
+			yield return 0;
+		}
 		//Spawn Zombies
 		foreach(GameObject zone in buildingNeighbors){
 			zone.GetComponent<ZoneScript>().hasSpawnedZombies = true;
 			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, 1, 0) + Vector3.back / 3, 0.2f);
+			zone.GetComponent<ZoneScript>().Highlight();
 			yield return new WaitForSeconds(0.2f);
 			
 			SpawnZombiesAt(zone);
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(1);
+			zone.GetComponent<ZoneScript>().Unhighlight();
 			
+		}
+		currPos = desired;
+		desired = new Vector2(0, 35);
+		
+		ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "";
+		t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition = Vector2.Lerp(currPos, desired, t);
+			
+			yield return 0;
 		}
 		
 		StartCoroutine(MoveSurvTurnImgOut());
@@ -684,14 +709,38 @@ public class GameController : MonoBehaviour {
 		}
 		
 		zombTurnText.text = "Zombies' Spawn!";
+		Vector2 currPos = ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition;
+		Vector2 desired = new Vector2(0, -35);
+		ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "";
+		
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition = Vector2.Lerp(currPos, desired, t);
+			
+			yield return 0;
+		}
 		//Spawn Zombies
 		foreach(GameObject zone in zombieSpawnZones){
 			CameraController.S.MoveTo(zone.transform.position + new Vector3(0, 1, 0) + Vector3.back / 3, 1);
+			zone.GetComponent<ZoneScript>().Highlight();
 			yield return new WaitForSeconds(1);
 
 			SpawnZombiesAt(zone);
 			yield return new WaitForSeconds(1);
+			zone.GetComponent<ZoneScript>().Unhighlight();
 
+		}
+		currPos = desired;
+		desired = new Vector2(0, 35);
+		
+		ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "";
+		t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition = Vector2.Lerp(currPos, desired, t);
+			
+			yield return 0;
 		}
 
 		foreach(Survivor surv in survivors){
@@ -716,17 +765,73 @@ public class GameController : MonoBehaviour {
 
 	void SpawnZombiesAt(GameObject zone){
 
-		//Random zombie spawn while we don't have cards fully implemented yet
-		int zombieType = 0;
-		float ran = Random.Range(0.0f, 100.0f);
-		if(ran < 50) zombieType = 0;
-		else if(ran < 85) zombieType = 1;
-		else zombieType = 2;
+		SpawnDeck.SpawnCard card = SpawnDeck.S.GetSpawnCard();
+		int topPLevel = HighestPlayerLevel();
 
+		Enemy.EnemyType type = Enemy.EnemyType.None;
+		int zombieType = 0;
 		int numToSpawn = 0;
-		if(zombieType == 0) numToSpawn = Random.Range(1, 5);
-		else if(zombieType == 1) numToSpawn = Random.Range(1, 3);
-		else numToSpawn = 1;
+		if(topPLevel == 0){
+			type = card.blueLevelType;
+			numToSpawn = card.blueLevelNum;
+		}
+		else if(topPLevel == 1){
+			type = card.yellowLevelType;
+			numToSpawn = card.yellowLevelNum;
+		}
+		else if(topPLevel == 2){
+			type = card.orangeLevelType;
+			numToSpawn = card.orangeLevelNum;
+		}
+		else if(topPLevel == 3){
+			type = card.redLevelType;
+			numToSpawn = card.redLevelNum;
+		}
+
+		if(numToSpawn == 0){
+			ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "No Zombies Spawn!";
+		}
+		else if(type == Enemy.EnemyType.Walker){
+			if(numToSpawn == 1){
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Walker Spawns!";
+			}
+			else{
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Walkers Spawn!";
+			}
+
+		}
+		else if(type == Enemy.EnemyType.Runner) {
+			if(numToSpawn == 1){
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Runner Spawns!";
+			}
+			else{
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Runners Spawn!";
+			}
+			zombieType = 1;
+		}
+		else if(type == Enemy.EnemyType.Fatty) {
+			if(numToSpawn == 1){
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Fatty and " + numToSpawn * 2 + " Walkers Spawn!";
+			}
+			else{
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Fatties and " + numToSpawn * 2 + " Walkers  Spawn!";
+			}
+			zombieType = 2;
+		}
+		else if(type == Enemy.EnemyType.Abomination) {
+			zombieType = 3;
+			foreach(Enemy enemy in allZombies){
+				if (enemy.type == Enemy.EnemyType.Abomination) {
+					zombieType = 2;
+					ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = numToSpawn + " Fatty and " + numToSpawn * 2 + " Walkers Spawn!";
+				}
+			}
+			if(zombieType == 3){
+				ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "An Abomination has Spawned!";
+			}
+		}
+
+		//Random zombie spawn while we don't have cards fully implemented yet
 
 		Vector3 topRightCorner = zone.GetComponent<BoxCollider>().bounds.max;
 		Vector3 topLeftCorner = topRightCorner;
@@ -735,6 +840,8 @@ public class GameController : MonoBehaviour {
 		topLeftCorner.z += -0.03f;
 		
 		Vector3 spawnPos = Vector3.Lerp (topLeftCorner, topRightCorner, (zombieType + 1) / 5.0f);
+
+		if(zombieType == 3) spawnPos = zone.transform.position;
 
 
 		if(zombieType == 2){

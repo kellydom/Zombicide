@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\Deck.cs" />
      <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Enemy\SpawnDeck.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\ObjectiveToken.cs" />
      <Compile Include="Assets\Scripts\PlayerSpawner.cs" />
@@ -65,7 +66,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Vectrosity">
- <HintPath>C:/Users/Shane/493/zombicide2/Zombicide/Zombicide/Assets/Plugins/Vectrosity.dll</HintPath>
+ <HintPath>C:/Users/Domenic/Documents/GitHub/Zombicide/Zombicide/Assets/Plugins/Vectrosity.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

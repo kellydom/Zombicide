@@ -54,7 +54,7 @@ public class BoardEditor : Editor {
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(Screen.width/3);
 			if (GUILayout.Button("Add Zone")){
-				
+
 				boardLayout.zonePositions.Add (boardLayout.zonePositions[boardLayout.zonePositions.Count - 1]);
 				boardLayout.zoneSizes.Add (boardLayout.zoneSizes[boardLayout.zoneSizes.Count - 1]);
 				boardLayout.isStreetZone.Add (boardLayout.isStreetZone[boardLayout.isStreetZone.Count - 1]);
@@ -116,7 +116,7 @@ public class BoardEditor : Editor {
 		GUILayout.Space(Screen.width/3);
 		if (GUILayout.Button("Add Door")){
 			
-			GameObject newDoor = Instantiate(boardLayout.door, Vector3.zero, Quaternion.identity) as GameObject;
+			GameObject newDoor = Instantiate(boardLayout.door, Vector3.up, Quaternion.identity) as GameObject;
 			boardLayout.doors.Add(newDoor);
 			BoardLayout.Door d = new BoardLayout.Door();
 			boardLayout.doorConnections.Add(d);
