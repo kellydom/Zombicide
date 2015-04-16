@@ -10,6 +10,10 @@ public class SurvivorToken : MonoBehaviour {
 	public Button wanda;
 	public Button josh;
 	public Button ned;
+	public Button tinyP;
+	public Button tinyW;
+	public Button tinyJ;
+	public Button tinyN;
 	public Button front1;
 	public Button front2;
 	public Button back1;
@@ -52,6 +56,7 @@ public class SurvivorToken : MonoBehaviour {
 	string tradeRight;
 	Card left;
 	Card right;
+	float moveTinyTo;
 
 	public Button tradeCards;
 
@@ -92,12 +97,37 @@ public class SurvivorToken : MonoBehaviour {
 		tempb1.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
 		tempb2.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
 		tempb3.image.rectTransform.sizeDelta = new Vector3(wide, high, 0);
+
+		moveTinyTo = josh.transform.position.y - 20;
 		//Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+	}
+
+	public void moveActionThingOut(string name) {
+		switch (name) {
+		case "Wanda":
+			tinyW.transform.position = new Vector3 (wanda.transform.position.x, -1000);
+			break;
+		case "Phil":
+			tinyP.transform.position = new Vector3 (phil.transform.position.x, -1000);
+			break;
+		case "Ned":
+			tinyN.transform.position = new Vector3 (ned.transform.position.x, -1000);
+			break;
+		case "Josh":
+			tinyJ.transform.position = new Vector3 (josh.transform.position.x, -1000);
+			break;
+		}
+	}
+
+	public void moveActionThingBack() {
+		tinyJ.transform.position = new Vector3 (josh.transform.position.x, moveTinyTo);
+		tinyP.transform.position = new Vector3 (phil.transform.position.x, moveTinyTo);
+		tinyW.transform.position = new Vector3 (wanda.transform.position.x, moveTinyTo);
+		tinyN.transform.position = new Vector3 (ned.transform.position.x, moveTinyTo);
 	}
 
 	public void tokenOnHover(string name) {

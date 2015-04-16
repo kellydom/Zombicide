@@ -487,7 +487,8 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}
-
+		
+		SurvivorToken.S.moveActionThingBack();
 		while(true){
 			if(waitForAaahhSpawn){
 				yield return 0;
@@ -540,6 +541,7 @@ public class GameController : MonoBehaviour {
 					yield return 0;
 					continue;
 				}
+				SurvivorToken.S.moveActionThingOut(currSurvivor.name);
 				ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 				currSurvivor.currTurn = false;
 				currSurvivor.Unhighlight();
