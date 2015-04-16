@@ -64,6 +64,7 @@ public class Deck : MonoBehaviour {
 	bool maShotTaken = false;
 
 	public List<string> equipment = new List<string>();
+	public List<string> usedCards = new List<string> ();
 	public List<string> initial = new List<string>();
 
 	// Use this for initialization
@@ -502,10 +503,17 @@ public class Deck : MonoBehaviour {
 
 	public void returnToDeck(string cardName) {
 		print ("trying to return " + cardName);
-		if (cardName != "Empty") {
+		if (cardName != "Empty" && cardName != "Pan" && cardName != "Molotov") {
 			print ("returned " + cardName);
-			equipment.Add (cardName);
+			usedCards.Add (cardName);
 		}
+	}
+
+	void shuffle() {
+		for (int i = 0; i < usedCards.Count; i++) {
+			equipment.Add(usedCards[i]);
+		}
+		usedCards.Clear ();
 	}
 
 	public Card searchCar() {
@@ -537,9 +545,8 @@ public class Deck : MonoBehaviour {
 	public Card draw() {
 		Card picked = new Card(); 
 		if (equipment.Count == 0) {
-			print ("We've run out of cards :(");
-			picked.cardName = "Null";
-			return picked;
+			print ("shuffling");
+			shuffle ();
 		}
 		int at = Random.Range (0, equipment.Count);
 		string cardName	= equipment [at];
