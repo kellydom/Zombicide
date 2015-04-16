@@ -54,7 +54,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="Vectrosity">
- <HintPath>C:/Users/Domenic/Documents/GitHub/Zombicide/Zombicide/Assets/Plugins/Vectrosity.dll</HintPath>
+ <HintPath>C:/Users/Shane/493/zombicide2/Zombicide/Zombicide/Assets/Plugins/Vectrosity.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>

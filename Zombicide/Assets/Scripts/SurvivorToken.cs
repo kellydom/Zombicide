@@ -1388,15 +1388,19 @@ public class SurvivorToken : MonoBehaviour {
 			switch(surv.name){
 			case "Wanda":
 				wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyW.transform.position = new Vector3 (wanda.transform.position.x, -1000);
 				break;
 			case "Phil":
 				phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyP.transform.position = new Vector3 (phil.transform.position.x, -1000);
 				break;
 			case "Ned":
 				ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyN.transform.position = new Vector3 (ned.transform.position.x, -1000);
 				break;
 			case "Josh": 
 				josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyJ.transform.position = new Vector3 (josh.transform.position.x, -1000);
 				break;
 			}
 		}
@@ -1408,15 +1412,23 @@ public class SurvivorToken : MonoBehaviour {
 			switch(surv.name){
 			case "Wanda":
 				wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyW.transform.position = new Vector3 (wanda.transform.position.x, moveTinyTo);
 				break;
 			case "Phil":
 				phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyP.transform.position = new Vector3 (phil.transform.position.x, moveTinyTo);
 				break;
 			case "Ned":
 				ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyN.transform.position = new Vector3 (ned.transform.position.x, moveTinyTo);
 				break;
 			case "Josh": 
 				josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyJ.transform.position = new Vector3 (josh.transform.position.x, moveTinyTo);
 				break;
 			}
 		}

@@ -1,12 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SurvivorToken.cs">
     <Files>
-      <File FileName="Assets\Scripts\SurvivorToken.cs" Line="390" Column="43" />
+      <File FileName="Assets\Scripts\SurvivorToken.cs" Line="1431" Column="11" />
       <File FileName="Assets\Scripts\GameController.cs" Line="198" Column="37" />
-      <File FileName="Assets\Scripts\Deck.cs" Line="589" Column="14" />
-      <File FileName="Assets\Scripts\AttackScript.cs" Line="383" Column="55" />
-      <File FileName="Assets\Scripts\Survivor.cs" Line="83" Column="31" />
+      <File FileName="Assets\Scripts\Deck.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\AttackScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Survivor.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
