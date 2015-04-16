@@ -599,12 +599,129 @@ public class SurvivorToken : MonoBehaviour {
 			GameController.S.survTurnText.text = "Can't discard Wound";
 			return;
 		}
+		checkForCombinable (GameController.S.currSurvivor, false);
 		GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
 		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
 		GameController.S.deleteForSearch.transform.position = new Vector3 (-1000,0,0);
 		GameController.S.playerSearching = false;
 		ActionWheel.S.MoveWheelDown ();
 		ShowSkills(GameController.S.currSurvivor);
+	}
+
+	void checkForCombinable(Survivor surv, bool dontSwitchCardPic) {
+		bool bottle = false;
+		bool gasoline = false;
+		switch(surv.front1.cardName) {
+		case "Gasoline":
+			gasoline = true;
+			break;
+		case "Glass Bottle":
+			bottle = true;
+			break;
+		}
+		switch(surv.front2.cardName) {
+		case "Gasoline":
+			gasoline = true;
+			break;
+		case "Glass Bottle":
+			bottle = true;
+			break;
+		}
+		switch(surv.back1.cardName) {
+		case "Gasoline":
+			gasoline = true;
+			break;
+		case "Glass Bottle":
+			bottle = true;
+			break;
+		}
+		switch(surv.back2.cardName) {
+		case "Gasoline":
+			gasoline = true;
+			break;
+		case "Glass Bottle":
+			bottle = true;
+			break;
+		}
+		switch(surv.back3.cardName) {
+		case "Gasoline":
+			gasoline = true;
+			break;
+		case "Glass Bottle":
+			bottle = true;
+			break;
+		}
+		if(gasoline && bottle) {
+			switch(surv.front1.cardName) {
+			case "Gasoline":
+				GameController.S.deck.returnToDeck(surv.front1.cardName);
+				surv.front1 = GameController.S.deck.empty;
+				if(!dontSwitchCardPic)
+					front1.image.sprite = GameController.S.deck.emptyButton.image.sprite;
+				break;
+			case "Glass Bottle":
+				GameController.S.deck.returnToDeck(surv.front1.cardName);
+				surv.front1 = GameController.S.deck.molotov;
+				if(!dontSwitchCardPic)
+					front1.image.sprite = GameController.S.deck.molotovButton.image.sprite;
+				break;
+			}
+			switch(surv.front2.cardName) {
+			case "Gasoline":
+				GameController.S.deck.returnToDeck(surv.front2.cardName);
+				surv.front2 = GameController.S.deck.empty;
+				if(!dontSwitchCardPic)
+					front2.image.sprite = GameController.S.deck.emptyButton.image.sprite;
+				break;
+			case "Glass Bottle":
+				GameController.S.deck.returnToDeck(surv.front2.cardName);
+				surv.front2 = GameController.S.deck.molotov;
+				front2.image.sprite = GameController.S.deck.molotovButton.image.sprite;
+				break;
+			}
+			switch(surv.back1.cardName) {
+			case "Gasoline":
+				GameController.S.deck.returnToDeck(surv.back1.cardName);
+				surv.back1 = GameController.S.deck.empty;
+				if(!dontSwitchCardPic)
+					back1.image.sprite = GameController.S.deck.emptyButton.image.sprite;
+				break;
+			case "Glass Bottle":
+				GameController.S.deck.returnToDeck(surv.back1.cardName);
+				surv.back1 = GameController.S.deck.molotov;
+				back1.image.sprite = GameController.S.deck.molotovButton.image.sprite;
+				break;
+			}
+			switch(surv.back2.cardName) {
+			case "Gasoline":
+				GameController.S.deck.returnToDeck(surv.back2.cardName);
+				surv.back2 = GameController.S.deck.empty;
+				if(!dontSwitchCardPic)
+					back2.image.sprite = GameController.S.deck.emptyButton.image.sprite;
+				break;
+			case "Glass Bottle":
+				GameController.S.deck.returnToDeck(surv.back2.cardName);
+				surv.back2 = GameController.S.deck.molotov;
+				if(!dontSwitchCardPic)
+					back2.image.sprite = GameController.S.deck.molotovButton.image.sprite;;
+				break;
+			}
+			switch(surv.back3.cardName) {
+			case "Gasoline":
+				GameController.S.deck.returnToDeck(surv.back3.cardName);
+				surv.back3 = GameController.S.deck.empty;
+				if(!dontSwitchCardPic)
+					back3.image.sprite = GameController.S.deck.emptyButton.image.sprite;
+				break;
+			case "Glass Bottle":
+				GameController.S.deck.returnToDeck(surv.back3.cardName);
+				surv.back3 = GameController.S.deck.molotov;
+				if(!dontSwitchCardPic)
+					back3.image.sprite = GameController.S.deck.molotovButton.image.sprite;
+				break;
+			}
+		}
+
 	}
 
 	void expandTrade() {
@@ -802,6 +919,8 @@ public class SurvivorToken : MonoBehaviour {
 			}
 			break;
 		}
+		checkForCombinable (GameController.S.currSurvivor, false);
+		checkForCombinable (tradingSurvivor, true);
 		tradeCards.transform.position = new Vector3(Screen.width/2, Screen.height/2, 0);
 		tempLeft.image.color = Color.white;
 		tempRight.image.color = Color.white;
