@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,6 +10,8 @@ public class ZoneSelector : MonoBehaviour {
 	public GameObject CurrZone{
 		get{return currZone;}
 	}
+
+	public Image zombAttRem;
 
 	// Use this for initialization
 	void Start () {

@@ -432,6 +432,13 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	public void SurvTurnImgOut(){
+		StartCoroutine(MoveSurvTurnImgOut());
+	}
+	public void ZombTurnImgOut(){
+		StartCoroutine(MoveZombTurnImgOut());
+	}
+
 	IEnumerator MoveSurvTurnImgOut(){
 
 		float t = 0;
@@ -642,6 +649,8 @@ public class GameController : MonoBehaviour {
 
 			yield return 0;
 		}
+		SurvivorToken.S.MoveTokensOffscreen();
+		ActionWheel.S.MoveWheelUp();
 
 		playerTurn = false;
 		playerGoing = false;
@@ -674,17 +683,22 @@ public class GameController : MonoBehaviour {
 
 		foreach(GameObject zone in BoardLayout.S.createdZones){
 			if(allZombies.Count == 0) continue;
-			if(zone.GetComponent<ZoneScript>().EnemiesInZone() == 0) continue;
-
 			while(zombiesAttacking){
+				yield return 0;
+			}
+			if(zone.GetComponent<ZoneScript>().EnemiesInZone() == 0) {
 				yield return 0;
 				continue;
 			}
+
 
 			zone.GetComponent<ZoneScript>().DoZombieActions();
 			yield return new WaitForSeconds(0.1f);
 		}
 		yield return new WaitForSeconds(1);
+		while(zombiesAttacking){
+			yield return 0;
+		}
 		
 		zombTurnText.text = "Zombies' Spawn!";
 		//Spawn Zombies
@@ -710,7 +724,9 @@ public class GameController : MonoBehaviour {
 		foreach(GameObject zone in BoardLayout.S.createdZones){
 			zone.GetComponent<ZoneScript>().RemoveNoiseTokens();
 		}
-
+		
+		ActionWheel.S.MoveWheelDown();
+		SurvivorToken.S.MoveTokensOnScreen();
 		zombieGoing = false;
 		playerTurn = true;
 	}

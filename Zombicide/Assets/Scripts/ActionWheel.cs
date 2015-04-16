@@ -264,10 +264,12 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void MoveWheelUp(){
+		middleButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -3000);
 		StartCoroutine(WheelUpCo());
 	}
 
 	public void MoveWheelDown(){
+		middleButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -124);
 		StartCoroutine(WheelDownCo());
 	}
 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
@@ -148,14 +149,55 @@ public class ZoneScript : MonoBehaviour {
 
 	}
 
-	IEnumerator ZombieAttack(){
+	IEnumerator ZombieAttack(int zombiesAttacking, GameObject zone){
 		GameController.S.zombiesAttacking = true;
 		GameController.S.zombTurnText.text = "Zombies Attack!";
 		//do zombie attacking stuff here
-		SurvivorToken.S.selectPlayerForWound ();
-		yield return 0;
+		SurvivorToken.S.sacrificeThem = true;
 
-		//GameController.S.zombiesAttacking = false;
+		bool survivorsInZone = true;
+
+		Vector2 currPos = ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition;
+		Vector2 desired = new Vector2(0, -35);
+
+		float t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition = Vector2.Lerp(currPos, desired, t);
+
+			yield return 0;
+		}
+
+		while(zombiesAttacking > 0 && survivorsInZone){
+			SurvivorToken.S.sacrificeThem = true;
+			SurvivorToken.S.selectPlayerForWound (zone);
+			ZoneSelector.S.zombAttRem.GetComponentInChildren<Text>().text = "Zombie Attacks Remaining: " + zombiesAttacking;
+			while(SurvivorToken.S.sacrificeThem){
+				yield return 0;
+			}
+			zombiesAttacking--;
+			survivorsInZone = false;
+			foreach(Survivor surv in GameController.S.survivors){
+				if(surv.CurrZone == zone){
+					survivorsInZone = true;
+				}
+			}
+
+			yield return 0;
+		}
+		SurvivorToken.S.MoveTokensOffscreen();
+
+		currPos = desired;
+		desired = new Vector2(0, 35);
+		
+		t = 0;
+		while(t < 1){
+			t += Time.deltaTime * Time.timeScale / 0.5f;
+			ZoneSelector.S.zombAttRem.rectTransform.anchoredPosition = Vector2.Lerp(currPos, desired, t);
+			
+			yield return 0;
+		}
+		GameController.S.zombiesAttacking = false;
 
 	}
 
@@ -178,7 +220,7 @@ public class ZoneScript : MonoBehaviour {
 
 		if(ZoneSelector.S.IsPlayerZone(enemyZone)){
 			//Attack the player
-			StartCoroutine(ZombieAttack());
+			StartCoroutine(ZombieAttack(zombies.Count, zombies[0].GetComponent<Enemy>().currZone));
 
 			return;
 		}

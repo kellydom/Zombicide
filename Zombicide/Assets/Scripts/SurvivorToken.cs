@@ -62,6 +62,7 @@ public class SurvivorToken : MonoBehaviour {
 	bool discardForWound = false;
 	bool woundTime = false;
 	Survivor woundedSurvivor;
+	bool chosenWoundedSurvivor = false;
 	
 	public List<Sprite>	levelSprites;
 
@@ -112,7 +113,7 @@ public class SurvivorToken : MonoBehaviour {
 			return;
 		}
 
-		if (ActionWheel.S.CurrAction == "Trade" || sacrificeThem) 
+		if (ActionWheel.S.CurrAction == "Trade" || chosenWoundedSurvivor) 
 			return;
 		Vector3 newScale = new Vector3 (4, 4, 0);
 		switch (name) {
@@ -163,12 +164,10 @@ public class SurvivorToken : MonoBehaviour {
 				return;
 			}
 		}
-		if (sacrificeThem)
-			return;
 		if(GameController.S.waitForAaahhSpawn){
 			return;
 		}
-		if(GameController.S.spawningIndoors){
+		if(GameController.S.spawningIndoors || chosenWoundedSurvivor){
 			return;
 		}
 
@@ -955,22 +954,33 @@ public class SurvivorToken : MonoBehaviour {
 		skillToHide.color = Color.white;
 	}
 
-	public void selectPlayerForWound() {
+	public void selectPlayerForWound(GameObject currZone) {
 		GameController.S.zombTurnText.text = "Wound a player";
-		sacrificeThem = true;
+		currZone.GetComponent<ZoneScript>().Highlight();
+		foreach(Survivor surv in GameController.S.survivors){
+			if(GameController.S.currSurvivor != null){
+				if(GameController.S.currSurvivor == surv) continue;
+			}
+
+			if(surv.CurrZone == currZone){
+				MoveSpecificTokenOn(surv);
+			}
+		}
 		//find the players in the same zone and move their buttons up		
 	}
 	
 	public void sacrifice(string playerName) {
-		if (!GameController.S.zombiesAttacking) {
+		if (!GameController.S.zombiesAttacking && !AttackScript.S.attackingSurvivor) {
 			return;
 		}
 		if (sacrificeThem) {
+			Vector3 newScale = new Vector3 (4, 4, 0);
 			switch(playerName) {
 			case "Wanda":
 				for (int i = 0; i < GameController.S.survivors.Count; i++) {
 					if("Wanda" == GameController.S.survivors[i].name) {
 						woundedSurvivor = GameController.S.survivors[i];
+						wanda.image.transform.localScale = newScale;
 					}
 				}
 				break;
@@ -978,6 +988,7 @@ public class SurvivorToken : MonoBehaviour {
 				for (int i = 0; i < GameController.S.survivors.Count; i++) {
 					if("Phil" == GameController.S.survivors[i].name) {
 						woundedSurvivor = GameController.S.survivors[i];
+						phil.image.transform.localScale = newScale;
 					}
 				}
 				break;
@@ -985,6 +996,7 @@ public class SurvivorToken : MonoBehaviour {
 				for (int i = 0; i < GameController.S.survivors.Count; i++) {
 					if("Ned" == GameController.S.survivors[i].name) {
 						woundedSurvivor = GameController.S.survivors[i];
+						ned.image.transform.localScale = newScale;
 					}
 				}
 				break;
@@ -992,12 +1004,17 @@ public class SurvivorToken : MonoBehaviour {
 				for (int i = 0; i < GameController.S.survivors.Count; i++) {
 					if("Josh" == GameController.S.survivors[i].name) {
 						woundedSurvivor = GameController.S.survivors[i];
+						josh.image.transform.localScale = newScale;
 					}
 				}
 				break;
 			}
+			chosenWoundedSurvivor = true;
+			woundedSurvivor.CurrZone.GetComponent<ZoneScript>().Unhighlight();
+			MoveTokensOffscreen();
+			MoveSpecificTokenOn(woundedSurvivor);
 			expandWound();
-			if((woundedSurvivor.front1.cardName != "Empty" || woundedSurvivor.front1.cardName != "Wound") && (woundedSurvivor.front2.cardName != "Empty" || woundedSurvivor.front2.cardName != "Wound") && (woundedSurvivor.back1.cardName != "Empty" || woundedSurvivor.back1.cardName != "Wound") && (woundedSurvivor.back2.cardName != "Empty" || woundedSurvivor.back2.cardName != "Wound") && (woundedSurvivor.back3.cardName != "Empty" || woundedSurvivor.back3.cardName != "Wound")) {
+			if((woundedSurvivor.front1.cardName != "Empty" && woundedSurvivor.front1.cardName != "Wound") || (woundedSurvivor.front2.cardName != "Empty" && woundedSurvivor.front2.cardName != "Wound") || (woundedSurvivor.back1.cardName != "Empty" && woundedSurvivor.back1.cardName != "Wound") || (woundedSurvivor.back2.cardName != "Empty" && woundedSurvivor.back2.cardName != "Wound") || (woundedSurvivor.back3.cardName != "Empty" && woundedSurvivor.back3.cardName != "Wound")) {
 				discardForWound = true;
 				GameController.S.zombTurnText.text = "Discard one item";
 				GameController.S.picked = GameController.S.deck.empty;
@@ -1084,10 +1101,17 @@ public class SurvivorToken : MonoBehaviour {
 			GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
 		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
 		woundComplete.transform.position = new Vector3 (-1000,0,0);
+		Vector3 newScale = new Vector3 (1, 1, 0);
+		josh.image.transform.localScale = newScale;
+		wanda.image.transform.localScale = newScale;
+		phil.image.transform.localScale = newScale;
+		ned.image.transform.localScale = newScale;
+
+
 
 		sacrificeThem = false;
+		chosenWoundedSurvivor = false;
 		removeCards ();
-		GameController.S.zombiesAttacking = false;
 	}
 
 	void woundSetup() {
@@ -1119,6 +1143,62 @@ public class SurvivorToken : MonoBehaviour {
 	
 	public void takeWound() {
 		
+	}
+	
+	public void MoveTokensOffscreen(){
+		foreach(Survivor surv in GameController.S.survivors){
+			switch(surv.name){
+			case "Wanda":
+				wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				break;
+			case "Phil":
+				phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				break;
+			case "Ned":
+				ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				break;
+			case "Josh": 
+				josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				break;
+			}
+		}
+	}
+
+	public void MoveTokensOnScreen(){
+		
+		foreach(Survivor surv in GameController.S.survivors){
+			switch(surv.name){
+			case "Wanda":
+				wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				break;
+			case "Phil":
+				phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				break;
+			case "Ned":
+				ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				break;
+			case "Josh": 
+				josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				break;
+			}
+		}
+	}
+
+	public void MoveSpecificTokenOn(Survivor surv){
+		switch(surv.name){
+		case "Wanda":
+			wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+			break;
+		case "Phil":
+			phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+			break;
+		case "Ned":
+			ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+			break;
+		case "Josh": 
+			josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+			break;
+		}
 	}
 }
 

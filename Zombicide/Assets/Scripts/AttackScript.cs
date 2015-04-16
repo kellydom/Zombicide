@@ -24,6 +24,8 @@ public class AttackScript : MonoBehaviour {
 	bool hasRerolled1PerTurn = false;
 	bool askForReroll = true;
 
+	public bool attackingSurvivor = false;
+
 	public Button rerollButton;
 	public Button keepButton;
 
@@ -221,17 +223,38 @@ public class AttackScript : MonoBehaviour {
 							continue;
 						}
 					}
+					bool survivorsInZone = false;
 					foreach(Survivor surv in GameController.S.survivors){
 						if(surv == GameController.S.currSurvivor) continue;
 
 						if(surv.CurrZone == attackingZone){
-							while(surv.numWounds < 2 && AttacksLeft() > 0){
-								surv.numWounds++;
-								Attack();
-								yield return 0;
-							}
+							survivorsInZone = true;
 						}
 					}
+
+					while(survivorsInZone && AttacksLeft() > 0){
+						SurvivorToken.S.MoveTokensOffscreen();
+						attackingSurvivor = true;
+						GameController.S.ZombTurnImgOut();
+						SurvivorToken.S.sacrificeThem = true;
+						SurvivorToken.S.selectPlayerForWound (attackingZone);
+						while(SurvivorToken.S.sacrificeThem){
+							yield return 0;
+						}
+						Attack();
+						survivorsInZone = false;
+						foreach(Survivor surv in GameController.S.survivors){
+							if(surv == GameController.S.currSurvivor) continue;
+							if(surv.CurrZone == attackingZone){
+								survivorsInZone = true;
+							}
+						}
+						attackingSurvivor = false;
+						SurvivorToken.S.MoveTokensOnScreen();
+						yield return 0;
+					}
+					GameController.S.SurvTurnImgOut();
+					SurvivorToken.S.MoveTokensOnScreen();
 					while(zone.walkersInZone.Count > 0 && AttacksLeft() > 0){
 						if(GameController.S.currSurvivor != null){
 							if(GameController.S.currSurvivor.doingSkillStuff){

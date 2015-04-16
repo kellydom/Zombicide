@@ -344,4 +344,16 @@ public class Survivor : MonoBehaviour {
 		}
 	}
 
+	void Die(){
+		GameController.S.survivors.RemoveAt(survNum);
+		Destroy(this.gameObject);
+	}
+
+	public void TakeWound(){
+		numWounds++;
+		if(numWounds >= 2){
+			Die ();
+		}
+	}
+
 }
