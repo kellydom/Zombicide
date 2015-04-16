@@ -997,7 +997,7 @@ public class SurvivorToken : MonoBehaviour {
 				break;
 			}
 			expandWound();
-			if(woundedSurvivor.front1.cardName != "Empty" || woundedSurvivor.front1.cardName != "Wound" || woundedSurvivor.front2.cardName != "Empty" || woundedSurvivor.front2.cardName != "Wound" || woundedSurvivor.back1.cardName != "Empty" || woundedSurvivor.back1.cardName != "Wound" || woundedSurvivor.back2.cardName != "Empty" || woundedSurvivor.back2.cardName != "Wound" || woundedSurvivor.front1.cardName != "Empty" || woundedSurvivor.front1.cardName != "Wound") {
+			if((woundedSurvivor.front1.cardName != "Empty" || woundedSurvivor.front1.cardName != "Wound") && (woundedSurvivor.front2.cardName != "Empty" || woundedSurvivor.front2.cardName != "Wound") && (woundedSurvivor.back1.cardName != "Empty" || woundedSurvivor.back1.cardName != "Wound") && (woundedSurvivor.back2.cardName != "Empty" || woundedSurvivor.back2.cardName != "Wound") && (woundedSurvivor.back3.cardName != "Empty" || woundedSurvivor.back3.cardName != "Wound")) {
 				discardForWound = true;
 				GameController.S.zombTurnText.text = "Discard one item";
 				GameController.S.picked = GameController.S.deck.empty;
