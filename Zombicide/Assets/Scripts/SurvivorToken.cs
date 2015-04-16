@@ -330,6 +330,8 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void ShowSkills(Survivor surv){
+		if(GameController.S.currSurvivor == null) return;
+
 		Text skill1 = skillList.transform.FindChild("Skill1").GetComponentInChildren<Text>();
 		skill1.text = surv.skills[0];
 		
@@ -367,11 +369,34 @@ public class SurvivorToken : MonoBehaviour {
 		StartCoroutine(MoveSkillsOffscreen());
 	}
 
+	public void resetTokens(){
+		clicked = false;
+		removeCards();
+		wandaClicked = false;
+		joshClicked = false;
+		nedClicked = false;
+		philClicked = false;
+		wanda.image.transform.localScale = new Vector3(1, 1, 0);
+		josh.image.transform.localScale =  new Vector3(1,1,0);
+		ned.image.transform.localScale =  new Vector3(1,1,0);
+		phil.image.transform.localScale =  new Vector3(1,1,0);
+	}
+
 	public void tokenOnClicked(string name) {
+		foreach(Survivor surv in GameController.S.survivors){
+			if(surv.name == name){
+				print (name);
+				print(surv.numActions + " "+ surv.maxActions);
+				if(surv.numActions < surv.maxActions){
+					return;
+				}
+			}
+		}
 		if(GameController.S.currSurvivor != null){
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
 			}
+
 		}
 		if(GameController.S.waitForAaahhSpawn){
 			return;
@@ -399,18 +424,20 @@ public class SurvivorToken : MonoBehaviour {
 			wanda.image.transform.localScale = newScale;
 			if(philClicked || nedClicked || joshClicked) {
 				if (GameController.S.currSurvivor != null)
-					if (GameController.S.currSurvivor.numActions < 3)
+					if (GameController.S.currSurvivor.numActions < GameController.S.currSurvivor.maxActions)
 						return;
 				removeCards();
 				//expandCards();
 				reload = true;
-				GameController.S.currSurvivor.Unhighlight();
 				phil.image.transform.localScale = new Vector3(1, 1, 0);
 				philClicked = false;
 				ned.image.transform.localScale = new Vector3(1, 1, 0);
 				nedClicked = false;
 				josh.image.transform.localScale = new Vector3(1, 1, 0);
 				joshClicked = false;
+				if(GameController.S.currSurvivor){
+					GameController.S.currSurvivor.Unhighlight();
+				}
 			}
 			wandaClicked = true;
 			for (int i = 0; i < GameController.S.survivors.Count; i++) {
@@ -438,7 +465,7 @@ public class SurvivorToken : MonoBehaviour {
 				expandCards();
 			if(wandaClicked || nedClicked || joshClicked) {
 				if (GameController.S.currSurvivor != null)
-					if (GameController.S.currSurvivor.numActions < 3)
+					if (GameController.S.currSurvivor.numActions < GameController.S.currSurvivor.maxActions)
 						return;
 				wanda.image.transform.localScale = new Vector3(1, 1, 0);
 				wandaClicked = false;
@@ -449,7 +476,9 @@ public class SurvivorToken : MonoBehaviour {
 				removeCards();
 				//expandCards();
 				reload = true;
-				GameController.S.currSurvivor.Unhighlight();
+				if(GameController.S.currSurvivor){
+					GameController.S.currSurvivor.Unhighlight();
+				}
 			}
 			philClicked = true;
 			for (int i = 0; i < GameController.S.survivors.Count; i++) {
@@ -476,7 +505,7 @@ public class SurvivorToken : MonoBehaviour {
 				expandCards();
 			if(wandaClicked || philClicked || joshClicked) {
 				if (GameController.S.currSurvivor != null)
-					if (GameController.S.currSurvivor.numActions < 3)
+					if (GameController.S.currSurvivor.numActions < GameController.S.currSurvivor.maxActions)
 						return;
 				wanda.image.transform.localScale = new Vector3(1, 1, 0);
 				wandaClicked = false;
@@ -487,7 +516,9 @@ public class SurvivorToken : MonoBehaviour {
 				removeCards();
 				//expandCards();
 				reload = true;
-				GameController.S.currSurvivor.Unhighlight();
+				if(GameController.S.currSurvivor){
+					GameController.S.currSurvivor.Unhighlight();
+				}
 			}
 			nedClicked = true;
 			for (int i = 0; i < GameController.S.survivors.Count; i++) {
@@ -514,7 +545,7 @@ public class SurvivorToken : MonoBehaviour {
 				expandCards();
 			if(wandaClicked || nedClicked || philClicked) {
 				if (GameController.S.currSurvivor != null)
-					if (GameController.S.currSurvivor.numActions < 3)
+					if (GameController.S.currSurvivor.numActions < GameController.S.currSurvivor.maxActions)
 						return;
 				wanda.image.transform.localScale = new Vector3(1, 1, 0);
 				wandaClicked = false;
@@ -525,7 +556,9 @@ public class SurvivorToken : MonoBehaviour {
 				removeCards();
 				//expandCards();
 				reload = true;
-				GameController.S.currSurvivor.Unhighlight();
+				if(GameController.S.currSurvivor){
+					GameController.S.currSurvivor.Unhighlight();
+				}
 			}
 			joshClicked = true;
 			for (int i = 0; i < GameController.S.survivors.Count; i++) {

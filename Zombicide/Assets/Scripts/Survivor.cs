@@ -88,6 +88,7 @@ public class Survivor : MonoBehaviour {
 	public void DoNothing(){
 		numActions = 0;
 		hasGone = true;
+		SurvivorToken.S.resetTokens();
 	}
 
 	public void MoveTo(GameObject newZone, int actionCost){

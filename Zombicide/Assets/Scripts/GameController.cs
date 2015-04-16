@@ -550,7 +550,7 @@ public class GameController : MonoBehaviour {
 				currSurvivor.currTurn = false;
 				currSurvivor.Unhighlight();
 				currSurvivor.HasGone = true;
-				SurvivorToken.S.tokenOnClicked(currSurvivor.name);
+				SurvivorToken.S.resetTokens();
 				currSurvivor = null;
 				yield return 0;
 				continue;
