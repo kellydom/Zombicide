@@ -757,6 +757,8 @@ public class GameController : MonoBehaviour {
 			zone.GetComponent<ZoneScript>().RemoveNoiseTokens();
 		}
 		
+		CameraController.S.ZoomOut(0.5f);
+		yield return new WaitForSeconds(0.5f);
 		ActionWheel.S.MoveWheelDown();
 		SurvivorToken.S.MoveTokensOnScreen();
 		zombieGoing = false;
@@ -871,7 +873,7 @@ public class GameController : MonoBehaviour {
 
 	void Update(){
 		//picked = deck.draw ();
-		//print (picked.cardName);
+                            		//print (picked.cardName);
 		if(playerTurn){
 			if(!playerGoing){
 				//I'm using coroutines because I think it looks cleaner here

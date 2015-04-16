@@ -150,14 +150,10 @@ public class Survivor : MonoBehaviour {
 			if(front1.ranged){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				List<GameObject> frontRange1 = new List<GameObject>();
-				frontRange1 = ZoneSelector.S.GetZonesInRange(currZone, front1.closeRange, front1.farRange);
+				frontRange1 = ZoneSelector.S.GetZonesCanSeeFromInRange(currZone, front1.closeRange, front1.farRange);
 				
 				foreach(GameObject zone in frontRange1){
-					
-					if(zone.GetComponent<ZoneScript>().walkersInZone.Count > 0) return true;
-					if(zone.GetComponent<ZoneScript>().runnersInZone.Count > 0) return true;
-					if(zone.GetComponent<ZoneScript>().fattiesInZone.Count > 0) return true;
-					if(zone.GetComponent<ZoneScript>().abombInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().EnemiesInZone() > 0) return true;
 				}
 			}
 		}
@@ -165,14 +161,10 @@ public class Survivor : MonoBehaviour {
 			if(front2.ranged){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				List<GameObject> frontRange2 = new List<GameObject>();
-				frontRange2 = ZoneSelector.S.GetZonesInRange(currZone, front2.closeRange, front2.farRange);
+				frontRange2 = ZoneSelector.S.GetZonesCanSeeFromInRange(currZone, front2.closeRange, front2.farRange);
 				
 				foreach(GameObject zone in frontRange2){
-					
-					if(zone.GetComponent<ZoneScript>().walkersInZone.Count > 0) return true;
-					if(zone.GetComponent<ZoneScript>().runnersInZone.Count > 0) return true;
-					if(zone.GetComponent<ZoneScript>().fattiesInZone.Count > 0) return true;
-					if(zone.GetComponent<ZoneScript>().abombInZone.Count > 0) return true;
+					if(zone.GetComponent<ZoneScript>().EnemiesInZone() > 0) return true;
 				}
 			}
 		}

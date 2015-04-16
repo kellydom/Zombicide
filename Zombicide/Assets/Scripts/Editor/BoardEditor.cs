@@ -132,6 +132,7 @@ public class BoardEditor : Editor {
 
 	void OnSceneGUI()
 	{
+
 		if(boardLayout == null) return;
 
 		if(boardLayout.zonePositions.Count != boardLayout.zoneSizes.Count || boardLayout.zonePositions.Count != boardLayout.isStreetZone.Count){
