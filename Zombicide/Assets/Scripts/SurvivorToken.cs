@@ -1062,9 +1062,16 @@ public class SurvivorToken : MonoBehaviour {
 		discardForWound = false;
 		if(GameController.S.picked.cardName != "Pan")
 			GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
-		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
-		discardComplete.transform.position = new Vector3 (-1000,0,0);
-		woundSetup ();
+		if (GameController.S.picked.cardName == "Mask") {
+			GameController.S.zombTurnText.text = "Saved with Mask";
+			discardComplete.transform.position = new Vector3 (-1000, 0, 0);
+			finishWound ();
+		} 
+		else {
+			GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
+			discardComplete.transform.position = new Vector3 (-1000, 0, 0);
+			woundSetup ();
+		}
 	}
 
 	public void finishWound() {
