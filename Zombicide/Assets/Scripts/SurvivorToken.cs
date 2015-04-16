@@ -163,18 +163,15 @@ public class SurvivorToken : MonoBehaviour {
 				return;
 			}
 		}
-<<<<<<< HEAD
-
 		if (sacrificeThem)
 			return;
-=======
 		if(GameController.S.waitForAaahhSpawn){
 			return;
 		}
 		if(GameController.S.spawningIndoors){
 			return;
 		}
->>>>>>> 7f3155502fba2ecefc61eabcf5cf4304cb972126
+
 		Vector3 newScale = new Vector3 (1, 1, 0);
 		if (!clicked) {
 			removeCards ();
