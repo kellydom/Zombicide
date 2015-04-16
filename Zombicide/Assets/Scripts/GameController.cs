@@ -47,6 +47,10 @@ public class GameController : MonoBehaviour {
 	public bool zombiesAttacking = false;
 	public bool waitForAaahhSpawn = false;
 	public bool spawningIndoors = false;
+
+	string btnShowingReload;
+	bool reloadImgOut = false;
+	Image reloadImg;
 	
 
 	// Use this for initialization
@@ -225,8 +229,10 @@ public class GameController : MonoBehaviour {
 			
 			yield return 0;
 		}
+		CameraController.S.MoveTo(currSurvivor.CurrZone.transform.position + new Vector3(0, 1, -.5f) + Vector3.back / 3, 0.6f);
 		
 		StartCoroutine(MoveSurvTurnImgOut());
+		currSurvivor.numActions--;
 		spawningIndoors = false;
 	}
 
@@ -246,6 +252,7 @@ public class GameController : MonoBehaviour {
 
 					int otherZone = door.zoneOne;
 					if(door.zoneOne == pZone) otherZone = door.zoneTwo;
+					BoardLayout.S.UpdateGraph(pZone, otherZone);
 
 					if(!BoardLayout.S.isStreetZone[otherZone] && !BoardLayout.S.createdZones[otherZone].GetComponent<ZoneScript>().hasSpawnedZombies){
 						zoneToStartSpawn = BoardLayout.S.createdZones[otherZone];
@@ -268,8 +275,10 @@ public class GameController : MonoBehaviour {
 		if(zoneToStartSpawn != null){
 			StartCoroutine(SpawningZombiesInsideCo(zoneToStartSpawn));
 		}
+		else{
+			currSurvivor.numActions--;
+		}
 
-		currSurvivor.numActions--;
 	}
 
 	public void MakeNoiseSetup(){
@@ -299,6 +308,9 @@ public class GameController : MonoBehaviour {
 		if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
 			dualWield = true;
 		}
+		if(attackingWeapon.cardName == "Sawed Off Shotgun"){
+			currSurvivor.hasUsedShotty = true;
+		}
 		AttackScript.S.CreateAttackWheels(zone, false, attackingWeapon, dualWield);
 	}
 
@@ -315,7 +327,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void RangedWeaponSetup(){
-		if(currSurvivor.front1.ranged && currSurvivor.front2.ranged){
+		if(currSurvivor.front1.ranged && currSurvivor.front2.ranged && !((currSurvivor.front1.cardName == "Sawed Off Shotgun" || currSurvivor.front2.cardName == "Sawed Off Shotgun") && currSurvivor.hasUsedShotty)){
 			SurvivorToken.S.front1.image.color = Color.yellow;
 			SurvivorToken.S.front2.image.color = Color.yellow;
 			if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
@@ -330,11 +342,11 @@ public class GameController : MonoBehaviour {
 			}
 		}
 		else{
-			if(currSurvivor.front1.ranged){
+			if(currSurvivor.front1.ranged && !(currSurvivor.front1.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty)){
 				attackingWeapon = currSurvivor.front1;
 				SurvivorToken.S.front1.image.color = Color.yellow;
 			}
-			else{
+			else if(currSurvivor.front2.ranged && !(currSurvivor.front2.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty)){
 				attackingWeapon = currSurvivor.front2;
 				SurvivorToken.S.front2.image.color = Color.yellow;
 			}
@@ -407,8 +419,6 @@ public class GameController : MonoBehaviour {
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}
-
-		ActionWheel.S.tradeBtn.interactable = false;
 		
 		if(!currSurvivor.CanMove()){
 			ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
@@ -424,7 +434,12 @@ public class GameController : MonoBehaviour {
 			distCanTravel++;
 		}
 
-		ZoneSelector.S.HighlightZonesInRange(currSurvivor.CurrZone, 1, distCanTravel);
+		if(distCanTravel == 1){
+			ZoneSelector.S.HighlightNeighborsOf(currSurvivor.CurrZone);
+		}
+		else{
+			ZoneSelector.S.HighlightMoveableZonesUpTo(currSurvivor.CurrZone, distCanTravel);
+		}
 	}
 
 	public void ClickedInvButton(Button clicked){
@@ -506,6 +521,11 @@ public class GameController : MonoBehaviour {
 			}
 
 			if(currSurvivor == null){
+				if(Input.GetKey(KeyCode.X)){
+					foreach(Survivor s in survivors){
+						s.DoNothing();
+					}
+				}
 				survTurnText.text = "Choose a Survivor";
 				//check to see if all survivors have finished - otherwise, keep looping
 				bool allSurvivorsDone = true;
@@ -513,28 +533,6 @@ public class GameController : MonoBehaviour {
 					if(!survivors[i].HasGone) allSurvivorsDone = false;
 				}
 				if(allSurvivorsDone) break;
-/*
-				Plane boardPlane = new Plane(Vector3.up, new Vector3(0,0.05f,0));
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				float hit;
-				
-				if(boardPlane.Raycast(ray, out hit)){
-					Vector3 hitPos = ray.GetPoint(hit);
-					closestSurvivor = GetClosestSurvivorTo(hitPos);
-					if(closestSurvivor != null){
-						if(!closestSurvivor.HasGone){
-							closestSurvivor.Highlight();
-							if(Input.GetMouseButton(0)){
-								
-								currSurvivor = closestSurvivor;
-								currSurvivor.currTurn = true;
-							}
-
-						}
-
-					}
-
-				}*/
 
 
 				yield return 0;
@@ -574,7 +572,15 @@ public class GameController : MonoBehaviour {
 						distCanTravel++;
 					}
 
-					if(ZoneSelector.S.ZoneDistance(survZone, clickedZone) <= distCanTravel && ZoneSelector.S.ZoneDistance(survZone, clickedZone) > 0){
+					bool canTravelThere = false;
+					if(distCanTravel == 1){
+						canTravelThere = ZoneSelector.S.IsNeighborOf(clickedZone, currSurvivor.CurrZone);
+					}
+					else{
+						canTravelThere = ZoneSelector.S.ZoneDistance(survZone, clickedZone) <= distCanTravel && ZoneSelector.S.ZoneDistance(survZone, clickedZone) > 0;
+					}
+
+					if(canTravelThere){
 						ZoneScript zs = currSurvivor.CurrZone.GetComponent<ZoneScript>();
 
 						int actionCount = 1;
@@ -681,6 +687,9 @@ public class GameController : MonoBehaviour {
 	}
 
 	IEnumerator ZombieTurn(){
+		foreach(Survivor surv in survivors){
+			surv.hasUsedShotty = false;
+		}
 		zombTurnText.text = "Zombies' Move!";
 		StartCoroutine(MoveZombTurnImgOut());
 		zombieGoing = true;
@@ -699,7 +708,7 @@ public class GameController : MonoBehaviour {
 				continue;
 			}
 
-
+			
 			zone.GetComponent<ZoneScript>().DoZombieActions();
 			yield return new WaitForSeconds(0.1f);
 		}
@@ -926,5 +935,60 @@ public class GameController : MonoBehaviour {
 			if(surv.currLevel > highestLevel) highestLevel = surv.currLevel;
 		}
 		return highestLevel;
+	}
+
+	public void ShowReload(string slot){
+		switch(slot){
+		case("front1"):
+			if(currSurvivor.front1.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty){
+				reloadImg.rectTransform.anchoredPosition = new Vector2(180, 55);
+				reloadImgOut = true;
+				btnShowingReload = slot;
+			}
+			break;
+		case("front2"):
+			if(currSurvivor.front2.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty){
+				reloadImg.rectTransform.anchoredPosition = new Vector2(180, 55);
+				reloadImgOut = true;
+				btnShowingReload = slot;
+			}
+			break;
+		}
+
+	}
+
+	public void HideReload(string slot){
+		if(btnShowingReload != slot) return;
+
+		reloadImgOut = false;
+		reloadImg.rectTransform.anchoredPosition = new Vector2(-300, 55);
+	}
+
+	IEnumerator ShowReload(){
+		reloadImg.GetComponentInChildren<Text>().text = "Reloaded!";
+		yield return new WaitForSeconds(1);
+		reloadImg.rectTransform.anchoredPosition = new Vector2(-300, 55);
+	}
+
+	public void ClickReload(string slot){
+		switch(slot){
+		case("front1"):
+			if(currSurvivor.front1.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty){
+				currSurvivor.hasUsedShotty = false;
+				btnShowingReload = "";
+				currSurvivor.numActions--;
+				StartCoroutine(ShowReload());
+			}
+			break;
+		case("front2"):
+			if(currSurvivor.front2.cardName == "Sawed Off Shotgun" && currSurvivor.hasUsedShotty){
+				currSurvivor.hasUsedShotty = false;
+				btnShowingReload = "";
+				currSurvivor.numActions--;
+				StartCoroutine(ShowReload());			
+			}
+			break;
+		}
+
 	}
 }

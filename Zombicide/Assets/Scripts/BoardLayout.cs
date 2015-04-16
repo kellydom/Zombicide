@@ -25,6 +25,7 @@ public class BoardLayout : MonoBehaviour {
 
 	public GameObject zonePlanePrefab;
 	public List<GameObject> createdZones;
+	public List<List<int>> zoneGraph = new List<List<int>>();
 
 
 	void Start(){
@@ -37,6 +38,7 @@ public class BoardLayout : MonoBehaviour {
 			if(this != S)
 				Destroy(this.gameObject);
 		}
+		StartCoroutine(CreateGraph());
 	}
 
 	void Awake(){
@@ -64,6 +66,32 @@ public class BoardLayout : MonoBehaviour {
 				doors[i].transform.Rotate(Vector3.right, 180);
 			}
 		}
+	}
+	
+	IEnumerator CreateGraph(){
+		while(ZoneSelector.S == null){
+			yield return 0;
+			continue;
+		}
+
+		int count = BoardLayout.S.createdZones.Count;
+		for(int i = 0; i < count; ++i){
+			List<int> temp = new List<int>();
+			zoneGraph.Add (temp);
+		}
+		
+		for(int i = 0; i < count; ++i){
+			foreach(Vector2 vec in neighborZones){
+				if((int)vec.x == i) zoneGraph[i].Add ((int)vec.y);
+				if((int)vec.y == i) zoneGraph[i].Add ((int)vec.x);
+			}
+		}
+	}
+
+	public void UpdateGraph(int zoneOne, int zoneTwo){
+
+		zoneGraph[zoneOne].Add (zoneTwo);
+		zoneGraph[zoneTwo].Add (zoneOne);
 
 	}
 

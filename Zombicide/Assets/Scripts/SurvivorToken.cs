@@ -544,6 +544,7 @@ public class SurvivorToken : MonoBehaviour {
 			HideSkills();
 		}
 		else{
+			CameraController.S.MoveTo(currSurvivor.CurrZone.transform.position + new Vector3(0, 1, -0.5f) + Vector3.back / 3, 0.6f);
 			ShowSkills(GameController.S.currSurvivor);
 		}
 	}
@@ -952,6 +953,7 @@ public class SurvivorToken : MonoBehaviour {
 				break;
 			}
 		}
+		MoveTokensOnScreen();
 		ActionWheel.S.MoveWheelDown ();
 		tradeCards.transform.position = new Vector3 (-1000, 0, 0);
 	}

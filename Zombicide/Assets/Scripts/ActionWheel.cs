@@ -128,13 +128,16 @@ public class ActionWheel : MonoBehaviour {
 
 		if(GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().objectiveInRoom == null) objBtn.interactable = false;
 		else objBtn.interactable = true;
-		
+
+		bool canTrade = false;
 		foreach (Survivor guy in GameController.S.survivors) {
+			if(guy == GameController.S.currSurvivor) continue;
 			if(guy.CurrZone == GameController.S.currSurvivor.CurrZone) {
-				if(guy.name != GameController.S.currSurvivor.name)
-					tradeBtn.interactable = true;
+				canTrade = true;
 			}
 		}
+		if(canTrade) tradeBtn.interactable = true;
+		else tradeBtn.interactable = false;
 
 		//meleeBtn.interactable = true;
 		if(GameController.S.currSurvivor.CanDoMelee()) meleeBtn.interactable = true;

@@ -85,6 +85,12 @@ public class ZoneSelector : MonoBehaviour {
 		currZone = zone;
 	}
 
+	public List<int> GetNeighborsOfInt(int zoneNum){
+		List<int> neighbors = new List<int>();
+		neighbors.AddRange(BoardLayout.S.zoneGraph[zoneNum]);
+		return neighbors;
+	}
+
 	public List<GameObject> GetNeighborsOf(GameObject zone){
 		List<GameObject> neighbors = new List<GameObject>();
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
@@ -98,18 +104,51 @@ public class ZoneSelector : MonoBehaviour {
 	}
 
 	public void HighlightNeighborsOf(GameObject zone){
-		List<GameObject> neighbors = GetNeighborsOf(zone);
-		for(int i = 0; i < neighbors.Count; ++i){
-			neighbors[i].GetComponent<ZoneScript>().Highlight();
+		List<int> neighbors = GetNeighborsOfInt(zone.GetComponent<ZoneScript>().zoneNum);
+		foreach(int n in neighbors){
+			BoardLayout.S.createdZones[n].GetComponent<ZoneScript>().Highlight();
 		}
 
 	}
 
 	public void HighlightZonesInRange(GameObject zone, int close, int far){
 		foreach(GameObject nextZone in BoardLayout.S.createdZones){
-			if(ZoneDistance(zone, nextZone) >= close && ZoneDistance(zone, nextZone) <= far){
+			int dist = ZoneDistance(zone, nextZone);
+
+			if(dist >= close && dist <= far){
 				nextZone.GetComponent<ZoneScript>().Highlight();
 			}
+		}
+	}
+
+	//much better performance-wise than the above
+	public void HighlightMoveableZonesUpTo(GameObject zone, int range){
+		List<int> zonesChecked = new List<int>();
+
+		List<int> zonesToCheckNow = new List<int>();
+		zonesToCheckNow.Add (zone.GetComponent<ZoneScript>().zoneNum);
+		List<int> zonesToCheckNext = new List<int>();
+
+		while(range > 0){
+			while(zonesToCheckNow.Count > 0){
+				int nextZone = zonesToCheckNow[0];
+				zonesChecked.Add (nextZone);
+				zonesToCheckNow.RemoveAt(0);
+
+				List<int> neighbors = GetNeighborsOfInt(nextZone);
+				foreach(int neigh in neighbors){
+					if(zonesChecked.Contains(neigh)) continue;
+					if(zonesToCheckNow.Contains (neigh)) continue;
+					if(zonesToCheckNext.Contains(neigh)) continue;
+
+					zonesToCheckNext.Add (neigh);
+					BoardLayout.S.createdZones[neigh].GetComponent<ZoneScript>().Highlight();
+				}
+			}
+			zonesToCheckNow.AddRange(zonesToCheckNext);
+			zonesToCheckNext.Clear();
+
+			range--;
 		}
 	}
 
@@ -120,45 +159,26 @@ public class ZoneSelector : MonoBehaviour {
 		int zoneOne = zone.GetComponent<ZoneScript>().zoneNum;
 		int zoneTwo = possibleNeighbor.GetComponent<ZoneScript>().zoneNum;
 
-
-		for(int i = 0; i < BoardLayout.S.neighborZones.Count; ++i){
-			int one = (int)BoardLayout.S.neighborZones[i].x;
-			int two = (int)BoardLayout.S.neighborZones[i].y;
-
-			if( (zoneOne == one && zoneTwo == two) || (zoneOne == two && zoneTwo == one) ){
-				return true;
-			}
-		}
-		for(int i = 0; i < BoardLayout.S.doorConnections.Count; ++i){
-			if(!BoardLayout.S.doorConnections[i].isOpened) continue;
-
-			int one = BoardLayout.S.doorConnections[i].zoneOne;
-			int two = BoardLayout.S.doorConnections[i].zoneTwo;
-			
-			if( (zoneOne == one && zoneTwo == two) || (zoneOne == two && zoneTwo == one) ){
-				return true;
-			}
-
-		}
-
-
+		if(BoardLayout.S.zoneGraph[zoneOne].Contains(zoneTwo)) return true;
+		if(BoardLayout.S.zoneGraph[zoneTwo].Contains(zoneOne)) return true;
+		
 		return false;
 	}
 
 	public List<GameObject> GetZonesCanSeeFrom(GameObject zone){
 		if(zone.GetComponent<ZoneScript>() == null) return new List<GameObject>();
-		List<GameObject> zonesCanSee = new List<GameObject>();
-		zonesCanSee.Add (zone);
+		List<int> zonesCanSee = new List<int>();
+		zonesCanSee.Add (zone.GetComponent<ZoneScript>().zoneNum);
 
-		List<GameObject> originalNeighbors = new List<GameObject>();
+		List<int> originalNeighbors = new List<int>();
 		List<string> sightDirections = new List<string>();
 		
 		float x = zone.transform.position.x;
 		float z = zone.transform.position.z;
 		
-		originalNeighbors = GetNeighborsOf(zone);
+		originalNeighbors = GetNeighborsOfInt(zone.GetComponent<ZoneScript>().zoneNum);
 		for(int i = 0; i < originalNeighbors.Count; ++i){
-			ZoneScript newZone = originalNeighbors[i].GetComponent<ZoneScript>();
+			ZoneScript newZone = BoardLayout.S.createdZones[originalNeighbors[i]].GetComponent<ZoneScript>();
 			//newZone.Highlight();
 			zonesCanSee.Add (originalNeighbors[i]);
 
@@ -178,18 +198,18 @@ public class ZoneSelector : MonoBehaviour {
 			}
 		}
 		
-		List<GameObject> zonesChecked = new List<GameObject>();
+		List<int> zonesChecked = new List<int>();
 		zonesChecked.AddRange(originalNeighbors);
-		zonesChecked.Add (zone);
+		zonesChecked.Add (zone.GetComponent<ZoneScript>().zoneNum);
 		
 		//for each neighbor, look along sight directions
 		for(int i = 0; i < originalNeighbors.Count; ++i){
 			//the keyvaluepair is so we know where the next neighbor came from
-			List<KeyValuePair<GameObject, GameObject>> neighbors = new List<KeyValuePair<GameObject,GameObject>>();
-			List<GameObject> firstNeighbors = GetNeighborsOf(originalNeighbors[i]);
+			List<KeyValuePair<int, int>> neighbors = new List<KeyValuePair<int,int>>();
+			List<int> firstNeighbors = GetNeighborsOfInt(originalNeighbors[i]);
 			
 			for(int j = 0; j < firstNeighbors.Count; ++j){
-				KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(originalNeighbors[i], firstNeighbors[j]);
+				KeyValuePair<int, int> newPair = new KeyValuePair<int, int>(originalNeighbors[i], firstNeighbors[j]);
 				neighbors.Add(newPair);
 			}
 			while(neighbors.Count > 0){
@@ -198,13 +218,13 @@ public class ZoneSelector : MonoBehaviour {
 					continue;
 				}
 				
-				GameObject newZone = neighbors[0].Value;
+				int newZone = neighbors[0].Value;
 				
-				float ogX = neighbors[0].Key.transform.position.x;
-				float ogZ = neighbors[0].Key.transform.position.z;
+				float ogX = BoardLayout.S.createdZones[neighbors[0].Key].transform.position.x;
+				float ogZ = BoardLayout.S.createdZones[neighbors[0].Key].transform.position.z;
 				
-				float newX = newZone.transform.position.x;
-				float newZ = newZone.transform.position.z;
+				float newX = BoardLayout.S.createdZones[newZone].transform.position.x;
+				float newZ = BoardLayout.S.createdZones[newZone].transform.position.z;
 				
 				float xDiff = Mathf.Abs(newX - ogX);
 				float zDiff = Mathf.Abs(newZ - ogZ);
@@ -213,11 +233,11 @@ public class ZoneSelector : MonoBehaviour {
 					
 					//newZone.GetComponent<ZoneScript>().Highlight();
 					zonesCanSee.Add (newZone);
-					if(BoardLayout.S.isStreetZone[newZone.GetComponent<ZoneScript>().zoneNum]){
+					if(BoardLayout.S.isStreetZone[newZone]){
 						
-						List<GameObject> nextNeighbors = GetNeighborsOf(newZone);
+						List<int> nextNeighbors = GetNeighborsOfInt(newZone);
 						for(int j = 0; j < nextNeighbors.Count; ++j){
-							KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(newZone, nextNeighbors[j]);
+							KeyValuePair<int, int> newPair = new KeyValuePair<int, int>(newZone, nextNeighbors[j]);
 							neighbors.Add(newPair);
 						}
 					}
@@ -225,11 +245,11 @@ public class ZoneSelector : MonoBehaviour {
 				else if(sightDirections[i] == "z" && zDiff >= xDiff){
 					//newZone.GetComponent<ZoneScript>().Highlight();
 					zonesCanSee.Add (newZone);
-					if(BoardLayout.S.isStreetZone[newZone.GetComponent<ZoneScript>().zoneNum]){
+					if(BoardLayout.S.isStreetZone[newZone]){
 						
-						List<GameObject> nextNeighbors = GetNeighborsOf(newZone);
+						List<int> nextNeighbors = GetNeighborsOfInt(newZone);
 						for(int j = 0; j < nextNeighbors.Count; ++j){
-							KeyValuePair<GameObject, GameObject> newPair = new KeyValuePair<GameObject, GameObject>(newZone, nextNeighbors[j]);
+							KeyValuePair<int, int> newPair = new KeyValuePair<int, int>(newZone, nextNeighbors[j]);
 							neighbors.Add(newPair);
 						}
 					}
@@ -239,7 +259,12 @@ public class ZoneSelector : MonoBehaviour {
 			}
 		}
 
-		return zonesCanSee;
+		List<GameObject> returnList = new List<GameObject>();
+		foreach(int n in zonesCanSee){
+			returnList.Add (BoardLayout.S.createdZones[n]);
+		}
+
+		return returnList;
 	}
 
 	public void HighlightZonesCanSeeFrom(GameObject zone){
@@ -321,27 +346,27 @@ public class ZoneSelector : MonoBehaviour {
 	public int ZoneDistance(GameObject zoneOne, GameObject zoneTwo){
 		if(zoneOne == zoneTwo) return 0;
 
-		List<GameObject> zonesChecked = new List<GameObject>();
-		zonesChecked.Add(zoneOne);
+		List<int> zonesChecked = new List<int>();
+		zonesChecked.Add(zoneOne.GetComponent<ZoneScript>().zoneNum);
 
-		List<GameObject> neighborZones = GetNeighborsOf(zoneOne);
-		List<KeyValuePair<GameObject, int>> neighbors = new List<KeyValuePair<GameObject, int>>();
-		foreach(GameObject go in neighborZones){
-			KeyValuePair<GameObject, int> newPair = new KeyValuePair<GameObject, int>(go, 1);
+		List<int> neighborZones = GetNeighborsOfInt(zoneOne.GetComponent<ZoneScript>().zoneNum);
+		List<KeyValuePair<int, int>> neighbors = new List<KeyValuePair<int, int>>();
+		foreach(int go in neighborZones){
+			KeyValuePair<int, int> newPair = new KeyValuePair<int, int>(go, 1);
 			neighbors.Add (newPair);
 		}
 		zonesChecked.AddRange(neighborZones);
 
 		while(neighbors.Count > 0){
-			GameObject currZone = neighbors[0].Key;
+			int currZone = neighbors[0].Key;
 			int dist = neighbors[0].Value;
 
-			if(currZone == zoneTwo) return dist;
+			if(currZone == zoneTwo.GetComponent<ZoneScript>().zoneNum) return dist;
 
-			neighborZones = GetNeighborsOf(currZone);
-			foreach(GameObject go in neighborZones){
+			neighborZones = GetNeighborsOfInt(currZone);
+			foreach(int go in neighborZones){
 				if(zonesChecked.Contains(go)) continue;
-				KeyValuePair<GameObject, int> newPair = new KeyValuePair<GameObject, int>(go, 1 + dist);
+				KeyValuePair<int, int> newPair = new KeyValuePair<int, int>(go, 1 + dist);
 				zonesChecked.Add (go);
 				neighbors.Add (newPair);
 			}
@@ -352,39 +377,41 @@ public class ZoneSelector : MonoBehaviour {
 	}
 
 	public List<GameObject> StepTowardsZone(GameObject startZone, GameObject goalZone, int distToZone){
-		List<GameObject> possiblePaths = new List<GameObject>();
+		List<int> possiblePaths = new List<int>();
 
 		//Yeah, I know this is a stupid way to do it, but whatever
-		List<List<GameObject>> currentPaths = new List<List<GameObject>>();
-		List<GameObject> neighbors = GetNeighborsOf(startZone);
-		foreach(GameObject go in neighbors){
-			List<GameObject> temp = new List<GameObject>();
+		List<List<int>> currentPaths = new List<List<int>>();
+		List<int> neighbors = GetNeighborsOfInt(startZone.GetComponent<ZoneScript>().zoneNum);
+		foreach(int go in neighbors){
+			List<int> temp = new List<int>();
 			temp.Add (go);
 			currentPaths.Add (temp);
 		}
 
 		while(currentPaths.Count > 0 && currentPaths[0].Count <= distToZone){
-			List<GameObject> thisPath = currentPaths[0];
-			GameObject currZone = thisPath[thisPath.Count - 1];
+			List<int> thisPath = currentPaths[0];
+			int currZone = thisPath[thisPath.Count - 1];
 
 
-			if(currZone == goalZone){
+			if(currZone == goalZone.GetComponent<ZoneScript>().zoneNum){
 				possiblePaths.Add (thisPath[0]);
 				currentPaths.RemoveAt(0);
 				continue;
 			}
 
-			neighbors = GetNeighborsOf(currZone);
-			foreach(GameObject go in neighbors){
-				List<GameObject> newPath = new List<GameObject>();
+			neighbors = GetNeighborsOfInt(currZone);
+			foreach(int go in neighbors){
+				List<int> newPath = new List<int>();
 				newPath.AddRange(thisPath);
+				if(newPath.Contains(go)) continue;
+
 				newPath.Add (go);
 				currentPaths.Add (newPath);
 			}
 			currentPaths.RemoveAt(0);
 
 			//Fun sorting algorithm!
-			List<List<GameObject>> newCurrentPaths = new List<List<GameObject>>();
+			List<List<int>> newCurrentPaths = new List<List<int>>();
 			while(currentPaths.Count > 0){
 				int lowCount = int.MaxValue;
 				int lowNum = -1;
@@ -400,8 +427,14 @@ public class ZoneSelector : MonoBehaviour {
 			currentPaths.AddRange(newCurrentPaths);
 
 		}
+		List<GameObject> returnList = new List<GameObject>();
 
-		return possiblePaths;
+		foreach(int n in possiblePaths){
+			returnList.Add (BoardLayout.S.createdZones[n]);
+		}
+
+
+		return returnList;
 	}
 
 	public List<GameObject> GetZonesInRange(GameObject startZone, int close, int far){
@@ -436,15 +469,15 @@ public class ZoneSelector : MonoBehaviour {
 	}
 
 	public List<GameObject> BuildingNeighbors(GameObject startZone){
-		List<GameObject> buildingNeighbors = new List<GameObject>();
-		buildingNeighbors.Add (startZone);
-		List<GameObject> zonesChecked = new List<GameObject>();
+		List<int> buildingNeighbors = new List<int>();
+		buildingNeighbors.Add (startZone.GetComponent<ZoneScript>().zoneNum);
+		List<int> zonesChecked = new List<int>();
 
-		List<GameObject> zonesToCheck = new List<GameObject>();
-		zonesToCheck.Add (startZone);
+		List<int> zonesToCheck = new List<int>();
+		zonesToCheck.Add (startZone.GetComponent<ZoneScript>().zoneNum);
 
 		while(zonesToCheck.Count > 0){
-			GameObject zone = zonesToCheck[0];
+			int zone = zonesToCheck[0];
 			if(zonesChecked.Contains(zone)){
 				zonesToCheck.RemoveAt(0);
 				continue;
@@ -452,10 +485,10 @@ public class ZoneSelector : MonoBehaviour {
 
 			zonesChecked.Add (zone);
 
-			List<GameObject> neighbors = GetNeighborsOf(zone);
-			foreach(GameObject neigh in neighbors){
+			List<int> neighbors = GetNeighborsOfInt(zone);
+			foreach(int neigh in neighbors){
 				if(zonesChecked.Contains(neigh)) continue;
-				if(BoardLayout.S.isStreetZone[neigh.GetComponent<ZoneScript>().zoneNum]){
+				if(BoardLayout.S.isStreetZone[neigh]){
 					zonesChecked.Add (neigh);
 					continue;
 				}
@@ -468,7 +501,11 @@ public class ZoneSelector : MonoBehaviour {
 			zonesToCheck.RemoveAt(0);
 		}
 
+		List<GameObject> returnList = new List<GameObject>();
+		foreach(int n in buildingNeighbors){
+			returnList.Add (BoardLayout.S.createdZones[n]);
+		}
 
-		return buildingNeighbors;
+		return returnList;
 	}
 }

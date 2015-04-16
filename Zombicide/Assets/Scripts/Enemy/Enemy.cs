@@ -62,6 +62,8 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
+		if(ActionWheel.S.mouseInWheel || ActionWheel.S.mouseInWheelButton) return;
+
 		List<GameObject> zoneZombies = new List<GameObject>();
 		if(type == EnemyType.Walker){
 			zoneZombies = currZone.GetComponent<ZoneScript>().walkersInZone;

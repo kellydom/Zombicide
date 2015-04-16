@@ -205,7 +205,7 @@ public class ZoneScript : MonoBehaviour {
 
 	public void DoAnAction(List<GameObject> zombies){
 		if(zombies.Count == 0) return;
-		
+
 		GameObject enemyZone = zombies[0].GetComponent<Enemy>().currZone;
 
 		for(int i = zombies.Count - 1; i >= 0; --i){
@@ -240,6 +240,7 @@ public class ZoneScript : MonoBehaviour {
 		if(closestZones.Count == 0) return;
 
 		List<GameObject> nextSteps = new List<GameObject>();
+		//nextSteps.Add (closestZones[0]);
 		foreach(GameObject go in closestZones){
 			int dist = ZoneSelector.S.ZoneDistance(enemyZone, go);
 			List<GameObject> stepsToGO = ZoneSelector.S.StepTowardsZone(enemyZone, go, dist);

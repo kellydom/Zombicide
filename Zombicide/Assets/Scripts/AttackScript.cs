@@ -384,13 +384,13 @@ public class AttackScript : MonoBehaviour {
 			hasRerolledCard = false;
 		}
 		else{
-			hasRerolledCard = false;
+			hasRerolledCard = true;
 		}
 		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Heavy)") && !melee){
 			hasRerolledCard = false;
 		}
 		else{
-			hasRerolledCard = false;
+			hasRerolledCard = true;
 		}
 
 		askForReroll = true;

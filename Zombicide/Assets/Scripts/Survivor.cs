@@ -52,6 +52,7 @@ public class Survivor : MonoBehaviour {
 	public bool hasDoneMove = false;
 	public bool hasDoneCombatAction = false;
 	bool waitingToSelectSkill = false;
+	public bool hasUsedShotty = false;
 
 
 	// Use this for initialization
@@ -86,6 +87,7 @@ public class Survivor : MonoBehaviour {
 
 	public void DoNothing(){
 		numActions = 0;
+		hasGone = true;
 	}
 
 	public void MoveTo(GameObject newZone, int actionCost){
@@ -110,11 +112,8 @@ public class Survivor : MonoBehaviour {
 		if(numActions == 0) return false;
 
 		if(skills.Contains("Slippery")) return true;
-		
-		if(zs.walkersInZone.Count > 0) return false;
-		if(zs.runnersInZone.Count > 0) return false;
-		if(zs.fattiesInZone.Count > 0) return false;
-		if(zs.abombInZone.Count > 0) return false;
+
+		if(zs.EnemiesInZone() > 0) return false;
 		
 		return true;
 	}
@@ -147,7 +146,7 @@ public class Survivor : MonoBehaviour {
 	}
 	public bool CanDoRanged(){
 		if(front1 != null){
-			if(front1.ranged){
+			if(front1.ranged && !(front1.cardName == "Sawed Off Shotgun" && hasUsedShotty)){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				List<GameObject> frontRange1 = new List<GameObject>();
 				frontRange1 = ZoneSelector.S.GetZonesCanSeeFromInRange(currZone, front1.closeRange, front1.farRange);
@@ -158,7 +157,7 @@ public class Survivor : MonoBehaviour {
 			}
 		}
 		if(front2 != null){
-			if(front2.ranged){
+			if(front2.ranged && !(front2.cardName == "Sawed Off Shotgun" && hasUsedShotty)){
 				ZoneScript zs = currZone.GetComponent<ZoneScript>();
 				List<GameObject> frontRange2 = new List<GameObject>();
 				frontRange2 = ZoneSelector.S.GetZonesCanSeeFromInRange(currZone, front2.closeRange, front2.farRange);
