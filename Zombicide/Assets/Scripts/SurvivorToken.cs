@@ -1143,7 +1143,9 @@ public class SurvivorToken : MonoBehaviour {
 				break;
 			}
 		}
-		woundedSurvivor.TakeWound();
+		if(!GameController.S.picked.cardName == "Mask"){
+			woundedSurvivor.TakeWound();
+		}
 
 
 		sacrificeThem = false;
