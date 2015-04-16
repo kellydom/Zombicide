@@ -70,6 +70,9 @@ public class Deck : MonoBehaviour {
 	void Start () {
 		empty.but = emptyButton;
 		empty.cardName = "Empty";
+
+		wounded.but = woundedButton;
+		wounded.cardName = "Wound";
 		
 		pan.cardName = "Pan";
 		pan.combinable = false;

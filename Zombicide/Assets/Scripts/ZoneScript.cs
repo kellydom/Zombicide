@@ -148,12 +148,12 @@ public class ZoneScript : MonoBehaviour {
 
 	IEnumerator ZombieAttack(){
 		GameController.S.zombiesAttacking = true;
-
+		GameController.S.zombTurnText.text = "Zombies Attack!";
 		//do zombie attacking stuff here
-
+		SurvivorToken.S.selectPlayerForWound ();
 		yield return 0;
 
-		GameController.S.zombiesAttacking = false;
+		//GameController.S.zombiesAttacking = false;
 
 	}
 

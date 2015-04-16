@@ -322,7 +322,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ClickedInvButton(Button clicked){
-		if (ActionWheel.S.CurrAction == "Trade")
+		if (ActionWheel.S.CurrAction == "Trade" || SurvivorToken.S.sacrificeThem)
 			return;
 		if(clicked.name == "Front1"){
 			clickedCard = currSurvivor.front1;

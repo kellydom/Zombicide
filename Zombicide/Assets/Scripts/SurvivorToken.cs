@@ -37,6 +37,10 @@ public class SurvivorToken : MonoBehaviour {
 	bool tempOut = false;
 	bool cardsOut = false;
 
+	public bool sacrificeThem = false;
+	public Button discardComplete;
+	public Button woundComplete;
+
 	string whichCard;
 	bool cardSwitch = false;
 
@@ -54,6 +58,10 @@ public class SurvivorToken : MonoBehaviour {
 	public Image skillList;
 	public Image chooseSkillImage;
 	public Image newSkillImage;
+
+	bool discardForWound = false;
+	bool woundTime = false;
+	Survivor woundedSurvivor;
 	
 	public List<Sprite>	levelSprites;
 
@@ -98,7 +106,7 @@ public class SurvivorToken : MonoBehaviour {
 			}
 		}
 
-		if (ActionWheel.S.CurrAction == "Trade") 
+		if (ActionWheel.S.CurrAction == "Trade" || sacrificeThem) 
 			return;
 		Vector3 newScale = new Vector3 (4, 4, 0);
 		switch (name) {
@@ -149,6 +157,9 @@ public class SurvivorToken : MonoBehaviour {
 				return;
 			}
 		}
+
+		if (sacrificeThem)
+			return;
 		Vector3 newScale = new Vector3 (1, 1, 0);
 		if (!clicked) {
 			removeCards ();
@@ -310,7 +321,7 @@ public class SurvivorToken : MonoBehaviour {
 		}
 		bool reload = false;
 		Vector3 newScale = new Vector3 (4, 4, 0);
-		if (ActionWheel.S.CurrAction == "Trade")
+		if (ActionWheel.S.CurrAction == "Trade" || sacrificeThem)
 			return;
 		clicked = true;
 		switch (name) {
@@ -524,6 +535,10 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void deleteSearchCard() {
+		if (GameController.S.picked.cardName == "Wound") {
+			GameController.S.survTurnText.text = "Can't discard Wound";
+			return;
+		}
 		GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
 		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
 		GameController.S.deleteForSearch.transform.position = new Vector3 (-1000,0,0);
@@ -909,4 +924,164 @@ public class SurvivorToken : MonoBehaviour {
 		skillDescription.rectTransform.anchoredPosition = new Vector3(-2000,-2000,0);
 		skillToHide.color = Color.white;
 	}
+
+	public void selectPlayerForWound() {
+		GameController.S.zombTurnText.text = "Wound a player";
+		sacrificeThem = true;
+		//find the players in the same zone and move their buttons up		
+	}
+	
+	public void sacrifice(string playerName) {
+		if (!GameController.S.zombiesAttacking) {
+			return;
+		}
+		if (sacrificeThem) {
+			switch(playerName) {
+			case "Wanda":
+				for (int i = 0; i < GameController.S.survivors.Count; i++) {
+					if("Wanda" == GameController.S.survivors[i].name) {
+						woundedSurvivor = GameController.S.survivors[i];
+					}
+				}
+				break;
+			case "Phil":
+				for (int i = 0; i < GameController.S.survivors.Count; i++) {
+					if("Phil" == GameController.S.survivors[i].name) {
+						woundedSurvivor = GameController.S.survivors[i];
+					}
+				}
+				break;
+			case "Ned":
+				for (int i = 0; i < GameController.S.survivors.Count; i++) {
+					if("Ned" == GameController.S.survivors[i].name) {
+						woundedSurvivor = GameController.S.survivors[i];
+					}
+				}
+				break;
+			case "Josh":
+				for (int i = 0; i < GameController.S.survivors.Count; i++) {
+					if("Josh" == GameController.S.survivors[i].name) {
+						woundedSurvivor = GameController.S.survivors[i];
+					}
+				}
+				break;
+			}
+			expandWound();
+			if(woundedSurvivor.front1.cardName != "Empty" || woundedSurvivor.front1.cardName != "Wound" || woundedSurvivor.front2.cardName != "Empty" || woundedSurvivor.front2.cardName != "Wound" || woundedSurvivor.back1.cardName != "Empty" || woundedSurvivor.back1.cardName != "Wound" || woundedSurvivor.back2.cardName != "Empty" || woundedSurvivor.back2.cardName != "Wound" || woundedSurvivor.front1.cardName != "Empty" || woundedSurvivor.front1.cardName != "Wound") {
+				discardForWound = true;
+				GameController.S.zombTurnText.text = "Discard one item";
+				GameController.S.picked = GameController.S.deck.empty;
+				GameController.S.pickedImage.image.sprite = GameController.S.picked.but.image.sprite;
+				GameController.S.pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
+				discardComplete.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, 0);
+			}
+			else {
+				woundSetup();
+			}
+		}
+	}
+
+	public void discard(string cardName) {
+		if (!discardForWound && !woundTime)
+			return;
+		Card picked = new Card ();
+		switch (cardName) {
+		case "front1":
+			picked = woundedSurvivor.front1;
+			woundedSurvivor.front1 = GameController.S.picked;
+			front1.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "front2":
+			picked = woundedSurvivor.front2;
+			woundedSurvivor.front2 = GameController.S.picked;
+			front2.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "back1":
+			picked = woundedSurvivor.back1;
+			woundedSurvivor.back1 = GameController.S.picked;
+			back1.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "back2":
+			picked = woundedSurvivor.back2;
+			woundedSurvivor.back2 = GameController.S.picked;
+			back2.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		case "back3":
+			picked = woundedSurvivor.back3;
+			woundedSurvivor.back3 = GameController.S.picked;
+			back3.image.sprite = GameController.S.picked.but.image.sprite;
+			GameController.S.picked = picked;
+			GameController.S.pickedImage.image.sprite = picked.but.image.sprite;
+			break;
+		}
+	}
+
+	public void finishDiscard() {
+		if (GameController.S.picked.cardName == "Wound" || GameController.S.picked.cardName == "Empty") {
+			GameController.S.zombTurnText.text = "Must select item";
+			return;
+		}
+		discardForWound = false;
+		if(GameController.S.picked.cardName != "Pan")
+			GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
+		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
+		discardComplete.transform.position = new Vector3 (-1000,0,0);
+		woundSetup ();
+	}
+
+	public void finishWound() {
+		if (GameController.S.picked.cardName == "Wound") {
+			GameController.S.zombTurnText.text = "Can't discard a Wound";
+			return;
+		}
+		woundTime = false;
+		if(GameController.S.picked.cardName != "Empty" && GameController.S.picked.cardName != "Pan")
+			GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
+		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
+		woundComplete.transform.position = new Vector3 (-1000,0,0);
+
+		sacrificeThem = false;
+		removeCards ();
+		GameController.S.zombiesAttacking = false;
+	}
+
+	void woundSetup() {
+		woundTime = true;
+		GameController.S.zombTurnText.text = "Add the wound";
+		GameController.S.picked = GameController.S.deck.wounded;
+		GameController.S.pickedImage.image.sprite = GameController.S.picked.but.image.sprite;
+		GameController.S.pickedImage.transform.position = new Vector3 (Screen.width/2, Screen.height/2, 0);
+		woundComplete.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, 0);
+	}
+
+	void expandWound() {
+		HideSkills();
+		front1.image.sprite = woundedSurvivor.front1.but.image.sprite;
+		front2.image.sprite = woundedSurvivor.front2.but.image.sprite;
+		back1.image.sprite = woundedSurvivor.back1.but.image.sprite;
+		back2.image.sprite = woundedSurvivor.back2.but.image.sprite;
+		back3.image.sprite = woundedSurvivor.back3.but.image.sprite;
+		
+		float frontPos = front1.GetComponent<RectTransform>().sizeDelta.x * 3.0f/2.0f;
+		float backPos = front1.GetComponent<RectTransform>().sizeDelta.x * 1.0f/2.0f;
+
+		front1.transform.position = new Vector3 (frontPos, front1.transform.position.y);
+		front2.transform.position = new Vector3 (frontPos, front2.transform.position.y);
+		back1.transform.position = new Vector3 (backPos, back1.transform.position.y);
+		back2.transform.position = new Vector3 (backPos, back2.transform.position.y);
+		back3.transform.position = new Vector3 (backPos, back3.transform.position.y);
+	}
+	
+	public void takeWound() {
+		
+	}
 }
+
