@@ -45,13 +45,13 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Mouse wheel moving forward
-		if((Input.GetKeyDown(KeyCode.PageUp) || Input.GetAxis("Mouse ScrollWheel") > 0) && transform.position.y > closeDist)
+		if((Input.GetKeyDown(KeyCode.Q) ||(Input.GetKeyDown(KeyCode.PageUp) || Input.GetAxis("Mouse ScrollWheel") > 0) && transform.position.y > closeDist)
 		{
 			transform.Translate(Vector3.forward * zoomSpeed);
 		}
 		
 		// Mouse wheel moving backward
-		if((Input.GetKeyDown(KeyCode.PageDown) || Input.GetAxis("Mouse ScrollWheel") < 0) && transform.position.y < farDist)
+		if((Input.GetKeyDown(KeyCode.E) ||(Input.GetKeyDown(KeyCode.PageDown) || Input.GetAxis("Mouse ScrollWheel") < 0) && transform.position.y < farDist)
 		{
 			transform.Translate(Vector3.back * zoomSpeed);
 		}

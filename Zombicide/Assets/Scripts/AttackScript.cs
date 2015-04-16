@@ -22,6 +22,7 @@ public class AttackScript : MonoBehaviour {
 
 	bool hasRerolledLucky = false;
 	bool hasRerolled1PerTurn = false;
+	bool hasRerolledCard = false;
 	bool askForReroll = true;
 
 	public bool attackingSurvivor = false;
@@ -67,11 +68,13 @@ public class AttackScript : MonoBehaviour {
 		if(!hasRerolled1PerTurn){
 			hasRerolled1PerTurn = true;
 		}
-		else{
-			if(!hasRerolledLucky){
-				hasRerolledLucky = true;
-			}
+		else if(!hasRerolledLucky){
+			hasRerolledLucky = true;
 		} 
+		else if(!hasRerolledCard){
+			hasRerolledCard = true;
+		}
+
 		rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, 30);
 		keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, 30);
 		rerollButton.enabled = false;
@@ -107,6 +110,11 @@ public class AttackScript : MonoBehaviour {
 					keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, -30);
 				}
 				if(!hasRerolledLucky){
+					allFinished = false;
+					rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, -30);
+					keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, -30);
+				}
+				if(!hasRerolledCard){
 					allFinished = false;
 					rerollButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(-159, -30);
 					keepButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(159, -30);
@@ -371,6 +379,18 @@ public class AttackScript : MonoBehaviour {
 		}
 		else{
 			hasRerolledLucky = true;
+		}
+		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Light)") && melee){
+			hasRerolledCard = false;
+		}
+		else{
+			hasRerolledCard = false;
+		}
+		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Heavy)") && !melee){
+			hasRerolledCard = false;
+		}
+		else{
+			hasRerolledCard = false;
 		}
 
 		askForReroll = true;

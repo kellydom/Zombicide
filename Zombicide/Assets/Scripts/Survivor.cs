@@ -348,4 +348,11 @@ public class Survivor : MonoBehaviour {
 		}
 	}
 
+	public bool HasCard(string cardName){
+		if(front1.cardName == cardName || front2.cardName == cardName || back1.cardName == cardName || back2.cardName == cardName || back3.cardName == cardName){
+			return true;
+		}
+		return false;
+	}
+
 }
