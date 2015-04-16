@@ -35,6 +35,10 @@ public class Enemy : MonoBehaviour {
 		else if(type == EnemyType.Fatty) zombieType = 2;
 
 		Vector3 movePos = Vector3.Lerp (topLeftCorner, topRightCorner, (zombieType + 1) / 5.0f);
+		if(type == EnemyType.Abomination){
+			movePos = zone.transform.position;
+		}
+
 		transform.position = movePos + Vector3.up / 5.0f * vertOffset;
 
 		if(type == EnemyType.Walker){
