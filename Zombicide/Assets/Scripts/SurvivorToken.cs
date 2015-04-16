@@ -143,7 +143,7 @@ public class SurvivorToken : MonoBehaviour {
 			return;
 		}
 
-		if (ActionWheel.S.CurrAction == "Trade" || chosenWoundedSurvivor) 
+		if (chosenWoundedSurvivor || inTrade) 
 			return;
 		Vector3 newScale = new Vector3 (4, 4, 0);
 		switch (name) {
@@ -181,7 +181,7 @@ public class SurvivorToken : MonoBehaviour {
 			}
 			ShowSkills(surv);
 		} 
-		else if(currSurvivor.name != name && !inTrade){
+		else if(currSurvivor.name != name && !inTrade && !sacrificeThem){
 			expandTempCards();
 			tempOut = true;
 			HideSkills();
@@ -200,6 +200,7 @@ public class SurvivorToken : MonoBehaviour {
 		if(GameController.S.spawningIndoors || chosenWoundedSurvivor){
 			return;
 		}
+		if(inTrade) return;
 
 		Vector3 newScale = new Vector3 (1, 1, 0);
 		if (!clicked) {
@@ -801,6 +802,25 @@ public class SurvivorToken : MonoBehaviour {
 		rightTradeSelected = false;
 		leftTradeSelected = false;
 		GameController.S.playerTrading = false;
+		Vector3 newScale = new Vector3 (1, 1, 0);
+		foreach(Survivor surv in GameController.S.survivors){
+			if(surv == GameController.S.currSurvivor) continue;
+			surv.Unhighlight();
+			switch(surv.name){
+			case "Wanda":
+				wanda.image.transform.localScale = newScale;
+				break;
+			case "Phil":
+				phil.image.transform.localScale = newScale;
+				break;
+			case "Ned":
+				ned.image.transform.localScale = newScale;
+				break;
+			case "Josh": 
+				josh.image.transform.localScale = newScale;
+				break;
+			}
+		}
 		ActionWheel.S.MoveWheelDown ();
 		tradeCards.transform.position = new Vector3 (-1000, 0, 0);
 	}
@@ -985,6 +1005,8 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void selectPlayerForWound(GameObject currZone) {
+		front1.image.color = Color.white;
+		front2.image.color = Color.white;
 		GameController.S.zombTurnText.text = "Wound a player";
 		currZone.GetComponent<ZoneScript>().Highlight();
 		foreach(Survivor surv in GameController.S.survivors){
@@ -1131,17 +1153,37 @@ public class SurvivorToken : MonoBehaviour {
 			GameController.S.deck.returnToDeck (GameController.S.picked.cardName);
 		GameController.S.pickedImage.transform.position = new Vector3 (-3000, 0, 0);
 		woundComplete.transform.position = new Vector3 (-1000,0,0);
+		MoveTokensOffscreen();
 		Vector3 newScale = new Vector3 (1, 1, 0);
-		josh.image.transform.localScale = newScale;
-		wanda.image.transform.localScale = newScale;
-		phil.image.transform.localScale = newScale;
-		ned.image.transform.localScale = newScale;
-
+		foreach(Survivor surv in GameController.S.survivors){
+			if(surv == GameController.S.currSurvivor) continue;
+			surv.Unhighlight();
+			switch(surv.name){
+			case "Wanda":
+				wanda.image.transform.localScale = newScale;
+				break;
+			case "Phil":
+				phil.image.transform.localScale = newScale;
+				break;
+			case "Ned":
+				ned.image.transform.localScale = newScale;
+				break;
+			case "Josh": 
+				josh.image.transform.localScale = newScale;
+				break;
+			}
+		}
+		if(GameController.S.picked.cardName != "Mask"){
+			woundedSurvivor.TakeWound();
+		}
 
 
 		sacrificeThem = false;
 		chosenWoundedSurvivor = false;
 		removeCards ();
+		if(GameController.S.currSurvivor != null){
+			expandCards();
+		}
 	}
 
 	void woundSetup() {
