@@ -71,6 +71,9 @@ public class SurvivorToken : MonoBehaviour {
 	
 	public List<Sprite>	levelSprites;
 
+	bool oneClickInventory = false;
+	string whichInventory;
+
 	public Image skillDescription;
 	Image skillShowingDescriptionOf;
 	// Use this for initialization
@@ -254,6 +257,237 @@ public class SurvivorToken : MonoBehaviour {
 		}
 	}
 
+	public void changeInventory (string cardName) {
+		if (cardName == "Setup") {
+			expandCards ();
+			return;
+		}
+		if (!oneClickInventory) {
+			oneClickInventory = true;
+			whichInventory = cardName;
+			switch (cardName) {
+			case "front1":
+				front1.image.color = Color.yellow;
+				break;
+			case "front2":
+				front2.image.color = Color.yellow;
+				break;
+			case "back1":
+				back1.image.color = Color.yellow;
+				break;
+			case "back2":
+				back2.image.color = Color.yellow;
+				break;
+			case "back3":
+				back3.image.color = Color.yellow;
+				break;
+			}
+		}
+		else {
+			oneClickInventory = false;
+			if(cardName == whichInventory) {
+				switch (cardName) {
+				case "front1":
+					currSurvivor.front1.but.image.color = Color.white;
+					break;
+				case "front2":
+					currSurvivor.front2.but.image.color = Color.white;
+					break;
+				case "back1":
+					currSurvivor.back1.but.image.color = Color.white;
+					break;
+				case "back2":
+					currSurvivor.back2.but.image.color = Color.white;
+					break;
+				case "back3":
+					currSurvivor.back3.but.image.color = Color.white;
+					break;
+				}
+				return;
+			}
+			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
+			Card picked = new Card();
+			switch (whichInventory) {
+			case "front1":
+				currSurvivor.front1.but.image.color = Color.white;
+				switch (cardName) {
+				case "front2":
+					picked = currSurvivor.front2;
+					currSurvivor.front2 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					break;
+				case "back1":
+					picked = currSurvivor.back1;
+					currSurvivor.back1 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					break;
+				case "back2":
+					picked = currSurvivor.back2;
+					currSurvivor.back2 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					break;
+				case "back3":
+					picked = currSurvivor.back3;
+					currSurvivor.back3 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					break;
+				}
+				break;
+			case "front2":
+				currSurvivor.front2.but.image.color = Color.white;
+				switch (cardName) {
+				case "front1":
+					picked = currSurvivor.front2;
+					currSurvivor.front2 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					break;
+				case "back1":
+					picked = currSurvivor.back1;
+					currSurvivor.back1 = currSurvivor.front2;
+					currSurvivor.front2 = picked;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					break;
+				case "back2":
+					picked = currSurvivor.back2;
+					currSurvivor.back2 = currSurvivor.front2;
+					currSurvivor.front2 = picked;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					break;
+				case "back3":
+					picked = currSurvivor.back3;
+					currSurvivor.back3 = currSurvivor.front2;
+					currSurvivor.front2 = picked;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					break;
+				}
+				break;
+			case "back1":
+				currSurvivor.back1.but.image.color = Color.white;
+				switch (cardName) {
+				case "front2":
+					picked = currSurvivor.front2;
+					currSurvivor.front2 = currSurvivor.back1;
+					currSurvivor.back1 = picked;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					break;
+				case "front1":
+					picked = currSurvivor.back1;
+					currSurvivor.back1 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					break;
+				case "back2":
+					picked = currSurvivor.back2;
+					currSurvivor.back2 = currSurvivor.back1;
+					currSurvivor.back1 = picked;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					break;
+				case "back3":
+					picked = currSurvivor.back3;
+					currSurvivor.back3 = currSurvivor.back1;
+					currSurvivor.back1 = picked;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					break;
+				}
+				break;
+			case "back2":
+				currSurvivor.back2.but.image.color = Color.white;
+				switch (cardName) {
+				case "front2":
+					picked = currSurvivor.front2;
+					currSurvivor.front2 = currSurvivor.back2;
+					currSurvivor.back2 = picked;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					break;
+				case "back1":
+					picked = currSurvivor.back1;
+					currSurvivor.back1 = currSurvivor.back2;
+					currSurvivor.back2 = picked;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					break;
+				case "front1":
+					picked = currSurvivor.back2;
+					currSurvivor.back2 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					break;
+				case "back3":
+					picked = currSurvivor.back3;
+					currSurvivor.back3 = currSurvivor.back2;
+					currSurvivor.back2 = picked;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					break;
+				}
+				break;
+			case "back3":
+				currSurvivor.back3.but.image.color = Color.white;
+				switch (cardName) {
+				case "front2":
+					picked = currSurvivor.front2;
+					currSurvivor.front2 = currSurvivor.back3;
+					currSurvivor.back3 = picked;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					front2.image.sprite = currSurvivor.front2.but.image.sprite;
+					break;
+				case "back1":
+					picked = currSurvivor.back1;
+					currSurvivor.back1 = currSurvivor.back3;
+					currSurvivor.back3 = picked;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					back1.image.sprite = currSurvivor.back1.but.image.sprite;
+					break;
+				case "front1":
+					picked = currSurvivor.back3;
+					currSurvivor.back3 = currSurvivor.front1;
+					currSurvivor.front1 = picked;
+					front1.image.sprite = currSurvivor.front1.but.image.sprite;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					break;
+				case "back2":
+					picked = currSurvivor.back3;
+					currSurvivor.back3 = currSurvivor.back2;
+					currSurvivor.back2 = picked;
+					back2.image.sprite = currSurvivor.back2.but.image.sprite;
+					back3.image.sprite = currSurvivor.back3.but.image.sprite;
+					break;
+				}
+				break;
+			}
+			front1.image.color = Color.white;
+			front2.image.color = Color.white;
+			back1.image.color = Color.white;
+			back2.image.color = Color.white;
+			back3.image.color = Color.white;
+		}
+	}
+
+	public void finishOrganizing() {
+		GameController.S.playerOrganizing = false;
+		GameController.S.finishOrganizing.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, -3000);
+		ActionWheel.S.MoveWheelDown ();
+	}
+
 	void expandTempCards() {
 		tempf1.image.sprite = tempSurvivor.front1.but.image.sprite;
 		tempf2.image.sprite = tempSurvivor.front2.but.image.sprite;
@@ -406,7 +640,7 @@ public class SurvivorToken : MonoBehaviour {
 		}
 		bool reload = false;
 		Vector3 newScale = new Vector3 (4, 4, 0);
-		if (ActionWheel.S.CurrAction == "Trade" || sacrificeThem)
+		if (ActionWheel.S.CurrAction == "Trade" || sacrificeThem || GameController.S.playerOrganizing)
 			return;
 		clicked = true;
 		switch (name) {
@@ -953,6 +1187,7 @@ public class SurvivorToken : MonoBehaviour {
 			}
 			break;
 		}
+		GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
 		checkForCombinable (GameController.S.currSurvivor, false);
 		checkForCombinable (tradingSurvivor, true);
 		tradeCards.transform.position = new Vector3(Screen.width/2, Screen.height/2, 0);
@@ -1388,15 +1623,19 @@ public class SurvivorToken : MonoBehaviour {
 			switch(surv.name){
 			case "Wanda":
 				wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyW.transform.position = new Vector3 (wanda.transform.position.x, -1000);
 				break;
 			case "Phil":
 				phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyP.transform.position = new Vector3 (phil.transform.position.x, -1000);
 				break;
 			case "Ned":
 				ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyN.transform.position = new Vector3 (ned.transform.position.x, -1000);
 				break;
 			case "Josh": 
 				josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, -100);
+				tinyJ.transform.position = new Vector3 (josh.transform.position.x, -1000);
 				break;
 			}
 		}
@@ -1408,15 +1647,23 @@ public class SurvivorToken : MonoBehaviour {
 			switch(surv.name){
 			case "Wanda":
 				wanda.GetComponent<RectTransform>().anchoredPosition = new Vector2(wanda.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyW.transform.position = new Vector3 (wanda.transform.position.x, moveTinyTo);
 				break;
 			case "Phil":
 				phil.GetComponent<RectTransform>().anchoredPosition = new Vector2(phil.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyP.transform.position = new Vector3 (phil.transform.position.x, moveTinyTo);
 				break;
 			case "Ned":
 				ned.GetComponent<RectTransform>().anchoredPosition = new Vector2(ned.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyN.transform.position = new Vector3 (ned.transform.position.x, moveTinyTo);
 				break;
 			case "Josh": 
 				josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
+				if(surv.numActions > 0)
+					tinyJ.transform.position = new Vector3 (josh.transform.position.x, moveTinyTo);
 				break;
 			}
 		}
@@ -1436,6 +1683,57 @@ public class SurvivorToken : MonoBehaviour {
 		case "Josh": 
 			josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
 			break;
+		}
+	}
+
+	public void getOutOfAction() {
+		if (ActionWheel.S.CurrAction == "Trade") {
+			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
+			//tradeCards.transform.position = new Vector3(Screen.width/2, Screen.height/2, 0);
+			tempf1.transform.position = new Vector3 (setCards, front1.transform.position.y);
+			tempf2.transform.position = new Vector3 (setCards, front2.transform.position.y);
+			tempb1.transform.position = new Vector3 (setCards, back1.transform.position.y);
+			tempb2.transform.position = new Vector3 (setCards, back2.transform.position.y);
+			tempb3.transform.position = new Vector3 (setCards, back3.transform.position.y);
+			inTrade = false;
+			rightTradeSelected = false;
+			leftTradeSelected = false;
+			GameController.S.playerTrading = false;
+			Vector3 newScale = new Vector3 (1, 1, 0);
+			foreach(Survivor surv in GameController.S.survivors){
+				if(surv == GameController.S.currSurvivor) continue;
+				surv.Unhighlight();
+				switch(surv.name){
+				case "Wanda":
+					wanda.image.transform.localScale = newScale;
+					break;
+				case "Phil":
+					phil.image.transform.localScale = newScale;
+					break;
+				case "Ned":
+					ned.image.transform.localScale = newScale;
+					break;
+				case "Josh": 
+					josh.image.transform.localScale = newScale;
+					break;
+				}
+			}
+			MoveTokensOnScreen();
+			ActionWheel.S.MoveWheelDown ();
+			tradeCards.transform.position = new Vector3 (-1000, 0, 0);
+			GameController.S.currSurvivor.numActions++;
+		} 
+		else if (ActionWheel.S.CurrAction == "ReorganizeInventory") {
+			front1.image.color = Color.white;
+			front2.image.color = Color.white;
+			back1.image.color = Color.white;
+			back2.image.color = Color.white;
+			back3.image.color = Color.white;
+			GameController.S.playerOrganizing = false;
+			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/4, -3000);
+			GameController.S.currSurvivor.numActions++;
+			GameController.S.finishOrganizing.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, -3000);
+			ActionWheel.S.MoveWheelDown ();
 		}
 	}
 }
