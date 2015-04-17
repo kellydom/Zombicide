@@ -35,6 +35,9 @@ public class GameController : MonoBehaviour {
 	public bool playerTrading = false;
 	public bool playerOrganizing = false;
 
+	public bool endGame = false;
+	public Image endGameImg;
+
 
 	//public bool playerJustStarted = false;
 
@@ -99,6 +102,10 @@ public class GameController : MonoBehaviour {
 		float high = Screen.width/8f;
 
 		zombieDescription.rectTransform.localScale = new Vector2(high / currHigh, high / currHigh);
+
+		endGameImg.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+		endGameImg.transform.FindChild("Banner").GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height / 5f);
+		endGameImg.transform.FindChild("Banner").FindChild("TurnText 1").GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height / 5f);
 	}
 
 	IEnumerator GetZombieSpawnZones(){
@@ -531,19 +538,28 @@ public class GameController : MonoBehaviour {
 		
 		SurvivorToken.S.moveActionThingBack();
 		while(true){
+			if(endGame){
+				yield break;
+			}
 			if(waitForAaahhSpawn){
 				yield return 0;
+				if(endGame){
+					yield break;
+				}
 				continue;
 			}
 			if(spawningIndoors){
 				yield return 0;
+				if(endGame){
+					yield break;
+				}
 				continue;
 			}
 
 			if(currSurvivor == null){
 				if(Input.GetKey(KeyCode.X)){
 					foreach(Survivor s in survivors){
-						s.DoNothing();
+						//s.DoNothing();
 					}
 				}
 				survTurnText.text = "Choose a Survivor";
@@ -720,6 +736,9 @@ public class GameController : MonoBehaviour {
 	}
 
 	IEnumerator ZombieTurn(){
+		if(endGame){
+			yield break;
+		}
 		foreach(Survivor surv in survivors){
 			surv.hasUsedShotty = false;
 		}
@@ -734,6 +753,9 @@ public class GameController : MonoBehaviour {
 		foreach(GameObject zone in BoardLayout.S.createdZones){
 			if(allZombies.Count == 0) continue;
 			while(zombiesAttacking){
+				if(endGame){
+					yield break;
+				}
 				yield return 0;
 			}
 			if(zone.GetComponent<ZoneScript>().EnemiesInZone() == 0) {
@@ -743,10 +765,16 @@ public class GameController : MonoBehaviour {
 
 			
 			zone.GetComponent<ZoneScript>().DoZombieActions();
+			if(endGame){
+				yield break;
+			}
 			yield return new WaitForSeconds(0.1f);
 		}
 		yield return new WaitForSeconds(1);
 		while(zombiesAttacking){
+			if(endGame){
+				yield break;
+			}
 			yield return 0;
 		}
 		
@@ -913,7 +941,28 @@ public class GameController : MonoBehaviour {
 		
 	}
 
+	public void Win(){
+		endGame = true;
+		endGameImg.rectTransform.anchoredPosition = new Vector2(0,0);
+	}
+
+	public void Lose(){
+		endGame = true;
+		endGameImg.rectTransform.anchoredPosition = new Vector2(0,0);
+		endGameImg.transform.FindChild("Banner").GetComponentInChildren<Text>().text = "Failure";
+		endGameImg.transform.FindChild("Banner").GetComponentInChildren<Text>().color = Color.red;
+
+	}
+
 	void Update(){
+		if(survivors.Count == 0){
+			Lose ();
+		}
+		GameObject[] objTokens = GameObject.FindGameObjectsWithTag("Objective");
+		if(objTokens.Length == 0){
+			Win ();
+		}
+
 		//picked = deck.draw ();
                             		//print (picked.cardName);
 		if(playerTurn){

@@ -1607,6 +1607,7 @@ public class SurvivorToken : MonoBehaviour {
 
 	void woundSetup() {
 		woundTime = true;
+		hoveredImage.rectTransform.anchoredPosition = new Vector3(-2000,0,0);
 		GameController.S.zombTurnText.text = "Add the wound";
 		GameController.S.picked = GameController.S.deck.wounded;
 		GameController.S.pickedImage.image.sprite = GameController.S.picked.but.image.sprite;
@@ -1706,6 +1707,11 @@ public class SurvivorToken : MonoBehaviour {
 
 	public void getOutOfAction() {
 		if (ActionWheel.S.CurrAction == "Trade") {
+			front1.image.color = Color.white;
+			front2.image.color = Color.white;
+			back1.image.color = Color.white;
+			back2.image.color = Color.white;
+			back3.image.color = Color.white;
 			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
 			//tradeCards.transform.position = new Vector3(Screen.width/2, Screen.height/2, 0);
 			tempf1.transform.position = new Vector3 (setCards, front1.transform.position.y);
@@ -1757,22 +1763,24 @@ public class SurvivorToken : MonoBehaviour {
 
 	
 	public void HoverCard(string card){
+		if(woundTime) return;
+
 		hoveredImage.rectTransform.anchoredPosition = new Vector3(0,0,0);
 		switch(card){
 		case "front1":
-			hoveredImage.sprite = GameController.S.currSurvivor.front1.but.image.sprite;
+			hoveredImage.sprite = front1.image.sprite;
 			break;
 		case "front2":
-			hoveredImage.sprite = GameController.S.currSurvivor.front2.but.image.sprite;
+			hoveredImage.sprite = front2.image.sprite;
 			break;
 		case "back1":
-			hoveredImage.sprite = GameController.S.currSurvivor.back1.but.image.sprite;
+			hoveredImage.sprite = back1.image.sprite;
 			break;
 		case "back2":
-			hoveredImage.sprite = GameController.S.currSurvivor.back2.but.image.sprite;
+			hoveredImage.sprite = back2.image.sprite;
 			break;
 		case "back3":
-			hoveredImage.sprite = GameController.S.currSurvivor.back3.but.image.sprite;
+			hoveredImage.sprite = back3.image.sprite;
 			break;
 		case "tempf1":
 			hoveredImage.sprite = tempf1.image.sprite;
@@ -1795,27 +1803,27 @@ public class SurvivorToken : MonoBehaviour {
 	public void UnhoverCard(string card){
 		switch(card){
 		case "front1":
-			if(hoveredImage.sprite != GameController.S.currSurvivor.front1.but.image.sprite){
+			if(hoveredImage.sprite != front1.image.sprite){
 				return;
 			}
 			break;
 		case "front2":
-			if(hoveredImage.sprite != GameController.S.currSurvivor.front2.but.image.sprite){
+			if(hoveredImage.sprite != front2.image.sprite){
 				return;
 			}
 			break;
 		case "back1":
-			if(hoveredImage.sprite != GameController.S.currSurvivor.back1.but.image.sprite){
+			if(hoveredImage.sprite != back1.image.sprite){
 				return;
 			}
 			break;
 		case "back2":
-			if(hoveredImage.sprite != GameController.S.currSurvivor.back2.but.image.sprite){
+			if(hoveredImage.sprite != back2.image.sprite){
 				return;
 			}
 			break;
 		case "back3":
-			if(hoveredImage.sprite != GameController.S.currSurvivor.back3.but.image.sprite){
+			if(hoveredImage.sprite != back3.image.sprite){
 				return;
 			}
 			break;

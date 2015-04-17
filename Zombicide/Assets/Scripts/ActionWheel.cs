@@ -89,6 +89,10 @@ public class ActionWheel : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameController.S.endGame){
+			StartCoroutine(RetractWheel());
+			return;
+		}
 		if(!wheelIsMinimized && !wheelIsChanging){
 			if(!mouseInWheel && !mouseInWheelButton){
 				StartCoroutine(RetractWheel());
@@ -119,7 +123,7 @@ public class ActionWheel : MonoBehaviour {
 		CheckDoor();
 		
 		int zoneNum = GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().zoneNum;
-		if(GameController.S.currSurvivor.hasSearched || BoardLayout.S.isStreetZone[zoneNum]) searchBtn.interactable = false;
+		if(GameController.S.currSurvivor.hasSearched || BoardLayout.S.isStreetZone[zoneNum] || GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().EnemiesInZone() > 0) searchBtn.interactable = false;
 		else searchBtn.interactable = true;
 
 
@@ -149,6 +153,9 @@ public class ActionWheel : MonoBehaviour {
 	
 	}
 	public void MouseEnterWheel(){
+		if(GameController.S.endGame){
+			return;
+		}
 		if(GameController.S.currSurvivor != null){
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
@@ -277,6 +284,9 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionWheelButtonClick(){
+		if(GameController.S.endGame){
+			return;
+		}
 		if(wheelIsChanging) return;
 
 		//if(wheelIsMinimized) StartCoroutine(ExpandWheel());
@@ -284,6 +294,9 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionHover(string action){
+		if(GameController.S.endGame){
+			return;
+		}
 		if(GameController.S.currSurvivor != null){
 			if(GameController.S.currSurvivor.doingSkillStuff){
 				return;
@@ -339,6 +352,9 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionMouseLeave(){
+		if(GameController.S.endGame){
+			return;
+		}
 		MouseExitButton();
 		if(currAction == "") actionText.text = "";	
 		else actionText.text = currAction;
@@ -348,6 +364,9 @@ public class ActionWheel : MonoBehaviour {
 	}
 
 	public void ActionClick(string action){
+		if(GameController.S.endGame){
+			return;
+		}
 		for(int i = 0; i < BoardLayout.S.createdZones.Count; ++i){
 			BoardLayout.S.createdZones[i].GetComponent<ZoneScript>().Unhighlight();
 		}

@@ -30,6 +30,8 @@ public class AttackScript : MonoBehaviour {
 	public Button rerollButton;
 	public Button keepButton;
 
+	public Image zombiesKilled;
+
 	// Use this for initialization
 	void Start () {
 		if(S == null){
@@ -149,6 +151,7 @@ public class AttackScript : MonoBehaviour {
 					}
 					
 					if(typeAttacking == Enemy.EnemyType.Walker){
+						int killed = 0;
 						while(zone.walkersInZone.Count > 0 && AttacksLeft() > 0){
 							if(GameController.S.currSurvivor != null){
 								if(GameController.S.currSurvivor.doingSkillStuff){
@@ -159,14 +162,26 @@ public class AttackScript : MonoBehaviour {
 							GameController.S.allZombies.Remove(zone.walkersInZone[zone.walkersInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 							zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
+							killed++;
 							Attack ();
 							GameController.S.currSurvivor.GiveEXP(1);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
 						typeAttacking = Enemy.EnemyType.None;
+
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,-33,0);
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Walkers Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,100,0);
+
 					}
 					if(typeAttacking == Enemy.EnemyType.Runner){
+						int killed = 0;
 						while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
 							if(GameController.S.currSurvivor != null){
 								if(GameController.S.currSurvivor.doingSkillStuff){
@@ -177,14 +192,25 @@ public class AttackScript : MonoBehaviour {
 							GameController.S.allZombies.Remove(zone.runnersInZone[zone.runnersInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 							zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
+							killed++;
 							Attack ();
 							GameController.S.currSurvivor.GiveEXP(1);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
 						typeAttacking = Enemy.EnemyType.None;
+						
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,-33,0);
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Runners Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,100,0);
 					}
 					if(typeAttacking == Enemy.EnemyType.Fatty && attWeapon.damage > 1){
+						int killed = 0;
 						if(GameController.S.currSurvivor != null){
 							if(GameController.S.currSurvivor.doingSkillStuff){
 								yield return 0;
@@ -195,14 +221,25 @@ public class AttackScript : MonoBehaviour {
 							GameController.S.allZombies.Remove(zone.fattiesInZone[zone.fattiesInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 							zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
+							killed++;
 							Attack ();
 							GameController.S.currSurvivor.GiveEXP(1);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
 						typeAttacking = Enemy.EnemyType.None;
+						
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,-33,0);
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Fatties Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,100,0);
 					}
 					if(typeAttacking == Enemy.EnemyType.Abomination && attWeapon.damage > 2){
+						int killed = 0;
 						while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
 							if(GameController.S.currSurvivor != null){
 								if(GameController.S.currSurvivor.doingSkillStuff){
@@ -213,12 +250,22 @@ public class AttackScript : MonoBehaviour {
 							GameController.S.allZombies.Remove(zone.abombInZone[zone.abombInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 							zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
+							killed++;
 							Attack ();
 							GameController.S.currSurvivor.GiveEXP(5);
 							yield return 0;
 						}
 						GameController.S.MoveZombieNumOff();
 						typeAttacking = Enemy.EnemyType.None;
+						
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,-33,0);
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Abombinations Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+						zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,100,0);
 					}
 				}
 				else{
@@ -245,6 +292,9 @@ public class AttackScript : MonoBehaviour {
 					}
 
 					while(survivorsInZone && AttacksLeft() > 0){
+						if(GameController.S.endGame){
+							yield break;
+						}
 						SurvivorToken.S.MoveTokensOffscreen();
 						attackingSurvivor = true;
 						GameController.S.ZombTurnImgOut();
@@ -265,8 +315,14 @@ public class AttackScript : MonoBehaviour {
 						SurvivorToken.S.MoveTokensOnScreen();
 						yield return 0;
 					}
+					if(GameController.S.endGame){
+						yield break;
+					}
 					GameController.S.SurvTurnImgOut();
 					SurvivorToken.S.MoveTokensOnScreen();
+					int killed = 0;
+					zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,-33,0);
+					zombiesKilled.GetComponentInChildren<Text>().text = "";
 					while(zone.walkersInZone.Count > 0 && AttacksLeft() > 0){
 						if(GameController.S.currSurvivor != null){
 							if(GameController.S.currSurvivor.doingSkillStuff){
@@ -277,10 +333,21 @@ public class AttackScript : MonoBehaviour {
 						GameController.S.allZombies.Remove(zone.walkersInZone[zone.walkersInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 						zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
+						killed++;
 						Attack ();
 						GameController.S.currSurvivor.GiveEXP(1);
 						yield return 0;
 					}
+					if(killed != 0){
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Walkers Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+					}
+					killed = 0;
+
 					while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
 						if(GameController.S.currSurvivor != null){
 							if(GameController.S.currSurvivor.doingSkillStuff){
@@ -290,12 +357,22 @@ public class AttackScript : MonoBehaviour {
 						}
 						Attack ();
 						if(attWeapon.damage < 2) continue;
+						killed++;
 						GameController.S.allZombies.Remove(zone.fattiesInZone[zone.fattiesInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 						zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
 						GameController.S.currSurvivor.GiveEXP(1);
 						yield return 0;
 					}
+					if(killed != 0){
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Fatties Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+					}
+					killed = 0;
 					while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
 						if(GameController.S.currSurvivor != null){
 							if(GameController.S.currSurvivor.doingSkillStuff){
@@ -305,12 +382,22 @@ public class AttackScript : MonoBehaviour {
 						}
 						Attack ();
 						if(attWeapon.damage < 3) continue;
+						killed++;
 						GameController.S.allZombies.Remove(zone.abombInZone[zone.abombInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 						zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
 						GameController.S.currSurvivor.GiveEXP(5);
 						yield return 0;
 					}
+					if(killed != 0){
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Abombination Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+					}
+					killed = 0;
 					while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
 						if(GameController.S.currSurvivor != null){
 							if(GameController.S.currSurvivor.doingSkillStuff){
@@ -321,10 +408,20 @@ public class AttackScript : MonoBehaviour {
 						GameController.S.allZombies.Remove(zone.runnersInZone[zone.runnersInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 						zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
+						killed++;
 						GameController.S.currSurvivor.GiveEXP(1);
 						Attack ();
 						yield return 0;
 					}
+					if(killed != 0){
+						zombiesKilled.GetComponentInChildren<Text>().text = killed + " Runners Killed!";
+						float t = 0;
+						while(t < 1){
+							t += Time.deltaTime * Time.timeScale / 2f;
+							yield return 0;
+						}
+					}
+					zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,100,0);
 				}
 			}
 
@@ -377,7 +474,6 @@ public class AttackScript : MonoBehaviour {
 
 	IEnumerator UseMolotov(){
 		//Kill everything in the zone
-		SurvivorToken.S.MoveTokensOffscreen();
 		for(int i = GameController.S.survivors.Count - 1; i >= 0; --i){
 			Survivor surv = GameController.S.survivors[i];
 			if(surv.CurrZone != attackingZone) continue;
@@ -385,10 +481,14 @@ public class AttackScript : MonoBehaviour {
 			GameController.S.survivors.RemoveAt(i);
 			Destroy(surv.gameObject);
 		}
-		SurvivorToken.S.MoveTokensOnScreen();
+		if(GameController.S.endGame){
+			yield break;
+		}
 
 		ZoneScript zone = attackingZone.GetComponent<ZoneScript>();
-
+		int killed = 0;
+		zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,-33,0);
+		zombiesKilled.GetComponentInChildren<Text>().text = "";
 		while(zone.walkersInZone.Count > 0 ){
 			if(GameController.S.currSurvivor != null){
 				if(GameController.S.currSurvivor.doingSkillStuff){
@@ -397,11 +497,22 @@ public class AttackScript : MonoBehaviour {
 				}
 				GameController.S.currSurvivor.GiveEXP(1);
 			}
+			killed++;
 			GameController.S.allZombies.Remove(zone.walkersInZone[zone.walkersInZone.Count - 1].GetComponent<Enemy>());
 			Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 			zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 			yield return 0;
 		}
+		if(killed != 0){
+			zombiesKilled.GetComponentInChildren<Text>().text = killed + " Walkers Killed!";
+			float t = 0;
+			while(t < 1){
+				t += Time.deltaTime * Time.timeScale / 2f;
+				yield return 0;
+			}
+		}
+		killed = 0;
+
 		while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
 			if(GameController.S.currSurvivor != null){
 				if(GameController.S.currSurvivor.doingSkillStuff){
@@ -410,11 +521,22 @@ public class AttackScript : MonoBehaviour {
 				}
 				GameController.S.currSurvivor.GiveEXP(1);
 			}
+			killed++;
 			GameController.S.allZombies.Remove(zone.fattiesInZone[zone.fattiesInZone.Count - 1].GetComponent<Enemy>());
 			Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 			zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
 			yield return 0;
 		}
+		if(killed != 0){
+			zombiesKilled.GetComponentInChildren<Text>().text = killed + " Fatties Killed!";
+			float t = 0;
+			while(t < 1){
+				t += Time.deltaTime * Time.timeScale / 2f;
+				yield return 0;
+			}
+		}
+		killed = 0;
+
 		while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
 			if(GameController.S.currSurvivor != null){
 				if(GameController.S.currSurvivor.doingSkillStuff){
@@ -423,11 +545,22 @@ public class AttackScript : MonoBehaviour {
 				}
 				GameController.S.currSurvivor.GiveEXP(5);
 			}
+			killed++;
 			GameController.S.allZombies.Remove(zone.abombInZone[zone.abombInZone.Count - 1].GetComponent<Enemy>());
 			Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 			zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
 			yield return 0;
 		}
+		if(killed != 0){
+			zombiesKilled.GetComponentInChildren<Text>().text = killed + " Abomination Killed!";
+			float t = 0;
+			while(t < 1){
+				t += Time.deltaTime * Time.timeScale / 2f;
+				yield return 0;
+			}
+		}
+		killed = 0;
+
 		while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
 			if(GameController.S.currSurvivor != null){
 				if(GameController.S.currSurvivor.doingSkillStuff){
@@ -436,11 +569,23 @@ public class AttackScript : MonoBehaviour {
 				}
 				GameController.S.currSurvivor.GiveEXP(1);
 			}
+			killed++;
 			GameController.S.allZombies.Remove(zone.runnersInZone[zone.runnersInZone.Count - 1].GetComponent<Enemy>());
 			Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 			zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
 			yield return 0;
 		}
+		if(killed != 0){
+			zombiesKilled.GetComponentInChildren<Text>().text = killed + " Runners Killed!";
+			float t = 0;
+			while(t < 1){
+				t += Time.deltaTime * Time.timeScale / 2f;
+				yield return 0;
+			}
+		}
+		zombiesKilled.rectTransform.anchoredPosition = new Vector3(0,100,0);
+
+		GameController.S.FinishAttackAction();
 	}
 
 	public void CreateAttackWheels(GameObject zone, bool melee, Card attackingWeapon, bool dualWield){

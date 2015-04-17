@@ -8,6 +8,7 @@ TagManager:
   - Survivor
   - Zombie
   - ZombieSpawn
+  - Objective
   layers:
   - Default
   - TransparentFX

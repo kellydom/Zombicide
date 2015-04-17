@@ -174,6 +174,9 @@ public class Survivor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameController.S.endGame){
+			return;
+		}
 		if(!GameController.S.playerTurn) {Unhighlight(); return;}
 
 		/*if(GameController.S.currSurvivor != null) {
@@ -337,7 +340,7 @@ public class Survivor : MonoBehaviour {
 	}
 
 	void Die(){
-		GameController.S.survivors.RemoveAt(survNum);
+		GameController.S.survivors.Remove(this);
 		Destroy(this.gameObject);
 	}
 

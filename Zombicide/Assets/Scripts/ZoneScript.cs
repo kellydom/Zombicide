@@ -254,6 +254,7 @@ public class ZoneScript : MonoBehaviour {
 		}
 
 		int numDiffSteps = nextSteps.Count;
+		if(numDiffSteps == 0) return;
 		int extraZombies = 0;
 		if(zombies.Count % numDiffSteps != 0){
 			extraZombies = numDiffSteps - (zombies.Count - numDiffSteps);

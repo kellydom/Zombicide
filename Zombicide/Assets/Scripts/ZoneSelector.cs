@@ -38,7 +38,6 @@ public class ZoneSelector : MonoBehaviour {
 				break;
 			}
 		}
-		print (closestEnemy);
 		if(closestEnemy != null){
 			Enemy enemy = closestEnemy.GetComponent<Enemy>();
 			if(ActionWheel.S.mouseInWheel || ActionWheel.S.mouseInWheelButton) return;
@@ -88,6 +87,9 @@ public class ZoneSelector : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameController.S.endGame){
+			return;
+		}
 		Plane boardPlane = new Plane(Vector3.up, new Vector3(0,0.05f,0));
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		float hit;
