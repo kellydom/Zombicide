@@ -1,11 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Deck.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
     <Files>
+      <File FileName="Assets\Scripts\GameController.cs" Line="90" Column="105" />
+      <File FileName="Assets\MenuSCript.cs" Line="26" Column="2" />
       <File FileName="Assets\Scripts\SurvivorToken.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\ZoneSelector.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Survivor.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Deck.cs" Line="410" Column="7" />
+      <File FileName="Assets\Scripts\Deck.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\AttackScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\ActionWheel.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\ZoneScript.cs" Line="1" Column="1" />

@@ -62,6 +62,8 @@ public class GameController : MonoBehaviour {
 	public Image reloadImg;
 
 	bool shouldUseFlashlight = true;
+
+	public Button quitGameButton;
 	
 
 	// Use this for initialization
@@ -85,6 +87,7 @@ public class GameController : MonoBehaviour {
 			survivors.Add(survivorsTEMP[i].GetComponent<Survivor>());
 		}
 		deck = GameObject.Find("Main Camera").GetComponent<Deck>();
+		quitGameButton.transform.position = new Vector3 (Screen.width - 35, Screen.height-(Screen.height - 35), 0);
 
 		foreach (Survivor guy in survivors) {
 			guy.front1 = deck.empty;
@@ -106,6 +109,10 @@ public class GameController : MonoBehaviour {
 		endGameImg.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
 		endGameImg.transform.FindChild("Banner").GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height / 5f);
 		endGameImg.transform.FindChild("Banner").FindChild("TurnText 1").GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height / 5f);
+	}
+
+	public void quitGame() {
+		Application.Quit ();
 	}
 
 	IEnumerator GetZombieSpawnZones(){
