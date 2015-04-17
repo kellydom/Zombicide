@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\MenuSCript.cs" />
      <Compile Include="Assets\Scripts\ActionWheel.cs" />
      <Compile Include="Assets\Scripts\AttackScript.cs" />
      <Compile Include="Assets\Scripts\BoardLayout.cs" />
