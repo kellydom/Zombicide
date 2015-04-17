@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ public class ZoneSelector : MonoBehaviour {
 	}
 
 	public Image zombAttRem;
+	bool selectingEnemy = false;
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +25,66 @@ public class ZoneSelector : MonoBehaviour {
 				Destroy(this.gameObject);
 		}
 	}
+
+	void GetEnemy(Vector3 pos){
+		GameObject closestEnemy = null;
+		for(int i = 0; i < GameController.S.allZombies.Count; ++i){
+			GameObject zomb = GameController.S.allZombies[i].gameObject;
+			Bounds oldBounds = zomb.GetComponent<BoxCollider>().bounds;
+			Bounds newBounds = new Bounds(oldBounds.center, oldBounds.size + new Vector3(0, 2, 0));
+			
+			if(newBounds.Contains(pos)){
+				closestEnemy = zomb;
+				break;
+			}
+		}
+		print (closestEnemy);
+		if(closestEnemy != null){
+			Enemy enemy = closestEnemy.GetComponent<Enemy>();
+			if(ActionWheel.S.mouseInWheel || ActionWheel.S.mouseInWheelButton) return;
+			
+			int speed = 1;
+			int damage = 1;
+			string zombType = "Walker";
+			List<GameObject> zoneZombies = new List<GameObject>();
+			if(enemy.type == Enemy.EnemyType.Walker){
+				zoneZombies = enemy.currZone.GetComponent<ZoneScript>().walkersInZone;
+			}
+			if(enemy.type == Enemy.EnemyType.Runner){
+				zombType = "Runner";
+				speed = 2;
+				zoneZombies = enemy.currZone.GetComponent<ZoneScript>().runnersInZone;
+			}
+			if(enemy.type == Enemy.EnemyType.Fatty){
+				zombType = "Fatty";
+				damage = 2;
+				zoneZombies = enemy.currZone.GetComponent<ZoneScript>().fattiesInZone;
+			}
+			if(enemy.type == Enemy.EnemyType.Abomination){
+				zombType = "Abomination";
+				damage = 3;
+				zoneZombies = enemy.currZone.GetComponent<ZoneScript>().abombInZone;
+			}
+			
+			Vector3 avgPos = Vector3.zero;
+			
+			foreach(GameObject zombie in zoneZombies){
+				avgPos += zombie.transform.position;
+			}
+
+			avgPos /= zoneZombies.Count;
+			GameController.S.SetZombieNumText(avgPos, zoneZombies.Count, zombType, damage, speed);
+			if(!selectingEnemy){
+				selectingEnemy = true;
+			}
+		}
+		else{
+			GameController.S.MoveZombieNumOff();
+			if(selectingEnemy){
+				selectingEnemy = false;
+			}
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -33,6 +94,7 @@ public class ZoneSelector : MonoBehaviour {
 
 		if(boardPlane.Raycast(ray, out hit)){
 			Vector3 hitPos = ray.GetPoint(hit);
+			GetEnemy(hitPos);
 			GameObject zone = GetZoneAt(hitPos);
 			HighlightZone(zone);
 		}

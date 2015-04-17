@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour {
 
 	public Image zombieNumImg;
 	public Text zombieNum;
+	public Image zombieDescription;
 
 	public Button deleteForSearch;
 	public Button finishOrganizing;
@@ -93,6 +94,11 @@ public class GameController : MonoBehaviour {
 		//survivors [1].front1 = deck.pan;
 
 		StartCoroutine(GetZombieSpawnZones());
+
+		float currHigh = zombieDescription.rectTransform.sizeDelta.y;
+		float high = Screen.width/8f;
+
+		zombieDescription.rectTransform.localScale = new Vector2(high / currHigh, high / currHigh);
 	}
 
 	IEnumerator GetZombieSpawnZones(){
@@ -944,16 +950,19 @@ public class GameController : MonoBehaviour {
 		if(currSurvivor == null) return;
 	}
 
-	public void SetZombieNumText(Vector3 pos, int num){
-		zombieNum.text = num+"x";
-		Vector2 viewportPoint = Camera.main.WorldToScreenPoint(pos + new Vector3(0, 0, 0.1f)); //convert game object position to VievportPoint
-		// set MIN and MAX Anchor values(positions) to the same position (ViewportPoint)
-		zombieNumImg.transform.position = viewportPoint;
+	public void SetZombieNumText(Vector3 pos, int num, string zombieType, int damageToKill, int speed){
+		Vector2 viewportPoint = Camera.main.WorldToScreenPoint(pos + new Vector3(0, 0, 0.3f)); //convert game object position to VievportPoint
+		zombieDescription.transform.position = viewportPoint;
+
+		zombieDescription.transform.FindChild("Number").GetComponentInChildren<Text>().text = "Number in Zone: " + num;
+		zombieDescription.transform.FindChild("Damage").GetComponentInChildren<Text>().text = "Damage To Kill: " + damageToKill;
+		zombieDescription.transform.FindChild("Speed").GetComponentInChildren<Text>().text = "Zombie Speed: " + speed;
+		zombieDescription.transform.FindChild("ZombieType").GetComponentInChildren<Text>().text = "Zombie Type: " + zombieType;
+		zombieDescription.transform.FindChild("ZombieType2").GetComponentInChildren<Text>().text = "Zombie Type: " + zombieType;
 	}
 
 	public void MoveZombieNumOff(){
-		zombieNum.text = "";
-		zombieNumImg.transform.position = Camera.main.ViewportToScreenPoint(new Vector2(2, 2));
+		zombieDescription.transform.position = new Vector3(-2000,-2000,0);
 	}
 
 	public int HighestPlayerLevel(){

@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour {
 	public GameObject currZone;
 	public int damageToKill;
 
+
 	// Use this for initialization
 	void Start () {
 	
@@ -62,34 +63,9 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
-		if(ActionWheel.S.mouseInWheel || ActionWheel.S.mouseInWheelButton) return;
-
-		List<GameObject> zoneZombies = new List<GameObject>();
-		if(type == EnemyType.Walker){
-			zoneZombies = currZone.GetComponent<ZoneScript>().walkersInZone;
-		}
-		if(type == EnemyType.Runner){
-			zoneZombies = currZone.GetComponent<ZoneScript>().runnersInZone;
-		}
-		if(type == EnemyType.Fatty){
-			zoneZombies = currZone.GetComponent<ZoneScript>().fattiesInZone;
-		}
-		if(type == EnemyType.Abomination){
-			zoneZombies = currZone.GetComponent<ZoneScript>().abombInZone;
-		}
-
-		Vector3 avgPos = Vector3.zero;
-
-		foreach(GameObject zombie in zoneZombies){
-			avgPos += zombie.transform.position;
-		}
-
-		avgPos /= zoneZombies.Count;
-		GameController.S.SetZombieNumText(transform.position, zoneZombies.Count);
 	}
 
 	void OnMouseExit(){
-		GameController.S.MoveZombieNumOff();
 	}
 
 	void OnMouseDown(){
