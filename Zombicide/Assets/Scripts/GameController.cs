@@ -55,6 +55,8 @@ public class GameController : MonoBehaviour {
 	string btnShowingReload;
 	bool reloadImgOut = false;
 	public Image reloadImg;
+
+	bool shouldUseFlashlight = true;
 	
 
 	// Use this for initialization
@@ -656,9 +658,16 @@ public class GameController : MonoBehaviour {
 
 			case "Search":
 				if(!playerSearching) {
-					ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
-					if(!currSurvivor.skills.Contains("+1 free Search Action"))
-						currSurvivor.numActions--;
+					if(currSurvivor.HasCard("Flashlight") && shouldUseFlashlight){
+						SearchSetup();
+						shouldUseFlashlight = false;
+					}
+					else{
+						shouldUseFlashlight = true;
+						ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+						if(!currSurvivor.skills.Contains("+1 free Search Action"))
+							currSurvivor.numActions--;
+					}
 				}
 				break;
 			case "ReorganizeInventory":

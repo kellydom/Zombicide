@@ -375,6 +375,74 @@ public class AttackScript : MonoBehaviour {
 		typeAttacking = newType;
 	}
 
+	IEnumerator UseMolotov(){
+		//Kill everything in the zone
+		SurvivorToken.S.MoveTokensOffscreen();
+		for(int i = GameController.S.survivors.Count - 1; i >= 0; --i){
+			Survivor surv = GameController.S.survivors[i];
+			if(surv.CurrZone != attackingZone) continue;
+
+			GameController.S.survivors.RemoveAt(i);
+			Destroy(surv.gameObject);
+		}
+		SurvivorToken.S.MoveTokensOnScreen();
+
+		ZoneScript zone = attackingZone.GetComponent<ZoneScript>();
+
+		while(zone.walkersInZone.Count > 0 ){
+			if(GameController.S.currSurvivor != null){
+				if(GameController.S.currSurvivor.doingSkillStuff){
+					yield return 0;
+					continue;
+				}
+				GameController.S.currSurvivor.GiveEXP(1);
+			}
+			GameController.S.allZombies.Remove(zone.walkersInZone[zone.walkersInZone.Count - 1].GetComponent<Enemy>());
+			Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
+			zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
+			yield return 0;
+		}
+		while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
+			if(GameController.S.currSurvivor != null){
+				if(GameController.S.currSurvivor.doingSkillStuff){
+					yield return 0;
+					continue;
+				}
+				GameController.S.currSurvivor.GiveEXP(1);
+			}
+			GameController.S.allZombies.Remove(zone.fattiesInZone[zone.fattiesInZone.Count - 1].GetComponent<Enemy>());
+			Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
+			zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
+			yield return 0;
+		}
+		while(zone.abombInZone.Count > 0 && AttacksLeft() > 0){
+			if(GameController.S.currSurvivor != null){
+				if(GameController.S.currSurvivor.doingSkillStuff){
+					yield return 0;
+					continue;
+				}
+				GameController.S.currSurvivor.GiveEXP(5);
+			}
+			GameController.S.allZombies.Remove(zone.abombInZone[zone.abombInZone.Count - 1].GetComponent<Enemy>());
+			Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
+			zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
+			yield return 0;
+		}
+		while(zone.runnersInZone.Count > 0 && AttacksLeft() > 0){
+			if(GameController.S.currSurvivor != null){
+				if(GameController.S.currSurvivor.doingSkillStuff){
+					yield return 0;
+					continue;
+				}
+				GameController.S.currSurvivor.GiveEXP(1);
+			}
+			GameController.S.allZombies.Remove(zone.runnersInZone[zone.runnersInZone.Count - 1].GetComponent<Enemy>());
+			Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
+			zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
+			yield return 0;
+		}
+	}
+
 	public void CreateAttackWheels(GameObject zone, bool melee, Card attackingWeapon, bool dualWield){
 		if(GameController.S.currSurvivor.skills.Contains("1 re-roll per turn")){
 			hasRerolled1PerTurn = false;
@@ -407,6 +475,11 @@ public class AttackScript : MonoBehaviour {
 		waitingToGetEnemyType = false;
 		attWeapon = attackingWeapon;
 		GameObject canvas = GameObject.Find("Canvas");
+
+		if(attWeapon.cardName == "Molotov"){
+			StartCoroutine(UseMolotov());
+			return;
+		}
 		
 		if(attWeapon.noise){
 			GameController.S.currSurvivor.CurrZone.GetComponent<ZoneScript>().AddNoiseToken();

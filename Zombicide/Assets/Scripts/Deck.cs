@@ -90,7 +90,7 @@ public class Deck : MonoBehaviour {
 		pan.but = panButton;
 		initial.Add(pan.cardName);
 		for (int i = 0; i < 2; i++) {
-			equipment.Add(pan.cardName);
+			//equipment.Add(pan.cardName);
 		}
 
 		molotov.cardName = "Molotov";
