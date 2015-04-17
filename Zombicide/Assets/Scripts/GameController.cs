@@ -303,6 +303,7 @@ public class GameController : MonoBehaviour {
 	public void RangedAttackSetup(GameObject zone){
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		ActionWheel.S.MoveWheelUp();
+		survTurnText.text = "Shooting!";
 
 		bool dualWield = false;
 		if(currSurvivor.front1.cardName == currSurvivor.front2.cardName && currSurvivor.front1.dualWield){
@@ -318,7 +319,7 @@ public class GameController : MonoBehaviour {
 		needToChooseWeapon = false;
 		GameObject survZone = currSurvivor.CurrZone;
 		List<GameObject> rangeList = ZoneSelector.S.GetZonesCanSeeFromInRange(survZone, attackingWeapon.closeRange, attackingWeapon.farRange);
-
+		survTurnText.text = "Choose a Zone to Attack!";
 		foreach(GameObject zone in rangeList){
 			if (zone.GetComponent<ZoneScript>().EnemiesInZone() > 0){
 				zone.GetComponent<ZoneScript>().Highlight();
@@ -374,6 +375,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void MeleeSetup(){
+		survTurnText.text = "Attacking!";
 		ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 		ActionWheel.S.MoveWheelUp();
 		bool dualWield = false;
@@ -658,7 +660,7 @@ public class GameController : MonoBehaviour {
 				break;
 			}
 
-			if(ActionWheel.S.CurrAction != "Trade" && ActionWheel.S.CurrAction != "Search")
+			if(ActionWheel.S.CurrAction != "Trade" && ActionWheel.S.CurrAction != "Search" && ActionWheel.S.CurrAction != "Ranged")
 				survTurnText.text = "Actions Remaining: " + currSurvivor.numActions;
 
 			yield return 0;

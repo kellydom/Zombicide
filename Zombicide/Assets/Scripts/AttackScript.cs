@@ -156,6 +156,7 @@ public class AttackScript : MonoBehaviour {
 									continue;
 								}
 							}
+							GameController.S.allZombies.Remove(zone.walkersInZone[zone.walkersInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 							zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 							Attack ();
@@ -173,6 +174,7 @@ public class AttackScript : MonoBehaviour {
 									continue;
 								}
 							}
+							GameController.S.allZombies.Remove(zone.runnersInZone[zone.runnersInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 							zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
 							Attack ();
@@ -190,6 +192,7 @@ public class AttackScript : MonoBehaviour {
 							}
 						}
 						while(zone.fattiesInZone.Count > 0 && AttacksLeft() > 0){
+							GameController.S.allZombies.Remove(zone.fattiesInZone[zone.fattiesInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 							zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
 							Attack ();
@@ -207,6 +210,7 @@ public class AttackScript : MonoBehaviour {
 									continue;
 								}
 							}
+							GameController.S.allZombies.Remove(zone.abombInZone[zone.abombInZone.Count - 1].GetComponent<Enemy>());
 							Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 							zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
 							Attack ();
@@ -270,6 +274,7 @@ public class AttackScript : MonoBehaviour {
 								continue;
 							}
 						}
+						GameController.S.allZombies.Remove(zone.walkersInZone[zone.walkersInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.walkersInZone[zone.walkersInZone.Count - 1]);
 						zone.walkersInZone.RemoveAt(zone.walkersInZone.Count - 1);
 						Attack ();
@@ -285,6 +290,7 @@ public class AttackScript : MonoBehaviour {
 						}
 						Attack ();
 						if(attWeapon.damage < 2) continue;
+						GameController.S.allZombies.Remove(zone.fattiesInZone[zone.fattiesInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.fattiesInZone[zone.fattiesInZone.Count - 1]);
 						zone.fattiesInZone.RemoveAt(zone.fattiesInZone.Count - 1);
 						GameController.S.currSurvivor.GiveEXP(1);
@@ -299,6 +305,7 @@ public class AttackScript : MonoBehaviour {
 						}
 						Attack ();
 						if(attWeapon.damage < 3) continue;
+						GameController.S.allZombies.Remove(zone.abombInZone[zone.abombInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.abombInZone[zone.abombInZone.Count - 1]);
 						zone.abombInZone.RemoveAt(zone.abombInZone.Count - 1);
 						GameController.S.currSurvivor.GiveEXP(5);
@@ -311,6 +318,7 @@ public class AttackScript : MonoBehaviour {
 								continue;
 							}
 						}
+						GameController.S.allZombies.Remove(zone.runnersInZone[zone.runnersInZone.Count - 1].GetComponent<Enemy>());
 						Destroy(zone.runnersInZone[zone.runnersInZone.Count - 1]);
 						zone.runnersInZone.RemoveAt(zone.runnersInZone.Count - 1);
 						GameController.S.currSurvivor.GiveEXP(1);
@@ -380,18 +388,17 @@ public class AttackScript : MonoBehaviour {
 		else{
 			hasRerolledLucky = true;
 		}
+
+		bool giveRerollCard = false;
 		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Light)") && (attackingWeapon.cardName == "Pistol" || attackingWeapon.cardName == "Rifle")){
-			hasRerolledCard = false;
-		}
-		else{
-			hasRerolledCard = true;
+			giveRerollCard = true;
 		}
 		if(GameController.S.currSurvivor.HasCard("Plenty of Ammo (Heavy)") && (attackingWeapon.cardName == "Shotgun" || attackingWeapon.cardName == "Sawed Off Shotgun")){
-			hasRerolledCard = false;
+			giveRerollCard = true;
 		}
-		else{
-			hasRerolledCard = true;
-		}
+
+		if(giveRerollCard) hasRerolledCard = false;
+		else hasRerolledCard = true;
 
 		askForReroll = true;
 		attackingZone = zone;
