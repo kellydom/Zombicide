@@ -29,8 +29,10 @@ public class GameController : MonoBehaviour {
 	public Text zombieNum;
 
 	public Button deleteForSearch;
+	public Button finishOrganizing;
 	public bool playerSearching = false;
 	public bool playerTrading = false;
+	public bool playerOrganizing = false;
 
 	//public bool playerJustStarted = false;
 
@@ -111,7 +113,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ReorganizeInvSetup(){
-
+		playerOrganizing = true;
+		ActionWheel.S.MoveWheelUp ();
+		finishOrganizing.transform.position = new Vector3 (Screen.width/2, Screen.height / 2, 0);
+		SurvivorToken.S.changeInventory ("Setup");
 	}
 
 	IEnumerator SpawnAaahhCard(){
@@ -648,6 +653,12 @@ public class GameController : MonoBehaviour {
 					ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
 					if(!currSurvivor.skills.Contains("+1 free Search Action"))
 						currSurvivor.numActions--;
+				}
+				break;
+			case "ReorganizeInventory":
+				if(!playerOrganizing) {
+					ActionWheel.S.ActionClick(ActionWheel.S.CurrAction);
+					currSurvivor.numActions--;
 				}
 				break;
 			case "Trade":
