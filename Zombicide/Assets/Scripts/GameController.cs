@@ -50,6 +50,8 @@ public class GameController : MonoBehaviour {
 	public bool waitForAaahhSpawn = false;
 	public bool spawningIndoors = false;
 
+	public Button stopAction;
+
 	string btnShowingReload;
 	bool reloadImgOut = false;
 	public Image reloadImg;
@@ -116,6 +118,7 @@ public class GameController : MonoBehaviour {
 		playerOrganizing = true;
 		ActionWheel.S.MoveWheelUp ();
 		finishOrganizing.transform.position = new Vector3 (Screen.width/2, Screen.height / 2, 0);
+		GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/4, 0);
 		SurvivorToken.S.changeInventory ("Setup");
 	}
 
@@ -182,6 +185,7 @@ public class GameController : MonoBehaviour {
 		if(currSurvivor == null) return;
 		playerTrading = true;
 		survTurnText.text = "Select another Survivor";
+		stopAction.transform.position = new Vector3 (Screen.width / 2, Screen.height / 4, 0);
 
 		SurvivorToken.S.MoveTokensOffscreen();
 		//deactivate the buttons that cant be traded with

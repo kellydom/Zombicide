@@ -305,6 +305,7 @@ public class SurvivorToken : MonoBehaviour {
 				}
 				return;
 			}
+			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
 			Card picked = new Card();
 			switch (whichInventory) {
 			case "front1":
@@ -1186,6 +1187,7 @@ public class SurvivorToken : MonoBehaviour {
 			}
 			break;
 		}
+		GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
 		checkForCombinable (GameController.S.currSurvivor, false);
 		checkForCombinable (tradingSurvivor, true);
 		tradeCards.transform.position = new Vector3(Screen.width/2, Screen.height/2, 0);
@@ -1681,6 +1683,57 @@ public class SurvivorToken : MonoBehaviour {
 		case "Josh": 
 			josh.GetComponent<RectTransform>().anchoredPosition = new Vector2(josh.GetComponent<RectTransform>().anchoredPosition.x, 45.4f);
 			break;
+		}
+	}
+
+	public void getOutOfAction() {
+		if (ActionWheel.S.CurrAction == "Trade") {
+			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
+			//tradeCards.transform.position = new Vector3(Screen.width/2, Screen.height/2, 0);
+			tempf1.transform.position = new Vector3 (setCards, front1.transform.position.y);
+			tempf2.transform.position = new Vector3 (setCards, front2.transform.position.y);
+			tempb1.transform.position = new Vector3 (setCards, back1.transform.position.y);
+			tempb2.transform.position = new Vector3 (setCards, back2.transform.position.y);
+			tempb3.transform.position = new Vector3 (setCards, back3.transform.position.y);
+			inTrade = false;
+			rightTradeSelected = false;
+			leftTradeSelected = false;
+			GameController.S.playerTrading = false;
+			Vector3 newScale = new Vector3 (1, 1, 0);
+			foreach(Survivor surv in GameController.S.survivors){
+				if(surv == GameController.S.currSurvivor) continue;
+				surv.Unhighlight();
+				switch(surv.name){
+				case "Wanda":
+					wanda.image.transform.localScale = newScale;
+					break;
+				case "Phil":
+					phil.image.transform.localScale = newScale;
+					break;
+				case "Ned":
+					ned.image.transform.localScale = newScale;
+					break;
+				case "Josh": 
+					josh.image.transform.localScale = newScale;
+					break;
+				}
+			}
+			MoveTokensOnScreen();
+			ActionWheel.S.MoveWheelDown ();
+			tradeCards.transform.position = new Vector3 (-1000, 0, 0);
+			GameController.S.currSurvivor.numActions++;
+		} 
+		else if (ActionWheel.S.CurrAction == "ReorganizeInventory") {
+			front1.image.color = Color.white;
+			front2.image.color = Color.white;
+			back1.image.color = Color.white;
+			back2.image.color = Color.white;
+			back3.image.color = Color.white;
+			GameController.S.playerOrganizing = false;
+			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/4, -3000);
+			GameController.S.currSurvivor.numActions++;
+			GameController.S.finishOrganizing.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, -3000);
+			ActionWheel.S.MoveWheelDown ();
 		}
 	}
 }
