@@ -76,6 +76,10 @@ public class SurvivorToken : MonoBehaviour {
 
 	public Image skillDescription;
 	Image skillShowingDescriptionOf;
+
+	
+	public Image hoveredImage;
+
 	// Use this for initialization
 	void Start () {
 		//Singleton initialization
@@ -103,6 +107,12 @@ public class SurvivorToken : MonoBehaviour {
 
 		moveTinyTo = josh.transform.position.y - 20;
 		//Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
+
+		
+		high = Screen.width/2.0f;
+		wide = high * 2063/3186;
+		
+		hoveredImage.rectTransform.sizeDelta = new Vector3(wide, high, 0);
 	}
 	
 	// Update is called once per frame
@@ -1735,6 +1745,99 @@ public class SurvivorToken : MonoBehaviour {
 			GameController.S.finishOrganizing.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, -3000);
 			ActionWheel.S.MoveWheelDown ();
 		}
+	}
+
+	
+	public void HoverCard(string card){
+		hoveredImage.rectTransform.anchoredPosition = new Vector3(0,0,0);
+		switch(card){
+		case "front1":
+			hoveredImage.sprite = GameController.S.currSurvivor.front1.but.image.sprite;
+			break;
+		case "front2":
+			hoveredImage.sprite = GameController.S.currSurvivor.front2.but.image.sprite;
+			break;
+		case "back1":
+			hoveredImage.sprite = GameController.S.currSurvivor.back1.but.image.sprite;
+			break;
+		case "back2":
+			hoveredImage.sprite = GameController.S.currSurvivor.back2.but.image.sprite;
+			break;
+		case "back3":
+			hoveredImage.sprite = GameController.S.currSurvivor.back3.but.image.sprite;
+			break;
+		case "tempf1":
+			hoveredImage.sprite = tempf1.image.sprite;
+			break;
+		case "tempf2":
+			hoveredImage.sprite = tempf2.image.sprite;
+			break;
+		case "tempb1":
+			hoveredImage.sprite = tempb1.image.sprite;
+			break;
+		case "tempb2":
+			hoveredImage.sprite = tempb2.image.sprite;
+			break;
+		case "tempb3":
+			hoveredImage.sprite = tempb3.image.sprite;
+			break;
+		}
+	}
+	
+	public void UnhoverCard(string card){
+		switch(card){
+		case "front1":
+			if(hoveredImage.sprite != GameController.S.currSurvivor.front1.but.image.sprite){
+				return;
+			}
+			break;
+		case "front2":
+			if(hoveredImage.sprite != GameController.S.currSurvivor.front2.but.image.sprite){
+				return;
+			}
+			break;
+		case "back1":
+			if(hoveredImage.sprite != GameController.S.currSurvivor.back1.but.image.sprite){
+				return;
+			}
+			break;
+		case "back2":
+			if(hoveredImage.sprite != GameController.S.currSurvivor.back2.but.image.sprite){
+				return;
+			}
+			break;
+		case "back3":
+			if(hoveredImage.sprite != GameController.S.currSurvivor.back3.but.image.sprite){
+				return;
+			}
+			break;
+		case "tempf1":
+			if(hoveredImage.sprite != tempf1.image.sprite){
+				return;
+			}
+			break;
+		case "tempf2":
+			if(hoveredImage.sprite != tempf2.image.sprite){
+				return;
+			}
+			break;
+		case "tempb1":
+			if(hoveredImage.sprite != tempb1.image.sprite){
+				return;
+			}
+			break;
+		case "tempb2":
+			if(hoveredImage.sprite != tempb2.image.sprite){
+				return;
+			}
+			break;
+		case "tempb3":
+			if(hoveredImage.sprite != tempb3.image.sprite){
+				return;
+			}
+			break;
+		}
+		hoveredImage.rectTransform.anchoredPosition = new Vector3(-2000,0,0);
 	}
 }
 

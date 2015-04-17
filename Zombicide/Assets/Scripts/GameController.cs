@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour {
 	public bool playerTrading = false;
 	public bool playerOrganizing = false;
 
+
 	//public bool playerJustStarted = false;
 
 	//for now, I'm just going to have a list of each zombie type, and 
@@ -1021,4 +1022,5 @@ public class GameController : MonoBehaviour {
 		}
 
 	}
+
 }
