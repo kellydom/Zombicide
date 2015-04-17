@@ -407,17 +407,17 @@ public class Deck : MonoBehaviour {
 			equipment.Add(rice.cardName);
 		}
 
-		scope.cardName = "Scope";
-		scope.but = scopeButton;
-		scope.combinable = true;
-		scope.combineWith = "Rifle";
-		scope.ranged = false;
-		scope.melee = false;
-		scope.noise = false;
-		scope.dualWield = false;
-		for (int i = 0; i < 2; i++) {
-			equipment.Add(scope.cardName);
-		}
+//		scope.cardName = "Scope";
+//		scope.but = scopeButton;
+//		scope.combinable = true;
+//		scope.combineWith = "Rifle";
+//		scope.ranged = false;
+//		scope.melee = false;
+//		scope.noise = false;
+//		scope.dualWield = false;
+//		for (int i = 0; i < 2; i++) {
+//			equipment.Add(scope.cardName);
+//		}
 
 		water.cardName = "Water";
 		water.but = waterButton;
