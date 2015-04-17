@@ -13048,7 +13048,6 @@ MonoBehaviour:
   playerSearching: 0
   playerTrading: 0
   playerOrganizing: 0
-  hoveredImage: {fileID: 0}
   enemyTypes:
   - {fileID: 157352, guid: 526550de7ab311e4889105906c3a718e, type: 2}
   - {fileID: 164642, guid: 481a52d8f9fcf004ca7924b4d8b553e7, type: 2}
@@ -23923,7 +23922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}

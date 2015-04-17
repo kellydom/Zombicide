@@ -109,8 +109,11 @@ public class SurvivorToken : MonoBehaviour {
 		//Canvas canvas = GameObject.FindObjectOfType(Canvas) as Canvas;
 
 		
-		high = Screen.width/2.0f;
-		wide = high * 2063/3186;
+		//high = Screen.width/2.0f;
+		//wide = high * 2063/3186;
+
+		wide *= 3;
+		high *=3;
 		
 		hoveredImage.rectTransform.sizeDelta = new Vector3(wide, high, 0);
 	}
@@ -268,6 +271,8 @@ public class SurvivorToken : MonoBehaviour {
 	}
 
 	public void changeInventory (string cardName) {
+		if (ActionWheel.S.CurrAction != "ReorganizeInventory")
+			return;
 		if (cardName == "Setup") {
 			expandCards ();
 			return;
@@ -315,7 +320,7 @@ public class SurvivorToken : MonoBehaviour {
 				}
 				return;
 			}
-			GameController.S.stopAction.transform.position = new Vector3(Screen.width/2, Screen.height/2, -3000);
+			GameController.S.stopAction.transform.position = new Vector3(-3000, Screen.height/2, 0);
 			Card picked = new Card();
 			switch (whichInventory) {
 			case "front1":
@@ -489,12 +494,14 @@ public class SurvivorToken : MonoBehaviour {
 			back1.image.color = Color.white;
 			back2.image.color = Color.white;
 			back3.image.color = Color.white;
+			hoveredImage.rectTransform.anchoredPosition = new Vector3(-2000,0,0);
 		}
 	}
 
 	public void finishOrganizing() {
 		GameController.S.playerOrganizing = false;
-		GameController.S.finishOrganizing.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, -3000);
+		GameController.S.stopAction.transform.position = new Vector3(-3000, Screen.height/2, 0);
+		GameController.S.finishOrganizing.transform.position = new Vector3 (-3000, Screen.height / 2, 0);
 		ActionWheel.S.MoveWheelDown ();
 	}
 
@@ -870,6 +877,7 @@ public class SurvivorToken : MonoBehaviour {
 		}
 		cardSwitch = true;
 		whichCard = cardName;
+		hoveredImage.rectTransform.anchoredPosition = new Vector3(-2000,0,0);
 	}
 
 	public void deleteSearchCard() {
