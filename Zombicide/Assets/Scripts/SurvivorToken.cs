@@ -500,7 +500,8 @@ public class SurvivorToken : MonoBehaviour {
 
 	public void finishOrganizing() {
 		GameController.S.playerOrganizing = false;
-		GameController.S.finishOrganizing.transform.position = new Vector3 (Screen.width - 35, Screen.height / 2, -3000);
+		GameController.S.stopAction.transform.position = new Vector3(-3000, Screen.height/2, 0);
+		GameController.S.finishOrganizing.transform.position = new Vector3 (-3000, Screen.height / 2, 0);
 		ActionWheel.S.MoveWheelDown ();
 	}
 
